@@ -1,0 +1,11 @@
+Package: BioNetStat
+Type: Package
+Title: Biological Network Analysis
+Version: 1.0
+Date: 2017-07-06
+Author: Vinicius Jardim Carvalho and Suzana de Siqueira Santos
+Maintainer: Vinicius Jardim <viniciusjcarvalho@hotmail.com>
+Description: A package to perform differential network analysis, differential node analysis (differential coexpression analysis), network and metabolic pathways view.
+License: GLP-2
+Depends: Hmisc, psych, igraph, pathview, plyr
+RoxygenNote: 6.0.1.9000
