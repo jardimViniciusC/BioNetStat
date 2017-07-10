@@ -12,18 +12,18 @@ JSdegree(G1, G2, options = list(bandwidth = "Sturges"))
 
 \item{G2}{an igraph graph object}
 
-\item{options}{a list containing parameters. It can be set to either 
+\item{options}{a list containing parameters. It can be set to either
 \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.}
 }
 \value{
-a list containing the components, f1 (density estimate of the 
+a list containing the components, f1 (density estimate of the
 graph G1), and f2 (density estimate of the graph G2). Each component is
 a list, where the first element is the vector 'x' of 'npoints' coordinates
 of the points where the density function i estimated, and the second is
 a vector 'y' of the estimated density values.
 }
 \description{
-'JSdegree' computes the Jensen-Shannon divergence between the density 
+'JSdegree' computes the Jensen-Shannon divergence between the density
 functions of the degrees of two graphs
 }
 \seealso{

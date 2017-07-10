@@ -15,6 +15,6 @@ v, where v[1] contains the gene set name, v[2] descriptions about the set,
 v[3..length(v)] the genes that belong to the set.
 }
 \description{
-'readGmtFile' reads a tab-delimited text file containing a collection of 
+'readGmtFile' reads a tab-delimited text file containing a collection of
 gene sets.
 }

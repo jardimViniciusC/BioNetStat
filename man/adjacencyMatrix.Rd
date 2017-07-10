@@ -2,8 +2,7 @@
 % Please edit documentation in R/net_inference_bns.R
 \name{adjacencyMatrix}
 \alias{adjacencyMatrix}
-\title{'adjacencyMatrix' creates a function that infers a graph from gene expression 
-data.}
+\title{Adjacency matrix}
 \usage{
 adjacencyMatrix(method, association = c("corr", "pvalue", "fdr"),
   threshold = c("fdr", "pvalue", "corr", NULL), thr.value = 0.05,
@@ -12,24 +11,19 @@ adjacencyMatrix(method, association = c("corr", "pvalue", "fdr"),
 \arguments{
 \item{method:}{a function that measures the association between the variables values.}
 
-\item{association:}{a charactere string indicating wich value will be used as association value. 
-The options are "corr" for the correlation value, "pvalue" for nominal pvalue associated to 
-correlation or "fdr" for corrected pvalue for mutiple tests.}
+\item{association:}{a charactere string indicating wich value will be used as association value. The options are "corr" for the correlation value, "pvalue" for nominal pvalue associated to correlation or "fdr" for corrected pvalue for mutiple tests.}
 
-\item{threshold:}{a charactere string indicating wich value will be used as threshold value. 
-The options are "corr" for the correlation value, "pvalue" for nominal pvalue associated to 
-correlation or "fdr" for corrected pvalue for mutiple tests. If NULL, no edge is removed.}
+\item{threshold:}{a charactere string indicating wich value will be used as threshold value. The options are "corr" for the correlation value, "pvalue" for nominal pvalue associated to correlation or "fdr" for corrected pvalue for mutiple tests. If NULL, no edge is removed.}
 
-\item{thr.value:}{a numeric value. The function removes all edges weighted by a value less 
+\item{thr.value:}{a numeric value. The function removes all edges weighted by a value less
 than or equal to 'thr.value'.}
 
-\item{weighted:a}{logical value. If TRUE, then the edges of the graph are weighted by the 
+\item{weighted:a}{logical value. If TRUE, then the edges of the graph are weighted by the
 association degrees between the variables. Otherwise, the edges are are weighted by one.}
 }
 \value{
 a function that creates an adjacency matrix from variable values data.
 }
 \description{
-'adjacencyMatrix' creates a function that infers a graph from gene expression 
-data.
+creates a function that infers a graph from variables values matrix
 }

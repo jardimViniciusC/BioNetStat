@@ -13,14 +13,14 @@ nDegreeDensities(Gs, npoints = 1024, bandwidth = "Sturges", from = NULL,
 \item{G2}{an igraph graph object}
 }
 \value{
-a list containing the components, f1 (density estimate of the 
+a list containing the components, f1 (density estimate of the
 graph G1), and f2 (density estimate of the graph G2). Each component is
 a list, where the first element is the vector 'x' of 'npoints' coordinates
-of the points where the density function is estimated, and the second is 
+of the points where the density function is estimated, and the second is
 a vector 'y' of the estimated density values.
 }
 \description{
-'degreeDensities' estimates the density functions of the degrees for two 
+'degreeDensities' estimates the density functions of the degrees for two
 graphs at the same coordinates
 }
 \seealso{
