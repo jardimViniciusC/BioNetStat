@@ -93,7 +93,7 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL){#readSampleTable
 #' @param factorName string indicating the column name used to determine the labels of each row of matrix data. The NULL (default) indicates that the first column will be used.
 #' @param classes a vector of strings indicating which labels of choosed column will be compared, the minimum are two labels. The NULL (default) indicates that all classes will be compared.
 #' @param dec the character used in the file for decimal points.
-#' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is ‘white space’, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses "\t" for .txt files or ";" for .csv files.
+#' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is ‘white space’, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses tabulation for .txt files or ";" for .csv files.
 #' @export
 doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
   options(stringsAsFactors = T)
