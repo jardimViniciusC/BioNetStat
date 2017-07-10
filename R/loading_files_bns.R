@@ -1,28 +1,37 @@
-
-readExprTxtFile <- function(fileName,path=NULL,dec=".",sep.csv=";",sep.txt="\t"){#readSampleTable
+################################################################################################################
+#' Read variable values matrix
+#' @param fileName the name of the file which the data are to be read from. Each row of the table appears as one line of the file. If it does not contain an absolute path, the file name is relative to the current working directory, getwd().
+#' @param path the path to the directory that contains the file
+#' @param dec the character used in the file for decimal points.
+#' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is ‘white space’, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses "\t" for .txt files or ";" for .csv files.
+#' @export
+#'
+readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL){#readSampleTable
   if(is.null(path)) path<-fileName
   if(lapply(strsplit(as.character(path), '[.]'),rev)[[1]][1]=="txt"){ # Se o arquivo for TXT
-    expr <- read.table(fileName, header=TRUE,dec=dec,sep=sep.txt)
+    if(is.null(sep)) sep="\t"
+    expr <- read.table(fileName, header=TRUE,dec=dec,sep=sep)
     colnames(expr) <- toupper(colnames(expr))
     cols <- colnames(expr)
     if (cols[1] != "NAME")
       stop(paste("Wrong gene expression data format. The fist column",
                  "of the file should be \"Name\"."))
-    
+
     names <- expr[, "NAME"]
     n <- ncol(expr)
-    
+
     if (cols[2] == "DESCRIPTION")
       expr <- expr[, 3:n]
     else
       expr <- expr[, 2:n]
-    
+
     expr <- as.matrix(expr)
     rownames(expr) <- names
     return(expr) ## Lembrar que a matrix agora está com os genes na primeira coluna
   }
   if(lapply(strsplit(as.character(path), '[.]'),rev)[[1]][1]=="csv"){ # Se o arquivo for CSV
-    table <- read.table(fileName,header=T,dec=dec,sep=sep.csv) # atentar para o decimal como virgula
+    if(is.null(sep)) sep=";"
+    table <- read.table(fileName,header=T,dec=dec,sep=sep) # atentar para o decimal como virgula
     expr <- table[,sapply(table,is.numeric)]
     # names <- expr[1,]
     n <- nrow(expr)
@@ -31,14 +40,12 @@ readExprTxtFile <- function(fileName,path=NULL,dec=".",sep.csv=";",sep.txt="\t")
     return(expr)
     }
 }
-# # chooseClass(fileName = "~/Dropbox/mestrado/Link para teste de rede 03_02/tabela_rede experimento 1.csv")
-# # fileName = "~/Dropbox/mestrado/Link para Carmem/carmem.csv"
+################################################################################################################
 # chooseClass <- function(fileName) {
 #   table <- read.csv(fileName,header=T,dec=",",sep=";") # atentar para o decimal como virgula e separador ponto e virgula
 #   class <- names(which(!sapply(table,is.numeric)))
 #   return(class)
 # }
-# # factorName="hor"
 # readClass <- function(fileName, factorName) {
 #   table <- read.csv(fileName,header=T,dec=",",sep=";") # atentar para o decimal como virgula
 #   class <- as.factor(table[,which(names(table)==factorName)])
@@ -46,7 +53,7 @@ readExprTxtFile <- function(fileName,path=NULL,dec=".",sep.csv=";",sep.txt="\t")
 #   labels <- levels(class)
 #   return(labels)
 # }
-# 
+#
 # labelsAux <- function(labels, class1, class2) {
 #   l <- array(NA, length(labels))
 #   names <- levels(labels)
@@ -56,17 +63,17 @@ readExprTxtFile <- function(fileName,path=NULL,dec=".",sep.csv=";",sep.txt="\t")
 #   i1 <- which(labels == symbols[i])
 #   i2 <- which(labels == symbols[j])
 #   l[i1] <- 0
-#   l[i2] <- 1 
+#   l[i2] <- 1
 #   l[-(union(i1, i2))] <- -1
 #   return(l)
 # }
-# 
+#
 # labelsAux <- function(labels, classes) {
 #   l <- array(NA, length(labels))
 #   names <- levels(labels)
 #   i<-vector(len=length(classes))
 #   for(p in 1:length(i)) i[p] <- which(names == classes[p])
-#   
+#
 #   symbols <- unique(labels)
 #   j<-list()
 #   v<-0
@@ -78,21 +85,31 @@ readExprTxtFile <- function(fileName,path=NULL,dec=".",sep.csv=";",sep.txt="\t")
 #   l[is.na(l)] <- -1
 #   return(l)
 # }
+################################################################################################################
 
-doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=",",sep=";") {
+#' Class vector of data table
+#'
+#' @param fileName the name of the file which the data are to be read from. Each row of the table appears as one line of the file. If it does not contain an absolute path, the file name is relative to the current working directory, getwd().
+#' @param factorName string indicating the column name used to determine the labels of each row of matrix data. The NULL (default) indicates that the first column will be used.
+#' @param classes a vector of strings indicating which labels of choosed column will be compared, the minimum are two labels. The NULL (default) indicates that all classes will be compared.
+#' @param dec the character used in the file for decimal points.
+#' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is ‘white space’, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses "\t" for .txt files or ";" for .csv files.
+#' @export
+doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
   options(stringsAsFactors = T)
-  table <- read.csv(fileName,header=T,dec=dec,sep=sep) # atentar para o decimal como virgula e separador ponto e virgula
+  table <- read.csv(fileName,header=T,dec=dec,sep=sep)
   if(is.null(factorName)) factor <- names(which(!sapply(table,is.numeric)))[1]
   else if(!any(factorName==names(which(!sapply(table,is.numeric))))) stop(paste("The factorName",factorName," doesn't exists in Data frame"))
   else factor <- factorName
   labels<-table[,factor]
   if(is.null(classes)) classes<-levels(labels)
-  
+  else if(length(classes)<2) stop(paste("Just one class was indicated. More than one class of",factorName,"have to be indicated"))
+
   l <- array(NA, length(labels))
   names <- unique(labels)
   i<-vector(len=length(classes))
   for(p in 1:length(i)) i[p] <- which(names == classes[p])
-  
+
   symbols <- unique(labels)
   j<-list()
   v<-0
@@ -105,9 +122,10 @@ doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=",",sep=";") {
   return(l)
 }
 
+################################################################################################################
 #' Read a collection of gene sets (*.gmt)
 #'
-#' 'readGmtFile' reads a tab-delimited text file containing a collection of 
+#' 'readGmtFile' reads a tab-delimited text file containing a collection of
 #' gene sets.
 #' @param fileName a string containing the file name
 #' @return a list of gene sets. Each element of the list is a character vector
@@ -120,21 +138,37 @@ readGmtFile <- function(fileName) {
   n <- length(geneSets)
   for (i in 1:n) {
     if (length(geneSets[[i]]) < 3)
-      stop(paste("Wrong gene sets file format. All gene sets should", 
-                 "contain at least one gene."))
+      stop(paste("Wrong variable sets file format. All sets should",
+                 "contain at least one variable"))
   }
   return(geneSets)
 }
-# readGmtFile("~/Dropbox/mestrado/Link para Carmem/cargmt.gmt")
 
- diffNetAnalysis <- function(method, options, expr, labels, geneSets=NULL, 
-                            adjacencyMatrix, numPermutations=1000, print=TRUE, 
+################################################################################################################
+#' Class vector of data table
+#'
+#' @param method a method receives two adjacency matrices and returns a list containing a statistic theta that measures the difference between them, and a p-value for the test H0: theta = 0 against H1: theta > 0.
+#' @param options a list contaning paremeters used by 'method'.
+#' @param varFile a numeric matrix contaning variables values data.
+#' @param labels a vector of -1s, 0s, and 1s associating each sample with a phenotype. The value 0 corresponds to the first phenotype class of interest, 1 to the second phenotype class of interest, and -1 to the other classes, if there are more than two classes in the gene expression data.
+#' @param varSets a list of gene sets. Each element of the list is a character vector v, where v[1] contains the gene set name, v[2] descriptions about the set, v[3..length(v)] the genes that belong to the set.
+#' @param adjacencyMatrix a function that receives a numeric matrix containing gene expression data and returns the adjacency matrix of the inferred co-expression graph.
+#' @param numPermutations the number of permutations for the permutation test.
+#' @param print a logical. If true, it prints execution messages on the screen. resultsFile: path to a file where the partial results of the analysis will be saved. If NULL, then no partial results are saved.
+#' @param resultsFile
+#' @param seed the seed for the random number generators. If it is not null then the sample permutations are the same for all the gene sets.
+#' @param min.vert
+#' @return a data frame containing the name, size, test statistic, nominal p-value and adjusted p-value (q-value) associated with each gene set.
+#' @export
+#'
+ diffNetAnalysis <- function(method, options, varFile, labels, varSets=NULL,
+                            adjacencyMatrix, numPermutations=1000, print=TRUE,
                             resultsFile=NULL, seed=NULL, min.vert=5) {
    if(is.null(geneSets)) geneSets <- list(c("all",colnames(expr)))
    # else geneSets[[length(geneSets)+1]] <- c("all",colnames(expr))
-   geneSets<-lapply(geneSets, function(x){ 
+   geneSets<-lapply(geneSets, function(x){
      if(sum(x %in% colnames(expr))>=min.vert) x
-     else NA})# 
+     else NA})#
    geneSets<-geneSets[!is.na(geneSets)]
   results <- data.frame(matrix(NA, nrow=length(geneSets), ncol=5+length(unique(labels[labels!=-1]))))
   output<-list()
@@ -149,7 +183,7 @@ readGmtFile <- function(fileName) {
   for (i in 1:length(geneSets)) {
     setName <- geneSets[[i]][1]
     if (print)
-      cat(paste("Testing ", setName, " (", i, " of ", length(geneSets), 
+      cat(paste("Testing ", setName, " (", i, " of ", length(geneSets),
                 ")", "\n", sep=""), append=T)
     genes <- geneSets[[i]][geneSets[[i]] %in% colnames(expr)]
     if (!is.null(seed))
