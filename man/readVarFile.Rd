@@ -13,7 +13,7 @@ readVarFile(fileName, path = NULL, dec = ".", sep = NULL)
 
 \item{dec}{the character used in the file for decimal points.}
 
-\item{sep}{the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is ‘white space’, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses "\t" for .txt files or ";" for .csv files.}
+\item{sep}{the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is ‘white space’, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses tabulation for .txt files or ";" for .csv files.}
 }
 \description{
 Read variable values matrix
