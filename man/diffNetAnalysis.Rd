@@ -9,7 +9,7 @@ diffNetAnalysis(method, options, varFile, labels, varSets = NULL,
   resultsFile = NULL, seed = NULL, min.vert = 5)
 }
 \arguments{
-\item{method}{a method receives two adjacency matrices and returns a list containing a statistic theta that measures the difference between them, and a p-value for the test H0: theta = 0 against H1: theta > 0.}
+\item{method}{a function that receives two adjacency matrices and returns a list containing a statistic theta that measures the difference between them, and a p-value for the test H0: theta = 0 against H1: theta > 0.}
 
 \item{options}{a list contaning paremeters used by 'method'.}
 
