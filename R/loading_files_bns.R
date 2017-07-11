@@ -190,7 +190,7 @@ readGmtFile <- function(fileName) {
     if (!is.null(seed))
       set.seed(seed)
     result <- method(varFile[,genes], labels, adjacencyMatrix=
-                       adjacencyMatrix1,  numPermutations=
+                       adjacencyMatrix,  numPermutations=
                        numPermutations, options=options)
     if(!is.list(result)){
       output[[setName]]<-result
