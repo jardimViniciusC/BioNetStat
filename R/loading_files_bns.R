@@ -165,10 +165,10 @@ readGmtFile <- function(fileName) {
  diffNetAnalysis <- function(method, options, varFile, labels, varSets=NULL,
                             adjacencyMatrix, numPermutations=1000, print=TRUE,
                             resultsFile=NULL, seed=NULL, min.vert=5) {
-   if(is.null(varSets)) varSets <- list(c("all",colnames(expr)))
-   # else varSets[[length(varSets)+1]] <- c("all",colnames(expr))
+   if(is.null(varSets)) varSets <- list(c("all",colnames(varFile)))
+   # else varSets[[length(varSets)+1]] <- c("all",colnames(varFile))
    varSets<-lapply(varSets, function(x){
-     if(sum(x %in% colnames(expr))>=min.vert) x
+     if(sum(x %in% colnames(varFile))>=min.vert) x
      else NA})#
    varSets<-varSets[!is.na(varSets)]
   results <- data.frame(matrix(NA, nrow=length(varSets), ncol=5+length(unique(labels[labels!=-1]))))
@@ -186,10 +186,10 @@ readGmtFile <- function(fileName) {
     if (print)
       cat(paste("Testing ", setName, " (", i, " of ", length(varSets),
                 ")", "\n", sep=""), append=T)
-    genes <- varSets[[i]][varSets[[i]] %in% colnames(expr)]
+    genes <- varSets[[i]][varSets[[i]] %in% colnames(varFile)]
     if (!is.null(seed))
       set.seed(seed)
-    result <- method(expr[,genes], labels, adjacencyMatrix=
+    result <- method(varFile[,genes], labels, adjacencyMatrix=
                        adjacencyMatrix1,  numPermutations=
                        numPermutations, options=options)
     if(!is.list(result)){
