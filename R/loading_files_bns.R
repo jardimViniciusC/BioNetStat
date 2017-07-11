@@ -103,8 +103,9 @@ doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
   else factor <- factorName
   labels<-table[,factor]
   if(is.null(classes)) classes<-levels(labels)
-  else if(length(classes)<2) stop(paste("Just one class was indicated. More than one class of",factorName,"have to be indicated"))
-
+  else if(length(classes)<2) stop(paste("Just one class was indicated. More than one class of",factorName,"has to be indicated"))
+  if(any(!c(classes %in% levels(labels)))) if(sum(!c(classes %in% levels(labels)))==1) stop(paste("Class",classes[!c(classes %in% levels(labels))],"isn't contained in",factorName))
+  else stop(paste("Classes",paste(classes[!c(classes %in% levels(labels))],collapse = ", "),"aren't contained in",factorName))
   l <- array(NA, length(labels))
   names <- unique(labels)
   i<-vector(len=length(classes))
@@ -147,7 +148,7 @@ readGmtFile <- function(fileName) {
 ################################################################################################################
 #' Class vector of data table
 #'
-#' @param method a method receives two adjacency matrices and returns a list containing a statistic theta that measures the difference between them, and a p-value for the test H0: theta = 0 against H1: theta > 0.
+#' @param method a function that receives two adjacency matrices and returns a list containing a statistic theta that measures the difference between them, and a p-value for the test H0: theta = 0 against H1: theta > 0.
 #' @param options a list contaning paremeters used by 'method'.
 #' @param varFile a numeric matrix contaning variables values data.
 #' @param labels a vector of -1s, 0s, and 1s associating each sample with a phenotype. The value 0 corresponds to the first phenotype class of interest, 1 to the second phenotype class of interest, and -1 to the other classes, if there are more than two classes in the gene expression data.
@@ -164,28 +165,28 @@ readGmtFile <- function(fileName) {
  diffNetAnalysis <- function(method, options, varFile, labels, varSets=NULL,
                             adjacencyMatrix, numPermutations=1000, print=TRUE,
                             resultsFile=NULL, seed=NULL, min.vert=5) {
-   if(is.null(geneSets)) geneSets <- list(c("all",colnames(expr)))
-   # else geneSets[[length(geneSets)+1]] <- c("all",colnames(expr))
-   geneSets<-lapply(geneSets, function(x){
+   if(is.null(varSets)) varSets <- list(c("all",colnames(expr)))
+   # else varSets[[length(varSets)+1]] <- c("all",colnames(expr))
+   varSets<-lapply(varSets, function(x){
      if(sum(x %in% colnames(expr))>=min.vert) x
      else NA})#
-   geneSets<-geneSets[!is.na(geneSets)]
-  results <- data.frame(matrix(NA, nrow=length(geneSets), ncol=5+length(unique(labels[labels!=-1]))))
+   varSets<-varSets[!is.na(varSets)]
+  results <- data.frame(matrix(NA, nrow=length(varSets), ncol=5+length(unique(labels[labels!=-1]))))
   output<-list()
-  names <- array(NA, length(geneSets))
-  for (i in 1:length(geneSets)) {
-    names[i] <- geneSets[[i]][1]
+  names <- array(NA, length(varSets))
+  for (i in 1:length(varSets)) {
+    names[i] <- varSets[[i]][1]
   }
   rownames(results) <- names
   if(any(labels=="-1"))colnames(results) <- c("N of Networks","Set size", "Test statistic", "Nominal p-value", "Q-value",paste("Factor",unique(labels[-which(labels=="-1")])))
   else colnames(results) <- c("N of Networks","Set size", "Test statistic", "Nominal p-value", "Q-value",paste("Factor",unique(labels)))
   #temp <- tempfile("CoGA_results", fileext=".txt")
-  for (i in 1:length(geneSets)) {
-    setName <- geneSets[[i]][1]
+  for (i in 1:length(varSets)) {
+    setName <- varSets[[i]][1]
     if (print)
-      cat(paste("Testing ", setName, " (", i, " of ", length(geneSets),
+      cat(paste("Testing ", setName, " (", i, " of ", length(varSets),
                 ")", "\n", sep=""), append=T)
-    genes <- geneSets[[i]][geneSets[[i]] %in% colnames(expr)]
+    genes <- varSets[[i]][varSets[[i]] %in% colnames(expr)]
     if (!is.null(seed))
       set.seed(seed)
     result <- method(expr[,genes], labels, adjacencyMatrix=
