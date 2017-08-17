@@ -156,7 +156,7 @@ readGmtFile <- function(fileName) {
 #' @param adjacencyMatrix a function that receives a numeric matrix containing gene expression data and returns the adjacency matrix of the inferred co-expression graph.
 #' @param numPermutations the number of permutations for the permutation test.
 #' @param print a logical. If true, it prints execution messages on the screen. resultsFile: path to a file where the partial results of the analysis will be saved. If NULL, then no partial results are saved.
-#' @param resultsFile
+#' @param resultsFile a ".RData" file name to be saved in tha work directory.
 #' @param seed the seed for the random number generators. If it is not null then the sample permutations are the same for all the gene sets.
 #' @param min.vert
 #' @return a data frame containing the name, size, test statistic, nominal p-value and adjusted p-value (q-value) associated with each gene set.
@@ -202,9 +202,8 @@ readGmtFile <- function(fileName) {
     results[setName, "Nominal p-value"] <- result$p.value
     results[setName, "Set size"] <- length(genes)
     results[setName, 6:ncol(results)] <- result$Partial*100/sum(result$Partial)
-    if (!is.null(resultsFile))
-      save(results, file=resultsFile)
     }
+    # if (!is.null(resultsFile)) save(results, file=resultsFile)
   }
   if(is.list(result)) results[, "Q-value"] <- p.adjust(results[, "Nominal p-value"], method="fdr")
   return(results)
