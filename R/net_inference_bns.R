@@ -1,3 +1,10 @@
+#' Run BNS on the browser user interface.
+#' @export
+runBioNetStat <- function(){
+  library(shiny)
+  runApp(system.file('shiny', package='BioNetStat'))
+}
+
 #' Adjacency matrix
 #' @description creates a function that infers a graph from variables values matrix
 #' @param method: a function that measures the association between the variables values.
@@ -41,12 +48,12 @@ adjacencyMatrix <- function(method, association=c("corr","pvalue","fdr"), thresh
           A$P <- 1 - A$P
         }
         if(abs.values==T) A[[1]] <- abs(A[[1]])
-        
+
         if(association == "corr") A <- A[[1]]
         else
           if(nrow(expr)==3 | nrow(expr)==4) stop("The method do not calculate p-value nor fdr for less than 5 samples, please choose association=corr ")
             else A <- A$P
-        
+
         if (!weighted) {
           A[which(A > thr.value)] <- 1
           A[which(A <= thr.value)] <- 0
