@@ -1,8 +1,0 @@
-Name Function Source Type Options Description
-"Spectral entropy" "spectralEntropies" "" "both" "Bandwidth=Sturges,Silverman" ""
-"Average degree centrality" "averageDegreeCentrality" "" "both" "" ""
-"Average betweenness centrality" "averageBetweennessCentrality" "" "unweighted" "" ""
-"Average closeness centrality" "averageClosenessCentrality" "" "unweighted" "" ""
-"Average eigenvector centrality" "averageEigenvectorCentrality" "" "both" "" ""
-"Average clustering coefficient" "averageClusteringCoefficient" "" "both" "" ""
-"Average shortest path length" "averageShortestPath" "" "unweighted" "" "" 
