@@ -1,8 +1,8 @@
 #' Run BNS on the browser user interface.
 #' @export
-runBioNetStat <- function(name='BioNetStat'){
+runBioNetStat <- function(){
   library(shiny)
-  runApp(system.file('shiny', package='BioNetStat'))
+  runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 }
 
 #' Adjacency matrix

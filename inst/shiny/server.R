@@ -1,5 +1,5 @@
 library(shiny);library(shinyBS);library(BioNetStat)
-source("~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/shiny_BioNetStat/shiny/global.R")
+# source("~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/shiny_BioNetStat/shiny/global.R")
 # ------------------------------------------------------------------------------
 # Global variables
 # ------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ for (i in 1:nrow(networkTestsMatrix)) {
 }
 rownames(networkTestsMatrix) <- networkTests
 
-# Matrix that maps dependence measure names to functions 
+# Matrix that maps dependence measure names to functions
 correlationMeasuresMatrix <- as.matrix(read.table("dependenceMeasures.txt",  header=T))
 correlationMeasures <- matrix(NA, nrow(correlationMeasuresMatrix), 2)
 rownames(correlationMeasures) <- correlationMeasuresMatrix[,1]
@@ -60,30 +60,30 @@ rownames(networkScoresMatrix) <- networkScores
 # Defining the server logic
 # ------------------------------------------------------------------------------
 
-# Define server logic 
+# Define server logic
 shinyServer(function(input, output, session) {
-  
-  values <- reactiveValues(canExecute=F, completed=F, expr=NULL, labels=NULL, 
-                           filteredGeneSets=NULL, classes=NULL, 
-                           associationMeasure=NULL, correlationMeasure=NULL, 
+
+  values <- reactiveValues(canExecute=F, completed=F, expr=NULL, labels=NULL,
+                           filteredGeneSets=NULL, classes=NULL,
+                           associationMeasure=NULL, correlationMeasure=NULL,
                            networkType=NULL, threshold=NULL, networkTest=NULL,
                            seed=NULL, options=NULL, exprInputFileName=NULL,
                            labelsInputFileName=NULL, geneSetsFileName=NULL)
-  
+
   # Loading data -------------------------------------------------------------
-  
+
   source("dataLoading.R", local=T)
-  
+
   # Setting execution parameters ---------------------------------------------
-  
+
   source("executionParameters.R", local=T)
-  
+
   # Showing analysis results -------------------------------------------------
-  
+
   source("results.R", local=T)
-  
+
   # Further analysis ---------------------------------------------------------
-  
+
   source("furtherAnalysis.R", local=T)
-  
+
 })
