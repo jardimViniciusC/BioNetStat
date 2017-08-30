@@ -207,13 +207,14 @@ readGmtFile <- function(fileName) {
   }
   if(is.list(result)) results[, "Q-value"] <- p.adjust(results[, "Nominal p-value"], method="fdr")
   return(results)
-}
-
+ }
+ 
+ ################################################################################################################
  #' Run BNS
  #'
  #' Run BNS on the browser user interface.
  #' @export
- runBNS <- function() {
+ runBioNetStat <- function() {
    shiny::runApp(system.file('shiny', package='BioNetStat'))
  }
  
