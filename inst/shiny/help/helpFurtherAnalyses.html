@@ -1,0 +1,334 @@
+<p>After performing the differential network analysis, you
+can explore several gene set properties on 
+the "Further analysis" tab.</p>
+
+<p>Below, we explain the available tools for exploring the 
+gene sets.</p>
+
+<h5>Gene set selection</h5>
+
+<p> To analyze a gene set, select it from the list of gene sets
+on the "Further analysis" tab. 
+
+The following options are available for filtering 
+the lists of gene sets: </p>
+
+<ul>
+    <li>
+        All gene sets with p-values less than the threshold: filter the gene
+        sets with the network comparison test nominal p-value less 
+        than the selected threshold. This option
+        is visible only after the differential network analysis finishes.
+    </li>
+    <li>
+        All gene sets with q-values less than the threshold: filter the gene
+        sets with the differential network test adjusted p-value
+        by False Discovery Rate method (Benjamini and Hochberg, 1995) for multiple testing less than the selected threshold. 
+        This option
+        is visible only after differential network analysis finishes
+    </li>
+    <li>
+        All tested gene sets: the gene sets that were tested for
+        the differential network analysis.  This option
+        is visible only after differential network analysis finishes.
+    </li> 
+    <li>
+        All filtered gene sets: the gene sets that were filtered 
+        according to their size on the left side panel.  This option
+        is visible only if differential network analysis has not
+        been performed yet.
+    </li>
+    <li>
+        All loaded gene sets: all gene sets of the 
+        uploaded gene set collection. 
+    </li>
+</ul>
+
+<p>After selecting a gene set,  choose a tab on the "Further analysis" section 
+for analyzing the selected set. </p>
+
+<h5>Network visualization plots</h5>
+
+<p>Given a gene set name, the "Network visualization plots" tab on the "Further analysis" 
+section provides tools to visually inspect the networks and the differences between
+the two phenotypes.</p>
+
+<p>Below, we describe the available tools.</p>
+
+<h6>Plot settings</h6>
+
+<ul>
+    <li>Colors selection: select a color scheme for the plots</li>
+    <li>Plot format: select a file format to save the plots</li>
+    <li>Plot dimensions: set the plot dimensions in inches (for PDF format)
+        or pixels (PNG and JPG formats) </li>
+</ul>
+
+<h6>Network visualization</h6>
+
+<p>
+    The network visualization tool plots one association matrix for
+    each phenotype.
+</p>
+
+<p>
+    The association matrix contains the association
+    degree of each pair of genes from the selected gene set. The 
+    associations degrees are measured from the expression data 
+    using the method selected on the left sidebar
+    ("Method for network inference"). The degrees vary between 0 and 1, and 
+    are represented by colors.
+    If the "absolute correlation" option is selected on the sidebar, the user can visualize both absolute and non absolute
+    correlations by setting the "Show negative correlations"
+    option. To save the plots, click on the "Save class 1 network plot"
+    and "Save class 2 network plot" buttons. 
+</p>
+
+<p>
+    You can check out the value of each association degree
+    on the "Association between two gene products"
+    section. 
+</p>
+
+<h6>Differences between the gene networks</h6>
+
+<p>
+    To visualize the differences between the networks,
+    you can plot a matrix of the differences.    
+    Each position of the matrix shows the difference
+    in the correlation (association degree) of two gene products between
+    the two phenotypes.
+</p>
+<p>
+    You can choose one of the following options:
+</p>
+<ul>
+    <li>
+        [class1] - [class2]: class1 association degree matrix
+        minus class2 association degree matrix.
+    </li>
+    <li>
+        [class2] - [class1]:  class2 association degree matrix
+        minus class1 association degree matrix.
+    </li>
+    <li>
+        Absolute differences between the association degrees:
+        matrix of the absolute values of the differences
+        between the association degrees.
+    </li>
+</ul>
+
+<p>
+    To plot the selected matrix of differences, just
+    expand the "Matrix of differences" collapsing panel. You can save
+    the plot by clicking on the "Save plot button".
+</p>
+
+<p>
+    To see the differences in association degree of 
+    each pair of genes,  
+    expand the "List of gene association degrees" collapsing panel. 
+    You can save the list as a CSV or R data file:
+    <ul>
+        <li>CSV: a comma-separated text file, containing the 
+            association degrees between the gene products. 
+            It can be opened with a spreadsheet software</li>
+        <li>R data: a file that contains a data frame R variable called 
+            associationDegrees. It 
+            can be loaded using the "load" command in the R console.</li>
+    </ul>
+</p>
+
+
+<h5>Gene set properties</h5>
+
+<p>
+    To check out network features of each phenotype, select one 
+    of the options described below.
+</p>
+
+<h6>Network features for unweighted graphs:</h6>
+
+<ul>
+    <li>
+        Spectral entropy: measures the
+        graph topological organization complexity (Takahashi <i>et al.</i>, 2012).
+    </li>
+    <li>
+        Average degree centrality: The degree of a node is the number of edges 
+        that connect to it. The average degree centrality is the sum of all
+        node degrees divided by the number of vertices.
+    </li>
+    <li>
+        Average betweenness centrality: The betweenness centrality of a node is the number of shortest paths going through it (Freeman, 1979). The average 
+        betweenness centrality is the sum of all
+        node betweenness centralities divided by the number of vertices.
+    </li>
+    <li>
+        Average closeness centrality: The closeness centrality of a node is the 
+        inverse of the average length of the shortest paths between it and all 
+        the other vertices in the graph (Freeman, 1979).
+        The average closeness centrality is the sum of all
+        node closeness centralities divided by the number of vertices.
+    </li>
+    <li>
+        Average eigenvector centrality: The eigenvector centrality of a node 
+        <i>v<sub>i</sub></i> is the <i>i</i>th value of the first eigenvector 
+        of the graph adjacency matrix (Bonacich, 1987).
+        The average eigenvector centrality is the sum of all
+        node eigenvector centralities divided by the number of vertices.
+    </li>
+    <li>
+        Average clustering coefficient: The local clustering coefficient of a node is the number of edges between the 
+        vertices within its neighborhood divided by the number of edges that could 
+        exist among them (Watts and Strogatz, 1998).
+        The average clustering coefficient is the sum of all
+        node local clustering coefficients divided by the number of vertices.
+    </li>
+    <li>
+        Average shortest path length:
+        average of all the shortest path
+        lengths for all pair of nodes <i>v<sub>i</sub></i> and 
+        <i>v<sub>j</sub></i> with <i>i</i> &#8800; <i>j</i>.
+    </li>
+</ul>
+
+<h6>Network features for weighted graphs:</h6>
+
+
+<ul>
+    <li>
+        Spectral entropy: Replaces the usual adjacency matrix by the
+        weighted adjacency matrix, and then computes the spectral 
+        entropy for unweighted networks.
+    </li>
+    <li>
+        Average degree centrality: CoGA generalizes the degree of a node 
+        to the sum of the weights of the edges that connect to it (Barrat, 2004).
+        It replaces the usual node degree by the weighted degree, and
+        then computes the average degree centrality for weighted networks.
+    </li>
+    <li>
+        Average eigenvector centrality: replaces the usual adjacency matrix by the
+        weighted adjacency matrix, and then computes the average eigenvector centrality 
+        for unweighted networks (Newton, 2004).
+    </li>
+    <li>
+        Average clustering coefficient: replaces the local clustering coefficient 
+        of a node by the sum of the weights of the edges between the vertices within its neighborhood divided by the number of edges that could exist among 
+        them (Lopez-Fernandez <i>et al</i>, 2004). Then it computes the
+        average clustering coefficient for unweighted networks.
+    </li>
+</ul>
+
+
+<h5>Gene scores</h5>
+
+<p>To rank the genes according to their ``importance'' in the networks,
+select one of the options below.</p>
+
+<h6>Gene scores for unweighted graphs:</h6>
+
+<ul>
+    <li>
+        Degree centrality: The degree of a node is the number of edges 
+        that connect to it. 
+    </li>
+    <li>
+        Betweenness centrality: The betweenness centrality of a node is the number of shortest paths going through it (Freeman, 1979).
+    </li>
+    <li>
+        Closeness centrality: The closeness centrality of a node is the 
+        inverse of the average length of the shortest paths between it and all 
+        the other vertices in the graph (Freeman, 1979).
+    </li>
+    <li>
+        Eigenvector centrality: The eigenvector centrality of a node 
+        <i>v<sub>i</sub></i> is the <i>i</i>th value of the first eigenvector 
+        of the graph adjacency matrix (Bonacich, 1987).
+    </li>
+    <li>
+        Local clustering coefficient: The local clustering coefficient of a node is the number of edges between the 
+        vertices within its neighborhood divided by the number of edges that could 
+        exist among them (Watts and Strogatz, 1998).
+    </li>
+</ul>
+
+<h6>Gene scores for weighted graphs:</h6>
+
+<ul>
+    <li>
+        Degree centrality: CoGA generalizes the degree of a node 
+        to the sum of the weights of the edges that connect to it (Barrat, 2004).
+    </li>
+    <li>
+        Eigenvector centrality: replaces the usual adjacency matrix by the
+        weighted adjacency matrix, and then computes the eigenvector centrality 
+        for unweighted networks (Newton, 2004).
+    </li>
+    <li>
+        Local clustering coefficient: generalizes the local clustering coefficient 
+        of a node to the sum of the weights of the edges between the vertices within its neighborhood divided by the number of edges that could exist among 
+        them (Lopez-Fernandez <i>et al</i>, 2004).
+    </li>
+</ul>
+
+<p>
+    You can save the gene scores as a CSV or R data file:
+    <ul>
+        <li>CSV: a comma-separated text file, containing the gene scores. It can be opened with a spreadsheet software</li>
+        <li>R data: a file that contains a data frame R variable called
+            geneScores. It 
+            can be loaded by using the "load" command in the R console.</li>
+    </ul>
+</p>
+
+<h5>Gene expression analysis</h5>
+
+<p>Below, we describe the available single gene differential analysis tools.</p>
+
+<h6>Gene expression heatmap</h6>
+
+<p>The gene expression heatmap represents the gene expression levels by 
+colors. Each column corresponds to a gene of the selected gene set, 
+and each row represents one sample.
+</p>
+
+<p>You can select the colors of the heatmap, and set its
+clustering options. The rows or columns of the heatmap 
+will be clustered according to the enclidean distance.
+You can set the heatmap dimensions and save it as
+a PDF, PNG or JPG file.</p>
+
+<p>CoGA uses the pheatmap CRAN package to plot the heatmaps.</p>
+
+<h6>Tests for differential expression</h6>
+
+<p>CoGA tests the difference in average or median expression levels
+of each single gene of the selected gene set. Those analyses use the "t.test" and "wilcox.test" R functions.</p>
+
+<p>The figure below shows the table of results:</p>
+
+<img src="images/diffExpressionAnalysis.png"  width="795">
+
+<p>
+    Those results can be saved as a CSV or R data file:
+    <ul>
+        <li>CSV: a comma-separated text file, containing the differential 
+            analysis statistics and p-values. It can be opened with a spreadsheet software</li>
+        <li>R data: a file that contains a data frame R variable called
+            "diffExpressionAnalysis". It 
+            can be loaded by using the "load" command in the R console.</li>
+    </ul>
+</p>
+
+<h6>Gene expression boxplot</h6>
+
+<p>To visualize the distribution of the gene expression levels
+in each phenotype, just select a gene from the list on the 
+"Gene expression boxplot" section.</p>
+
+<p>You can set the plot dimensions and save it as a PDF, PNG or
+    JPG file.</p>
+
+<p>CoGA boxplots are built with the ggplot2 package.</p>
