@@ -1,10 +1,3 @@
-#' Run BNS on the browser user interface.
-#' @export
-runBioNetStat <- function(){
-  library(shiny)
-  runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
-}
-
 #' Adjacency matrix
 #' @description creates a function that infers a graph from variables values matrix
 #' @param method: a function that measures the association between the variables values.
