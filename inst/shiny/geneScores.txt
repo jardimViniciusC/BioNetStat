@@ -1,0 +1,6 @@
+Name Function Source Type Description
+"Degree centrality" "degreeCentrality" "" "both" ""
+"Betweenness centrality" "betweennessCentrality" "" "unweighted" ""
+"Closeness centrality" "closenessCentrality" "" "unweighted" ""
+"Eigenvector centrality" "eigenvectorCentrality" "" "both" ""
+"Local clustering coefficient" "clusteringCoefficient" "" "both" ""

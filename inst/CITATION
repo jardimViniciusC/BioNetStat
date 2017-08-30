@@ -1,0 +1,14 @@
+bibentry("Manual",
+    title="coga: Co-expression Graph Analyzer",
+    author="Suzana Suzana",
+    year="2015",
+    note="(Version 0.01-1)",
+    url="http://www.ime.usp.br/~suzana/coga",
+
+    textVersion =
+    paste("Suzana, S. (2015). ",
+        "coga: Co-expression Graph Analyzer (Version 0.01-1). ",
+        "Available from http://www.ime.usp.br/~suzana/coga",
+        sep=""),
+
+    mheader = "To cite coga in publications use:")

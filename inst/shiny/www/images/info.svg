@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   width="210mm"
+   height="297mm"
+   id="svg2">
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1">
+    <path
+       d="m 202.85714,192.36218 a 45.714287,45.714287 0 1 1 -91.42857,0 45.714287,45.714287 0 1 1 91.42857,0 z"
+       transform="translate(0,-26)"
+       id="path2985"
+       style="fill:#e1e1e1;fill-opacity:1;stroke:none" />
+    <text
+       x="115.53028"
+       y="229.59738"
+       transform="scale(1.2007014,0.83284653)"
+       id="text3755"
+       xml:space="preserve"
+       style="font-size:48.0280571px;font-style:italic;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#585858;fill-opacity:1;stroke:none;font-family:Liberation Serif;-inkscape-font-specification:Liberation Serif Bold Italic"><tspan
+         x="115.53028"
+         y="229.59738"
+         id="tspan3757"
+         style="font-size:100px;font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#585858;fill-opacity:1;font-family:FreeSerif;-inkscape-font-specification:FreeSerif Italic">i</tspan></text>
+  </g>
+</svg>

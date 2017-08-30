@@ -1,0 +1,226 @@
+
+<p>CoGA analyses are also available in the R command line interface.
+Below, we describe how to perform the differential network analyses. 
+For a detailed description of the function parameters and
+return values, check it out
+in the R command line interface, by typing the command ?[function_name].</p>
+
+<h5>Preparing the dataset</h5>
+
+<h6>Read gene expression data</h6>
+<p style="font-family:courier;color:gray">
+    &nbsp; expr &lt;- readExprTxtFile([path_to_txt_file])
+</p>
+
+<h6>Read phenotype data</h6>
+<p style="font-family:courier;color:gray">
+    &nbsp; labels &lt;- readClsFile([path_to_cls_file])
+</p>
+
+<h6>Read annotation data</h6>
+<p style="font-family:courier;color:gray">
+    &nbsp; annotation &lt;- readChipFile([path_to_chip_file])
+</p>
+
+<h6>Collapse dataset to gene symbols</h6>
+<p style="font-family:courier;color:gray">
+    &nbsp; collapsingMethod &lt;- [collapsing_method_name]</br>
+    &nbsp; connectivityBasedCollapsing &lt;- list("connectivityBasedCollapsing"=TRUE_or_FALSE)</br>
+    &nbsp; expr &lt;- collapseExprData(expr, annotation, collapsingMethod, connectivityBasedCollapsing)
+</p>
+
+<p>The available options for [collapsing_method_name] are:</p>
+
+<ul>
+    <li>maxMean</li>
+    <li>minMean</li>
+    <li>absMaxMean</li>
+    <li>absMinMean</li>
+    <li>maxRowVariance</li> 
+    <li>me</li>
+    <li>average</li>
+</ul>
+
+<p>If [collapsing_method_name] is "me", the "connectivityBasedCollapsing" parameter
+will be ignored.</p>
+
+<h6>Read a collection of gene sets</h6>
+<p style="font-family:courier;color:gray">
+    &nbsp; geneSets &lt;- readGmtFile([path_to_gmt_file])
+</p>
+
+<h5>Setting the execution parameters</h5>
+
+<h6>Network inference method</h6>
+<p>For using the absolute correlation coefficient as the association measure, create the following variables:</p>
+<p style="font-family:courier;color:gray">
+    &nbsp; networkInference &lt;- [correlation_measure_name]Cor
+    </br>
+    &nbsp; abs &lt;- TRUE
+    </br>
+    &nbsp; pvalue &lt;- FALSE
+    <br/> 
+    &nbsp; fdr &lt;- FALSE
+</p>
+
+<p>For using one minus the test p-value to measure the association between the gene products, create the following variables:</p>
+<p style="font-family:courier;color:gray">
+    &nbsp; networkInference &lt;- [correlation_measure_name]Test
+    </br>
+    &nbsp; abs &lt;- TRUE
+    </br>
+    &nbsp; pvalue &lt;- TRUE
+    <br/> 
+    &nbsp; fdr &lt;- FALSE
+</p>
+
+<p>For using one minus the test q-value as the association measure, create the following variables:</p>
+<p style="font-family:courier;color:gray">
+    &nbsp; networkInference &lt;- [correlation_measure_name]Test
+    </br>
+    &nbsp; abs &lt;- TRUE
+    </br>
+    &nbsp; pvalue &lt;- TRUE
+    <br/> 
+    &nbsp; fdr &lt;- TRUE
+</p>
+
+
+<p>
+    The [correlation_measure_name] must be replaced by one of the following options:
+</p>
+
+<ul>
+    <li>pearson</li>
+    <li>spearman</li>
+    <li>kendall</li>
+</ul>
+
+<p>If your graph is weighted, you must set the following variables: </p>
+
+<p style="font-family:courier;color:gray">
+    &nbsp; weighted &lt;-  TRUE
+    </br>
+   &nbsp; threshold  &lt;-  NULL
+</p>
+
+<p>If the graph is unweighted, then set them to:</p>
+
+<p style="font-family:courier;color:gray">
+    &nbsp; weighted &lt;-  FALSE
+    </br>
+    &nbsp; threshold  &lt;-  value
+</p>
+
+<p>Replaces "value" by the desired threshold (only gene links
+with value higher then "value" will remain in the network).</p>
+
+<p>
+    Then, create the function for performing the network inference:
+</p>
+
+<p style="font-family:courier;color:gray">
+    adjacencyMatrix &lt;-  adjacencyMatrix(networkInference, abs, pvalue, fdr, weighted, threshold)
+</p>
+
+<h6>Methods for comparing networks</h6>
+
+<p style="font-family:courier;color:gray">
+    &nbsp; method &lt;- [network_test_name]
+</p>
+
+<p>If the graph is unweighted, the available values for [network_test_name] are:</p>
+
+<ul>
+    <li>spectralDensityTest</li> 
+    <li>spectralEntropyTest</li>
+    <li>degreeDistributionTest</li>
+    <li>degreeCentralityTest</li> 
+    <li>betweennessCentralityTest</li>
+    <li>closenessCentralityTest</li>
+    <li>eigenvectorCentralityTest</li>
+    <li>clusteringCoefficientTest</li>
+    <li>shortestPathTest</li>
+</ul>
+
+<p>For weighted networks, the available methods are:</p>
+
+<ul>
+    <li>spectralDensityTest</li> 
+    <li>spectralEntropyTest</li>
+    <li>degreeDistributionTest</li>
+    <li>degreeCentralityTest</li> 
+    <li>betweennessCentralityTest</li>
+    <li>closenessCentralityTest</li>
+    <li>eigenvectorCentralityTest</li>
+    <li>clusteringCoefficientTest</li>
+    <li>shortestPathTest</li>
+</ul>
+
+<h6>Number of sample label permutations</h6>
+
+<p style="font-family:courier;color:gray">
+    &nbsp; numPermutations &lt; [value]
+</p>
+
+<p>Where [value] is the desired number of sample permutations</p>
+
+<h6>Seed for random permutations generation</h6>
+
+<p>To use different sample label permutations for each gene set,
+define the "seed" as NULL:</p>
+
+<p style="font-family:courier;color:gray">
+    &nbsp; seed &lt; NULL
+</p>
+
+<p>
+    Otherwise, set it to the desired value:
+</p>
+
+<p style="font-family:courier;color:gray">
+    &nbsp; seed &lt; [value]
+</p>
+
+<h5>Running differential network analysis</h5>
+
+<p>If [network_test_name] is "spectralDensityTest", "spectralEntropyTest" or "degreeDistributionTest" you must set a criterion for the bandwidth 
+selection:</p>
+
+<p style="font-family:courier;color:gray">
+    &nbsp; options &lt;- list("bandwidth"="Sturges")
+</p>
+
+<p>
+    or:
+</p>
+
+<p style="font-family:courier;color:gray">
+    &nbsp; options &lt;- list("bandwidth"="Silverman")
+</p>
+
+<p>To save the partial results in a file, set the parameter:</p>
+
+<p style="font-family:courier;color:gray">
+    &nbsp; resultsFile &lt;- [path_to_results_file]
+</p>
+
+<p>If [path_to_results_file] is NULL, then the partial results will not
+be saved.</p>
+
+<p>To print execution messages, set the parameter "print" to TRUE:</p>
+<p style="font-family:courier;color:gray">
+    &nbsp; print &lt;- TRUE
+</p>
+
+<p>To print execution messages, set the parameter "print" to TRUE:</p>
+<p style="font-family:courier;color:gray">
+    &nbsp;  print &lt;- TRUE
+</p>
+
+<p>To perform the differential network analysis, type the command:</p>
+<p style="font-family:courier;color:gray">
+    &nbsp;  results &lt;- diffNetAnalysis(method, options, expr, labels, geneSets,
+                            adjacencyMatrix, numPermutations, print, 
+                            resultsFile, seed) 
+</p>
