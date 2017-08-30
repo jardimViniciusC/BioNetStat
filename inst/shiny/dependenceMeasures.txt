@@ -1,0 +1,4 @@
+Name CorMatrix PvalueMatrix Source
+"Pearson" "pearson" "pearsonTest" ""
+"Spearman" "spearman" "spearmanTest" ""
+"Kendall" "kendall" "kendallTest" ""
