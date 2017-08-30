@@ -1,4 +1,13 @@
 #' Run BNS on the browser user interface.
+#' @description creates a function that infers a graph from variables values matrix
+#' @param method: a function that measures the association between the variables values.
+#' @param association: a charactere string indicating wich value will be used as association value. The options are "corr" for the correlation value, "pvalue" for nominal pvalue associated to correlation or "fdr" for corrected pvalue for mutiple tests.
+#' @param threshold: a charactere string indicating wich value will be used as threshold value. The options are "corr" for the correlation value, "pvalue" for nominal pvalue associated to correlation or "fdr" for corrected pvalue for mutiple tests. If NULL, no edge is removed.
+#' @param thr.value: a numeric value. The function removes all edges weighted by a value less
+#' than or equal to 'thr.value'.
+#' @param weighted:a logical value. If TRUE, then the edges of the graph are weighted by the
+#' association degrees between the variables. Otherwise, the edges are are weighted by one.
+#' @return a function that creates an adjacency matrix from variable values data.
 #' @export
 runBioNetStat <- function(){
   library(shiny)
