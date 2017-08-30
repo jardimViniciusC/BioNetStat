@@ -216,5 +216,5 @@ readGmtFile <- function(fileName) {
 #' @export
 runBioNetStat <- function(){
   library(shiny)
-  runApp(system.file('shiny', package='BioNetStat'))
+  runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 }
