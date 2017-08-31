@@ -12,7 +12,7 @@ R (>= 3.0.0), shiny (>= 0.8.0), WGCNA, igraph, shinyBS, RColorBrewer, Hmisc, pat
 
 1. If don't have the R software installed in our computer, download and install it (check out the [R home page](http://www.r-project.org/))
 2. Open the R command line interface, and install all BNS dependencies (if they have not been installed yet):
-````
+```
 source("http://bioconductor.org/biocLite.R")
 biocLite("impute")
 biocLite("preprocessCore")
@@ -20,17 +20,32 @@ biocLite("GO.db")
 biocLite("AnnotationDbi")
 biocLite("pathview")
 install.packages(c("WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools")) 
-````
+```
 
 2a. If pathview don't install try to ilstall this libraries in linux shell terminal.
-````
+```
 $ sudo apt-get install libxml2-dev
 $ sudo apt-get install libcurl4-openssl-dev
 $ sudo apt-get install libssl-dev
-````
-
-3. Install the BioNetStat (BNS) package
-````
+```
+2b. And, try to install 'pathview' again
+```
+source("http://bioconductor.org/biocLite.R")
+biocLite("pathview")
+```
+3. Please, install versions 0.8.0 and 0.20 for shiny and shinyBS, respectively. We are working to make the CoGA package compatible with the new versions of the packages as soon as possible. To install the recommended versions for shiny and shinyBS, just type the following commands on the R command-line:
+```
+devtools::install_version("shiny", "0.8.0")
+devtools::install_version("shinyBS", "0.20")
+```
+4. Install the BioNetStat (BNS) package
+```
 library(devtools)
 install_github("jardimViniciusC/BioNetStat")
-````
+```
+5. To run BNS, just type the following code:
+```
+library(BioNetStat)
+runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
+```
+Wait for the browser page to open, and enjoy BoiNetStat!
