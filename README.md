@@ -50,9 +50,9 @@ runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
 Wait for the browser page to open, and enjoy BoiNetStat!
 
-# Example dataset
-## Variables values data (*.csv)
+## Example dataset
+### Variables values data (*.csv)
 
-## Classes (*.csv)
+### Classes (*.csv)
 
-## Collection of variables sets (*.gmt)
+### Collection of variables sets (*.gmt)
