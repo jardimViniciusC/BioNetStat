@@ -22,13 +22,13 @@ biocLite("pathview")
 install.packages(c("WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools")) 
 ```
 
-2a. If pathview don't install try to ilstall this libraries in linux shell terminal.
+2.a. If pathview don't install try to ilstall this libraries in linux shell terminal.
 ```
 $ sudo apt-get install libxml2-dev
 $ sudo apt-get install libcurl4-openssl-dev
 $ sudo apt-get install libssl-dev
 ```
-2b. And, try to install 'pathview' again
+2.b. And, try to install 'pathview' again
 ```
 source("http://bioconductor.org/biocLite.R")
 biocLite("pathview")
