@@ -23,8 +23,8 @@ results <- reactive ({
         associationMeasure <- values$associationMeasure
         networkType <- values$networkType
         threshold <- input$correlationValue
-        # threshold <- ifelse(associationMeasure=="correlation", 
-        #                     input$correlationValue, ifelse(associationMeasure=="qvalue", 
+        # threshold <- ifelse(associationMeasure=="correlation",
+        #                     input$correlationValue, ifelse(associationMeasure=="qvalue",
         #                                                    input$qvalueThreshold, input$pvalueThreshold))
         networkTest <- values$networkTest
         options <- values$networkTestOptions
@@ -35,7 +35,7 @@ results <- reactive ({
             return(NULL)
         # if (associationMeasure=="correlation")
         #     col <- 1
-        # else 
+        # else
         #     col <- 2
         if (!is.null(options)) {
             name <- networkTestsMatrix[networkTest, "Options"]
@@ -44,15 +44,15 @@ results <- reactive ({
             ops[tolower(name)] <- options
             options <- ops
         }
-        # networkInference <- 
+        # networkInference <-
         #              match.fun(correlationMeasures[correlationMeasure, col])
         print <- F
         adjacencyMatrix <- adjacencyMatrix(correlationMeasures[correlationMeasure, 1],
-                                           ifelse(associationMeasure=="correlation", 
-                                                  "corr", ifelse(associationMeasure=="qvalue", 
+                                           ifelse(associationMeasure=="correlation",
+                                                  "corr", ifelse(associationMeasure=="qvalue",
                                                                                 "fdr", "pvalue")),
-                                           ifelse(associationMeasure=="correlation", 
-                                                  "corr", ifelse(associationMeasure=="qvalue", 
+                                           ifelse(associationMeasure=="correlation",
+                                                  "corr", ifelse(associationMeasure=="qvalue",
                                                                  "fdr", "pvalue")),
                                            threshold,
                                            ifelse(networkType=="weighted", T, F))
@@ -74,7 +74,7 @@ results <- reactive ({
             for (i in 1:length(geneSets)) {
                 setName <- geneSets[[i]][1]
                 setProgress(value = i)
-                msg <- paste("Testing ", setName, " (", i, " of ", length(geneSets), 
+                msg <- paste("Testing ", setName, " (", i, " of ", length(geneSets),
                               " sets)", sep="")
                 setProgress(detail = msg)
                 if (print)
@@ -101,7 +101,7 @@ results <- reactive ({
         })
         results <- cbind(rownames(results), results)
         colnames(results)[1] <- "Set name"
-        return(results) 
+        return(results)
     })
 })
 
@@ -109,7 +109,7 @@ results <- reactive ({
 
 # _____Results tab
 
-# Render application messages 
+# Render application messages
 output$appMessages <- renderUI({
     if (input$start == 0) {
         return("")
@@ -169,18 +169,18 @@ output$appMessages <- renderUI({
         }
         if (max > maxSize()) {
             max <- maxSize()
-            updateNumericInput(session, "maxSize", max) 
+            updateNumericInput(session, "maxSize", max)
         }
         if (length(filteredGeneSets) == 0) {
-            msg <- paste("There are no gene sets with sizes between", 
+            msg <- paste("There are no gene sets with sizes between",
                           min, "and", max, ". Please, choose a new size",
                           "interval on the side panel and try to run",
                           "again.")
             stop(msg)
         }
         if (minSize() < 2 && min < 2) {
-            msg <- paste("All gene sets should contain at least 2 variables.", 
-                         "Please, choose a new minimum size on the side", 
+            msg <- paste("All gene sets should contain at least 2 variables.",
+                         "Please, choose a new minimum size on the side",
                          "panel and try again.")
             stop(msg)
         }
@@ -188,55 +188,55 @@ output$appMessages <- renderUI({
             msg <- paste("The number of permutations should be positive.")
             stop(msg)
         }
-        geneSetDatabase <- paste("\"", geneSetsInputFileName, "\"", sep="")
+        geneSetDatabase <- ifelse(is.null(geneSetsInputFileName),paste("all variables of ",exprInputFileName),paste("\"", geneSetsInputFileName, "\"", sep=""))
         classes <- input$factorsinput
-        
+
         # classes <- strsplit(classes, " ")
         l <- labels()
         names <- input$factorsinput
-        
+
         phen <- paste(paste(names, " (", table(l)[-1],
-                      " samples)", 
+                      " samples)",
                       sep=""),collapse = ", ")
         associationMsg <- c("correlation"="absolute correlation",
                             "pvalue"="1 - pvalue", "qvalue"="1 - qvalue")
         if (is.null(seed))
           seedMsg <- "created from the current time and the process ID"
-        else 
+        else
           seedMsg <- seed
 
         if (networkTestsMatrix[networkTest, "Options"] == "")
           options <- NULL
         if (is.null(options))
           optionsMsg <- ""
-        else { 
+        else {
           name <- networkTestsMatrix[networkTest, "Options"]
           # name <- strsplit(name, "=")[[1]][1]
           optionsMsg <- paste("*", name, "-", options, "\n")
         }
         thresholdMsg <- ""
         if (networkType == "unweighted")
-          thresholdMsg <- paste("* Association degree threshold for edge", 
+          thresholdMsg <- paste("* Association degree threshold for edge",
                                 "selection -", threshold, "\n")
 
-        parameters <- paste("* Variables values and conditions data from \"", exprInputFileName, "\"", 
+        parameters <- paste("* Variables values and conditions data from \"", exprInputFileName, "\"",
                   " - ", ncol(expr)," variables and ", nrow(expr), " samples",
-                  "\n", "* Conditions data - ", phen, "\n", 
-                  "* Variable sets from ", geneSetDatabase, " - ", 
-                  length(filteredGeneSets()), " filtered gene sets.", 
-                  " The set sizes vary between ", min, " and ", 
+                  "\n", "* Conditions data - ", phen, "\n",
+                  "* Variable sets from ", geneSetDatabase, " - ",
+                  length(filteredGeneSets()), " filtered gene sets.",
+                  " The set sizes vary between ", min, " and ",
                   max, "\n",
                   "* Network type - ", networkType, "\n",
-                  "* Association measure - ", correlationMeasure, " (", 
-                  associationMsg[associationMeasure], ")", "\n", 
+                  "* Association measure - ", correlationMeasure, " (",
+                  associationMsg[associationMeasure], ")", "\n",
                   thresholdMsg,
                   "* Method for networks comparison - ", networkTest, "\n",
-                  optionsMsg, 
+                  optionsMsg,
                   "* Number of label permutations - ", input$numPermutations,
-                  "\n",  
-                  "* Seed used to generate random permutations - ", 
+                  "\n",
+                  "* Seed used to generate random permutations - ",
                   seedMsg, "\n\n",  sep="")
-        msg <- paste("The analysis is running with the following parameters:", 
+        msg <- paste("The analysis is running with the following parameters:",
                   "\n\n", parameters, sep="")
         cat(msg)
         if (optionsMsg != "")
@@ -244,23 +244,23 @@ output$appMessages <- renderUI({
         if (thresholdMsg != "")
           thresholdMsg <- div(thresholdMsg, br())
         msg <- p(h5("Execution parameters"),
-                  "* Variables values data from \"", exprInputFileName, "\"", 
+                  "* Variables values data from \"", exprInputFileName, "\"",
                   " - ", ncol(expr)," variables and ", nrow(expr), " samples",
-                  br(), "* Conditions data from \"", exprInputFileName, 
-                  "\" - ", phen, br(), 
-                  "* Variable sets from ", geneSetDatabase, " - ", 
-                  length(filteredGeneSets()), " filtered variable sets.", 
-                  " The set sizes vary between ", min, " and ", 
+                  br(), "* Conditions data from \"", exprInputFileName,
+                  "\" - ", phen, br(),
+                  "* Variable sets from ", geneSetDatabase, " - ",
+                  length(filteredGeneSets()), " filtered variable sets.",
+                  " The set sizes vary between ", min, " and ",
                   max, br(),
                   "* Network type - ", networkType, br(),
-                  "* Association measure - ", correlationMeasure, " (", 
+                  "* Association measure - ", correlationMeasure, " (",
                   associationMsg[associationMeasure], ")", br(),
                   thresholdMsg,
                   "* Method for networks comparison - ", networkTest, br(),
                   optionsMsg,
                   "* Number of label permutations - ", input$numPermutations,
                   br(),
-                  "* Seed used to generate random permutations - ", 
+                  "* Seed used to generate random permutations - ",
                   seedMsg)
         values$expr <- expr
         values$filteredGeneSets <- geneSets[filteredGeneSets()]
@@ -311,7 +311,7 @@ output$results <- renderDataTable({
 
 # output$results <- renderChart2({
 #   table <- results()
-#   colnames(table)[5] <- paste("Q-value <img src=\"images/info.png\" ", 
+#   colnames(table)[5] <- paste("Q-value <img src=\"images/info.png\" ",
 #                               "title=\"Adjusted p-value for ",
 #                               "multiple comparisons (Benjamin and ",
 #                               "Hochberg FDR method)\" />", sep="")
@@ -319,7 +319,7 @@ output$results <- renderDataTable({
 # })
 
 
-# Render radio buttons that show the result file format options. 
+# Render radio buttons that show the result file format options.
 output$resultsType <- renderUI({
     if (!values$completed) {
         return(NULL)
@@ -336,7 +336,7 @@ output$downloadResultsButton <- renderUI({
     downloadButton("downloadResults", "Creat table of results")
 })
 
-# Prepare results file for download 
+# Prepare results file for download
 output$downloadResults <- downloadHandler(
     filename = function() {
         classes <- values$classes
@@ -360,14 +360,14 @@ output$downloadResults <- downloadHandler(
         options <- values$networkTestOptions
         if (is.null(values$seed))
           seedMsg <- "created from the current time and the process ID"
-        else 
+        else
           seedMsg <- values$seed
 
         if (networkTestsMatrix[values$networkTest, "Options"] == "")
           options <- NULL
         if (is.null(options))
           optionsMsg <- ""
-        else { 
+        else {
           name <- networkTestsMatrix[values$networkTest, "Options"]
           # name <- strsplit(name, "=")[[1]][1]
           optionsMsg <- paste(tolower(name), "-", options)
@@ -380,16 +380,16 @@ output$downloadResults <- downloadHandler(
         parameters[2, 2] <- date()
         parameters[3, 1] <- "Variables values input file:"
         parameters[3, 2] <- values$exprInputFileName
-        parameters[4, 1] <- "Number of variables:" 
+        parameters[4, 1] <- "Number of variables:"
         parameters[4, 2] <- ncol(expr)
-        parameters[5, 1] <- "Total number of samples:" 
+        parameters[5, 1] <- "Total number of samples:"
         parameters[5, 2] <- nrow(expr)
         parameters[6, 1] <- "Sample labels input file:"
         # parameters[6, 2] <- values$labelsInputFileName
-        parameters[7, 1] <- paste("Classes", 
+        parameters[7, 1] <- paste("Classes",
                                   sep="")
         parameters[7, 2:(length(classes)+1)] <- classes
-        parameters[8, 1] <- paste("Number of samples from each class:", 
+        parameters[8, 1] <- paste("Number of samples from each class:",
                                   sep="")
         parameters[8, 2:(length(classes)+1)] <- table(labels[which(labels!=-1)])
         parameters[9, 1] <- "Variable sets collection:"
@@ -398,17 +398,17 @@ output$downloadResults <- downloadHandler(
         parameters[10, 2] <- ifelse(is.null(values$filteredGeneSets),1,length(values$filteredGeneSets))
         if(!is.null(values$filteredGeneSets)){
           parameters[11, 1] <- "Minimum variable set size:"
-          parameters[11, 2] <-  min(as.numeric(lapply(values$filteredGeneSets, 
+          parameters[11, 2] <-  min(as.numeric(lapply(values$filteredGeneSets,
                                                       length)))
           parameters[12, 1] <- "Maximum variable set size:"
-          parameters[12, 2] <-  max(as.numeric(lapply(values$filteredGeneSets, 
+          parameters[12, 2] <-  max(as.numeric(lapply(values$filteredGeneSets,
                                                       length)))
         }
         parameters[13, 1] <- "Network type:"
         parameters[13, 2] <- values$networkType
         parameters[14, 1] <- "Association measure:"
-        parameters[14, 2] <- paste(values$correlationMeasure, " (", 
-                                   associationMsg[values$associationMeasure], 
+        parameters[14, 2] <- paste(values$correlationMeasure, " (",
+                                   associationMsg[values$associationMeasure],
                                    ")", sep="")
         parameters[15, 1] <- "Association degree threshold for edge selection:"
         parameters[15, 2] <- thresholdMsg
@@ -433,9 +433,9 @@ output$downloadResults <- downloadHandler(
           parameters <- rbind(parameters, rep(NA, ncol(results)))
           parameters <- rbind(parameters, rep(NA, ncol(results)))
           parameters <- rbind(parameters, colnames(results))
-          write.table(parameters, filename, na="", col.names=F, row.names=F, 
+          write.table(parameters, filename, na="", col.names=F, row.names=F,
                       sep=",",quote = F)
-          write.table(results, filename, append=T, row.names=F, col.names=F, 
+          write.table(results, filename, append=T, row.names=F, col.names=F,
                       sep=",", dec=".",quote = F)
         }
     }
@@ -448,7 +448,7 @@ output$downloadNetworksButton <- renderUI({
   downloadButton("downloadNetworks", "Creat files to vizualize networks in S.I.T. software")
 })
 
-# Prepare results file for download 
+# Prepare results file for download
 output$downloadNetworks <- downloadHandler(
   filename = function() {
     classes <- values$classes
@@ -471,11 +471,11 @@ output$downloadNetworks <- downloadHandler(
     options <- values$networkTestOptions
     seed <- values$seed
     adjacencyMatrix <- adjacencyMatrix(correlationMeasures[correlationMeasure, 1],
-                                       ifelse(associationMeasure=="correlation", 
-                                              "corr", ifelse(associationMeasure=="qvalue", 
+                                       ifelse(associationMeasure=="correlation",
+                                              "corr", ifelse(associationMeasure=="qvalue",
                                                              "fdr", "pvalue")),
-                                       ifelse(associationMeasure=="correlation", 
-                                              "corr", ifelse(associationMeasure=="qvalue", 
+                                       ifelse(associationMeasure=="correlation",
+                                              "corr", ifelse(associationMeasure=="qvalue",
                                                              "fdr", "pvalue")),
                                        threshold,
                                        ifelse(networkType=="weighted", T, F),abs.values = F)
@@ -503,7 +503,7 @@ output$downloadNetworks <- downloadHandler(
         weight[which(!is.na(df[,w]))]<-df[which(!is.na(df[,w])),w]
       }
       df<-cbind(df[1:2],weight)
-      write.table(df,file = paste("SIT_", setName,".txt",sep=""), append=T, 
+      write.table(df,file = paste("SIT_", setName,".txt",sep=""), append=T,
                   row.names=F, col.names=F, sep=",", dec=".")
     }
     tar(tarfile = filename, files ="/tmp/BNS_to_SIT")
@@ -520,7 +520,7 @@ output$isCompleted <- renderUI({
         msg <- "The analysis completed successfully."
         if (!is.null(results)) {
           cat(paste("\n", msg, "\n", sep=""))
-          updateTabsetPanel(session, "tabSelected", 
+          updateTabsetPanel(session, "tabSelected",
                             selected="Analysis results")
           return(h5("Results"))
         }
@@ -548,7 +548,7 @@ observe({
 observe({
     input$start
     if (input$start != 0)
-    updateTabsetPanel(session, "tabSelected", selected = 
+    updateTabsetPanel(session, "tabSelected", selected =
                       "Analysis results")
 })
 
@@ -603,15 +603,15 @@ observe({
 #             dismiss = TRUE,
 #             block = FALSE,
 #             append = FALSE)
-# 
+#
 # observe({
 #   if (values$completed) {
 #     r <- results()
 #     if (sum(is.na(r)) > 0) {
 #       createAlert(session, anchorId = "resultsWarning",
 #                   message = paste("There are missing results in your analysis.",
-#                                   "Please, check out the \"Help\" section on", 
-#                                   "\"Interpreting results\" to know", 
+#                                   "Please, check out the \"Help\" section on",
+#                                   "\"Interpreting results\" to know",
 #                                   "more about missing p-values."),
 #                   type = "warning",
 #                   dismiss = TRUE,
