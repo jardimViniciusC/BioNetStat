@@ -4,7 +4,7 @@
 loadExprFile <- reactive({
   inFile <- input$expr
   if (is.null(inFile))
-    return(NULL)     
+    return(NULL)
   #n <- nchar(inFile$name)
   #ext <- substr(inFile$name, n-3, n)D
     expr <- readVarFile(inFile$datapath,inFile$name)
@@ -48,7 +48,7 @@ exprInput <- reactive({
     options <- list()
     options[newName] <- input$collapsingMethodOptions
   }
-  method <- match.fun(collapsingMethodsMatrix[input$collapsingMethod, 
+  method <- match.fun(collapsingMethodsMatrix[input$collapsingMethod,
                                               "Function"])
   return(collapseExprData(expr, annotation, method, options))
 })
@@ -87,16 +87,16 @@ classesInput <- reactive({
   return(labels)
 })
 ############################################################
-# Read gene set data file 
+# Read gene set data file
 geneSetsInput <- reactive ({
   inFile <- input$geneSets
   if (is.null(inFile))
     return(NULL)
   geneSets <- readGmtFile(inFile$datapath)
   return(geneSets)
-})  
+})
 
-# Phenotype properties --------------------------------------------------------- 
+# Phenotype properties ---------------------------------------------------------
 
 # Vector of gene set sizes
 geneSetSizes <- reactive({
@@ -110,8 +110,8 @@ geneSetSizes <- reactive({
   return(sizes)
 })
 
-# Vector of gene set sizes, tanking into account only the genes that are 
-# present in the gene expression data 
+# Vector of gene set sizes, tanking into account only the genes that are
+# present in the gene expression data
 geneSetSizesInChip <-  reactive({
   geneSets <- geneSetsInput()
   expr <- exprInput()
@@ -125,8 +125,8 @@ geneSetSizesInChip <-  reactive({
   return(sizes)
 })
 
-# Min gene set size. If gene expression data is loaded, it takes into 
-# account only the genes that are present in the gene expression data. 
+# Min gene set size. If gene expression data is loaded, it takes into
+# account only the genes that are present in the gene expression data.
 # Otherwise, it considers all genes in the gene set file.
 minSize <- reactive({
   if (is.null(exprInput())) {
@@ -141,8 +141,8 @@ minSize <- reactive({
   return(min(geneSetSizesInChip()))
 })
 
-# Max gene set size. If gene expression data is loaded, it takes into 
-# account only the genes that are present in the gene expression data. 
+# Max gene set size. If gene expression data is loaded, it takes into
+# account only the genes that are present in the gene expression data.
 # Otherwise, it considers all genes in the gene set file.
 maxSize <- reactive({
   if (is.null(exprInput())) {
@@ -165,13 +165,13 @@ maxSize <- reactive({
 #     labels[[3]] == symbols[1])), " samples)", sep="")
 #   if (as.numeric(labels[[1]][2]) > 2)
 #     for (i in 3:as.numeric(labels[[1]][2])) {
-#       classes <- paste(classes, ", ", labels[[2]][i], " (", 
-#                        length(which(labels[[3]] == symbols[i-1])), 
+#       classes <- paste(classes, ", ", labels[[2]][i], " (",
+#                        length(which(labels[[3]] == symbols[i-1])),
 #                        " samples)", sep="")
 #     }
 #   i <- as.numeric(labels[[1]][2]) + 1
-#   classes <- paste(classes, " and ", labels[[2]][i], " (", 
-#                    length(which(labels[[3]] == symbols[i-1])), 
+#   classes <- paste(classes, " and ", labels[[2]][i], " (",
+#                    length(which(labels[[3]] == symbols[i-1])),
 #                    " samples).", sep="")
 #   return(classes)
 # })
@@ -200,7 +200,7 @@ output$expr <- renderUI({
     dim <- dim(expr)
     filename <- paste("\"", input$expr$name, "\"", sep="")
     msg <- paste(filename, "was loaded successfully. The",
-                 "matrix has", dim[2], "columns (variables) and", dim[1], 
+                 "matrix has", dim[2], "columns (variables) and", dim[1],
                  "rows (samples).")
     return(msg)
   }
@@ -215,7 +215,7 @@ output$labels <- renderUI({
     filename <- paste("\"", input$classes, "\"", sep="")
     # factors <- paste("\"", input$factors, "\"", sep="")
     # classes <- classes()
-    msg <- paste("Class",filename, "was choosed.", 
+    msg <- paste("Class",filename, "was choosed.",
                  "The factors are: ", paste(input$factorsinput[-c(length(input$factorsinput))],collapse = ", ")
                  , "and", input$factorsinput[c(length(input$factorsinput))]
                  )
@@ -240,7 +240,7 @@ output$classes <- renderUI({
   if (is.null(labelsInput()))
     return(NULL)
   labels <- labelsInput()
-  selectInput("classes", "Choose the conditions class you want to test:",
+  selectInput("classes", p("Choose the conditions class you want to test:",img(src="images/info.png", title="s")),
               choices = c(labels))
 })
 
@@ -253,7 +253,7 @@ output$factors <- renderUI({
   # for (i in 1:ncol(classes)) {
   #   options[i] <- paste(classes[1, i], classes[2, i])
   # }
-  selectizeInput("factorsinput", "Choose the conditions to be compared:",
+  selectizeInput("factorsinput", p("Choose the conditions to be compared:",img(src="images/info.png", title="s")),
               choices = classes, multiple=T)#c(options)
 })
 
@@ -264,7 +264,7 @@ output$factors <- renderUI({
 #   classes <- classes[-which(classes==input$factors1)]
 #   # options <- vector()
 #   # for (i in 1:ncol(classes)) {
-#   #   options[i] <- paste(classes[1, i], classes[2, i]) 
+#   #   options[i] <- paste(classes[1, i], classes[2, i])
 #   # }
 #   selectInput("factors2", "Choose the second factor:",
 #               choices = classes)#c(options)
@@ -278,17 +278,17 @@ output$geneSets <- renderUI({
     return(paste("No variables sets collection file was loaded. \n All", dim(expr)[2], "variables will be compared. \n (Depending on the number of variables, it may take a while) "))
   else {
     filename <- paste("\"", input$geneSets$name, "\"", sep="")
-    msg <- paste(filename, "was loaded successfully.", 
-                 "The collection contains", length(geneSets), 
+    msg <- paste(filename, "was loaded successfully.",
+                 "The collection contains", length(geneSets),
                  "variables sets ranging from")
     if (is.null(expr)) {
-      msg <- paste(msg, min(geneSetSizes()), "to", max(geneSetSizes()), 
+      msg <- paste(msg, min(geneSetSizes()), "to", max(geneSetSizes()),
                    "variables.")
     }
     else {
-      msg <- paste(msg, " ", min(geneSetSizes()), " (", minSize(), 
-                   " in the variables values data) to ", max(geneSetSizes()), 
-                   " (", maxSize(), " in the variables values data) variables.", 
+      msg <- paste(msg, " ", min(geneSetSizes()), " (", minSize(),
+                   " in the variables values data) to ", max(geneSetSizes()),
+                   " (", maxSize(), " in the variables values data) variables.",
                    sep="",rownames(expr))
     }
     return(msg)
