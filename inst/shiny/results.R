@@ -21,6 +21,7 @@ results <- reactive ({
         numPermutations <- values$numPermutations
         correlationMeasure <- values$correlationMeasure
         associationMeasure <- values$associationMeasure
+        edgeWeight <- input$edgeWeight
         networkType <- values$networkType
         threshold <- input$correlationValue
         # threshold <- ifelse(associationMeasure=="correlation",
@@ -46,14 +47,15 @@ results <- reactive ({
         }
         # networkInference <-
         #              match.fun(correlationMeasures[correlationMeasure, col])
+        associationEdge<-ifelse(associationMeasure=="correlation",
+                                "corr", ifelse(associationMeasure=="qvalue",
+                                               "fdr", "pvalue"))
         print <- F
         adjacencyMatrix <- adjacencyMatrix(correlationMeasures[correlationMeasure, 1],
-                                           ifelse(associationMeasure=="correlation",
-                                                  "corr", ifelse(associationMeasure=="qvalue",
-                                                                                "fdr", "pvalue")),
-                                           ifelse(associationMeasure=="correlation",
-                                                  "corr", ifelse(associationMeasure=="qvalue",
-                                                                 "fdr", "pvalue")),
+                                           associationEdge,
+                                           ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
+                                                                                  "corr", ifelse(edgeWeight=="qvalue",
+                                                                                                 "fdr", "pvalue")), associationEdge),
                                            threshold,
                                            ifelse(networkType=="weighted", T, F))
         logFile=stdout()
@@ -125,7 +127,7 @@ output$appMessages <- renderUI({
         associationMeasure <- input$associationMeasure
         networkTest <- input$networkTest
         networkType <- input$networkType
-        threshold <- input$edgeThreshold
+        threshold <- input$edgeWeight
         values$canExecute <- F
         seed <- input$seed
         options <- input$networkTestOptions

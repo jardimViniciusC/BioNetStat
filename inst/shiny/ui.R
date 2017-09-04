@@ -4,9 +4,9 @@
 library(shiny)
 # library(shinyBs)
 # library(BioNetStat)
-# Define UI for application 
+# Define UI for application
 shinyUI(fluidPage(
-  
+
 #   # Application title --------------------------------------------------------
   headerPanel(
     p(img(src="images/figuraBNS.png"), align="center"),
@@ -19,23 +19,22 @@ shinyUI(fluidPage(
     h3("1. Load data"),
     wellPanel(
       h5("Variables values data"),
-      fileInput("expr", 
-                paste("Please, select the text file (*.csv) containing",
-                      "the variables values data"),
+      fileInput("expr", p(paste("Please, select the text file (*.csv) containing the variables values data"),
+                          img(src="images/info.png", title="Insert table containing the variables in the colums and the samples in the rows. The conditions of measure rows have to be indicated by a factor column")),
                 accept=c("Comma-Seperated Values", "text/csv", ".csv"))
     ),
     h3("Factors"),
-    
+
     uiOutput("classes"),
-    
+
     uiOutput("factors"),
     # uiOutput("factor2"),
-    
+
     wellPanel(
       h5("Variable set database"),
-      fileInput("geneSets", 
-                paste("Load the Set of variables file (*.gmt)", 
-                      "describing the variables sets"),
+      fileInput("geneSets",
+                p(paste("Load the Set of variables file (*.gmt)",
+                      "describing the variables sets"),img(src="images/info.png", title="s")),
                 accept=c('.gmt'))
     ),
     # Parameters
@@ -55,7 +54,7 @@ shinyUI(fluidPage(
       h5("Method for network inference"),
       uiOutput("correlationMeasure"),
       radioButtons(
-        "associationMeasure", 
+        "associationMeasure",
         "",
         c("Absolute correlation"="correlation", "1 - p-value"="pvalue",
           "1 - q-value"="qvalue")
@@ -71,27 +70,29 @@ shinyUI(fluidPage(
         "networkType",
         "",
         c("Weighted"="weighted", "Unweighted"="unweighted")
-      )#,
-      # conditionalPanel(
-      #   "input.networkType=='unweighted'",
-      #   numericInput("edgeThreshold", 
-      #                paste("Enter a association degree threshold to", 
-      #                      "define the network edges:"), 
-      #                0.95, min=0, max=1, step=0.01)
-      # )
+      ),
+      conditionalPanel(
+        "input.networkType=='weighted'",
+        radioButtons(
+          "edgeWeight",
+          "Enter a association value to define the network edges weights:",
+          c("Absolute correlation"="correlation", "1 - p-value"="pvalue",
+            "1 - q-value"="qvalue")
+        )
+      )
     ),
     wellPanel(
       h5("Method for networks comparison"),
       uiOutput("networkTest"),
       uiOutput("networkTestDescription"),
       uiOutput("networkTestOptions")
-    ), 
+    ),
     wellPanel(
       h5("Permutation test settings"),
-      numericInput("numPermutations", 
-                   "Enter the number of label permutations:", 
+      numericInput("numPermutations",
+                   "Enter the number of label permutations:",
                    1000, min=0),
-      numericInput("seed", 
+      numericInput("seed",
                    "Enter a seed to generate random permutations:", 0)
     ),
     h3("3. Run differential network analysis"),
@@ -102,7 +103,7 @@ shinyUI(fluidPage(
   # Main panel ---------------------------------------------------------------
   mainPanel(
     h3("Reports"),
-      
+
     # Tabset
     tabsetPanel(
       id="tabSelected",
@@ -110,10 +111,10 @@ shinyUI(fluidPage(
       tabPanel(
         h5("Loaded data"),
         h5("Variable values data"),
-        uiOutput("expr"), 
+        uiOutput("expr"),
         h5("Sample labels"),
         uiOutput("labels"),
-        h5("Variable sets collection"), 
+        h5("Variable sets collection"),
         uiOutput("geneSets"),
         value = "Loaded data",
         dataTableOutput("table")
@@ -139,43 +140,42 @@ shinyUI(fluidPage(
       ),
       # Help tab
       tabPanel(
-        h5("Help"), 
+        h5("Help"),
         bsCollapse(
-          multiple=TRUE, 
+          multiple=TRUE,
           id="help",
           bsCollapsePanel(
-            "1. Loading the dataset", 
-            includeHTML("help/helpData.html"), 
+            "1. Loading the dataset",
+            includeHTML("help/helpData.html"),
             id="helpData"
           ),
           bsCollapsePanel(
-            "2. Setting parameters and running the analysis", 
-            includeHTML("help/helpParameters.html"), 
+            "2. Setting parameters and running the analysis",
+            includeHTML("help/helpParameters.html"),
             id="helpParameters"
           ),
           bsCollapsePanel(
-            "3. Interpreting the results", 
-            includeHTML("help/helpResults.html"), 
+            "3. Interpreting the results",
+            includeHTML("help/helpResults.html"),
             id="helpResults"
           ),
           bsCollapsePanel(
-            "4. Further Analyses", 
-            includeHTML("help/helpFurtherAnalyses.html"), 
+            "4. Further Analyses",
+            includeHTML("help/helpFurtherAnalyses.html"),
             id="helpFurtherAnalyses"
           ),
           bsCollapsePanel(
-            "5. Running BNS from the command-line interface", 
-            includeHTML("help/helpCommandLine.html"), 
+            "5. Running BNS from the command-line interface",
+            includeHTML("help/helpCommandLine.html"),
             id="helpCommandLine"
           ),
           bsCollapsePanel(
-            "6. References", 
-            includeHTML("help/helpReferences.html"), 
+            "6. References",
+            includeHTML("help/helpReferences.html"),
             id="helpReferences"
           )
         ),
-        value = "Help"            
+        value = "Help"
       )
       ))
 ))
-  
