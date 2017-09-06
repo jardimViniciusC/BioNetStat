@@ -975,7 +975,7 @@ degreeCentralityVertexTest <- function(expr, labels, adjacencyMatrix,
   saida<-cbind(result,pvalue,Q.value=p.adjust(pvalue,method="fdr"),t(sp[1:length(G),]))
   rownames(saida)<-colnames(expr)
   saida<-saida[order(saida[,"pvalue"]),]
-  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(lab)))
+  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(as.numeric(lab))))
   return(saida)
 }
 
@@ -1035,7 +1035,7 @@ betweennessCentralityVertexTest <- function(expr, labels, adjacencyMatrix,
   saida<-cbind(result,pvalue,Q.value=p.adjust(pvalue,method="fdr"),t(sp[1:length(G),]))
   rownames(saida)<-colnames(expr)
   saida<-saida[order(saida[,"pvalue"]),]
-  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(lab)))
+  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(as.numeric(lab))))
   return(saida)
 }
 
@@ -1092,7 +1092,7 @@ closenessCentralityVertexTest <- function(expr, labels, adjacencyMatrix,
   saida<-cbind(result,pvalue,Q.value=p.adjust(pvalue,method="fdr"),t(sp[1:length(G),]))
   rownames(saida)<-colnames(expr)
   saida<-saida[order(saida[,"pvalue"]),]
-  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(lab)))
+  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(as.numeric(lab))))
   return(saida)
 }
 
@@ -1142,7 +1142,7 @@ eigenvectorCentralityVertexTest <- function(expr, labels, adjacencyMatrix,
   saida<-cbind(result,pvalue,Q.value=p.adjust(pvalue,method="fdr"),t(sp[1:length(G),]))
   rownames(saida)<-colnames(expr)
   saida<-saida[order(saida[,"pvalue"]),]
-  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(lab)))
+  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(as.numeric(lab))))
   return(saida)
 }
 
@@ -1198,6 +1198,6 @@ clusteringCoefficientVertexTest <- function(expr, labels, adjacencyMatrix,
   saida<-cbind(result,pvalue,Q.value=p.adjust(pvalue,method="fdr"),t(sp[1:length(A),]))
   rownames(saida)<-colnames(expr)
   saida<-saida[order(saida[,"pvalue"]),]
-  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(lab)))
+  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(as.numeric(lab))))
   return(saida)
 }
