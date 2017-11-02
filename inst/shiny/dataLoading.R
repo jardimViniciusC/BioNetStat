@@ -308,4 +308,5 @@ observe({
   input$classes
   input$factor
   updateTabsetPanel(session, "tabSelected", selected = "Loaded data")
+  # updateTabsetPanel(sessionVertex, "tabSelected", selected = "Loaded data")
 })

@@ -31,7 +31,7 @@ plotSelectedData <- reactive({
     if (!is.null(classes))
         classes <- strsplit(classes, " ")
     if (is.null(filterGeneSets))
-        return(NULL)
+      return(NULL)
     if (filterGeneSets %in% c("tested", "pvalueThreshold", "qvalueThreshold")) {
         expr <- values$expr
         labels <- values$labels
@@ -43,43 +43,45 @@ plotSelectedData <- reactive({
     genes <- searchGeneSet()
     if (is.null(genes))
         return(NULL)
-    i <- which(genes %in% rownames(expr))
+    i <- which(genes %in% colnames(expr))
     if (length(i) == 0)
         genes <- NULL
-    else 
+    else
         genes <- genes[i]
     if (is.null(genes))
         return(NULL)
-    return(list("expr"=expr[genes, ], "labels"=labels, "classes"=classes))
+    return(list("expr"=expr[,genes], "labels"=labels, "classes"=classes))
 })
-    
+
 plotAdjacencyMatrix <- reactive({
     correlationMeasure <- input$correlationMeasure
     associationMeasure <- input$associationMeasure
     networkType <- input$networkType
-    threshold <- input$edgeThreshold
+    threshold <- input$correlationValue
+    edgeWeight <- input$edgeWeight
     signedCorrelation <- input$signedCorrelation
     if(is.null(correlationMeasure) ||
        is.null(associationMeasure) || is.null(networkType))
-        return(NULL)
+      return(NULL)
     if (is.null(signedCorrelation))
-        signedCorrelation <- F
+      signedCorrelation <- F
     if (associationMeasure == "correlation")
-        col <- 1
-    else 
-        col <- 2
-    networkInference <- 
-                 match.fun(correlationMeasures[correlationMeasure, col])
-    adjMatrix <- adjacencyMatrix(networkInference,
-                                 ifelse(signedCorrelation, F, T), 
-                                 ifelse(associationMeasure ==
-                                        "correlation", F, T), 
-                                 ifelse(associationMeasure=="qvalue", T, F),
-                                 ifelse(networkType=="weighted", T, F),
-                                 threshold)
+      col <- 1
+    else
+      col <- 2
+    associationEdge<-ifelse(associationMeasure=="correlation",
+                            "corr", ifelse(associationMeasure=="qvalue",
+                                           "fdr", "pvalue"))
+    adjMatrix <- adjacencyMatrix(correlationMeasures[correlationMeasure, 1],
+                                       associationEdge,
+                                       ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
+                                                                              "corr", ifelse(edgeWeight=="qvalue",
+                                                                                             "fdr", "pvalue")), associationEdge),
+                                       threshold,
+                                       ifelse(networkType=="weighted", T, F))
 })
 
-# Returns a adjacency matrix whose first half columns belongs to the class1 gene 
+# Returns a adjacency matrix whose first half columns belongs to the class1 gene
 # network and second hallf columns belongs to the class2
 # gene network
 adjacencyMatrices <- reactive({
@@ -104,16 +106,16 @@ adjacencyMatrices <- reactive({
 # _____Further analysis tab
 
 # Render radio buttons to select a collection of gene sets
-output$filterGeneSets <- renderUI({    
+output$filterGeneSets <- renderUI({
     if (values$completed) {
         return(
-            radioButtons("filterGeneSets", paste("Choose a collection of", 
-                   "gene sets:"), 
+            radioButtons("filterGeneSets", paste("Choose a collection of",
+                   "gene sets:"),
                     c("All gene sets with p-values less than the threshold"=
                       "pvalueThreshold",
                       "All gene sets with q-values less than the threshold"=
                       "qvalueThreshold",
-                      "All tested gene sets"="tested", 
+                      "All tested gene sets"="tested",
                       "All loaded gene sets"="all")
             )
         )
@@ -121,9 +123,9 @@ output$filterGeneSets <- renderUI({
     else if (!is.null(filteredGeneSets()) && !is.null(exprInput()) &&
              !is.null(labelsInput())) {
         return(
-            radioButtons("filterGeneSets", paste("Choose a collection of", 
+            radioButtons("filterGeneSets", paste("Choose a collection of",
                          "gene sets:"), c("All filtered gene sets"=
-                                          "filtered", 
+                                          "filtered",
                                           "All loaded gene sets"="all")
             )
         )
@@ -138,7 +140,7 @@ output$geneSetThreshold <- renderUI({
         return(NULL)
     if (values$completed) {
         if (input$filterGeneSets %in% c("pvalueThreshold", "qvalueThreshold"))
-            return(numericInput("geneSetThreshold", paste("Enter a", 
+            return(numericInput("geneSetThreshold", paste("Enter a",
                           "threshold:"), 0.05, min=0, max=1, step=0.05))
     }
     return(NULL)
@@ -146,13 +148,13 @@ output$geneSetThreshold <- renderUI({
 
 # Render a select input to choose a genes set
 output$selectGeneSet <- renderUI({
-    if (is.null(filteredGeneSets()) || is.null(exprInput()) || 
+    if (is.null(filteredGeneSets()) || is.null(exprInput()) ||
          is.null(labelsInput()))
         return(NULL)
 
     if (is.null(input$filterGeneSets))
         return(NULL)
-    
+
     n <- 0
     results <- results()
 
@@ -162,32 +164,32 @@ output$selectGeneSet <- renderUI({
         if (is.null(input$geneSetThreshold))
             return(NULL)
         if (input$filterGeneSets == "pvalueThreshold")
-            i <- which(results[, "Nominal p-value"] < input$geneSetThreshold)
+            i <- which(results[, "Nominal p-value"] <= input$geneSetThreshold)
         else
-            i <- which(results[, "Q-value"] < input$geneSetThreshold)
+            i <- which(results[, "q-value"] <= input$geneSetThreshold)
         n <- length(i)
         if (n != 0)
-            geneSets <- results[i, "Genes set name"]
+            geneSets <- results[i, "Set name"]
     }
-         
+
     else if (input$filterGeneSets == "tested") {
         geneSets <- values$filteredGeneSets
         n <- length(geneSets)
         names <- vector()
         if (n != 0)
-            for (i in 1:n) 
-                names[i] <- geneSets[[i]][1] 
+            for (i in 1:n)
+                names[i] <- geneSets[[i]][1]
         geneSets <- names
     }
-    
+
     else if (input$filterGeneSets == "filtered") {
         i <- filteredGeneSets()
         geneSets <- geneSetsInput()
         n <- length(i)
         if (n != 0) {
             names <- vector()
-            for (j in 1:n) 
-                names[j] <- geneSets[[i[j]]][1] 
+            for (j in 1:n)
+                names[j] <- geneSets[[i[j]]][1]
         }
         geneSets <- names
     }
@@ -197,17 +199,17 @@ output$selectGeneSet <- renderUI({
         n <- length(geneSets)
         names <- vector()
         if (n != 0)
-            for (i in 1:n) 
-                names[i] <- geneSets[[i]][1] 
+            for (i in 1:n)
+                names[i] <- geneSets[[i]][1]
         geneSets <- names
     }
 
-    else 
+    else
         return(NULL)
 
     if (n == 0)
         return("No filtered genes set.")
-    
+
     geneSets <- sort(geneSets)
 
     selectInput("selectGeneSet", "Select a genes set:", choices=geneSets)
@@ -232,8 +234,8 @@ output$geneSetInfo <- renderUI ({
     n1 <- length(genes)
     i <- which(genes %in% rownames(expr))
     n2 <- length(i)
-    msg <- paste("You have selected the ", geneSet, ". ", n2, " of the ", 
-                 n1, 
+    msg <- paste("You have selected the ", geneSet, ". ", n2, " of the ",
+                 n1,
                  " genes in this set were found in your expression data.")
 })
 
@@ -251,7 +253,7 @@ output$networkScore <- renderUI({
     if (input$networkType == "weighted")
         i <- union(i, which(networkScoresMatrix[,"Type"] == "weighted"))
     else if (input$networkType == "unweighted")
-        i <- union(i, which(networkScoresMatrix[,"Type"] == "unweighted")) 
+        i <- union(i, which(networkScoresMatrix[,"Type"] == "unweighted"))
     names <- rownames(networkScoresMatrix)[i]
     selectInput("networkScore", "Select a method to measure a network feature:",
                         names)
@@ -284,7 +286,7 @@ output$networkScoresComparison  <- renderUI({
     signedCorrelation <- input$signedCorrelation
     if (is.null(data) || is.null(adjMatrix) || is.null(networkScore))
         return(NULL)
-    
+
     options <- input$networkScoreOptions
     name <- networkScoresMatrix[networkScore, "Options"]
     if (is.null(options) && name != "")
@@ -301,7 +303,7 @@ output$networkScoresComparison  <- renderUI({
         return(abs(M))
     }
 
-    r <- match.fun(networkScoresMatrix[networkScore, 2])(data$expr, data$labels, 
+    r <- match.fun(networkScoresMatrix[networkScore, 2])(data$expr, data$labels,
                                                 adjacencyMatrix, options=options)
     r1 <- round(r[[1]], 6)
     r2 <- round(r[[2]], 6)
@@ -310,13 +312,17 @@ output$networkScoresComparison  <- renderUI({
     result <- div(class="row-fluid",
                   div(class="span4",
                       p(h5(paste(classes[[1]][1], " score:", sep="")), r1)),
-                  div(class="span4",    
+                  div(class="span4",
                       p(h5(paste(classes[[1]][2], " score:", sep="")), r2)),
                   div(class="span4",
-                      p(h5(paste("Difference between ", classes[[1]][1], " and ", 
+                      p(h5(paste("Difference between ", classes[[1]][1], " and ",
                           classes[[1]][2], " scores:", sep="")), diff)))
     return(result)
 })
+
+# Gene scores ------------------------------------------------------------------
+
+source("differentialVertexAnalysis.R", local=T)
 
 # Network visualization plots --------------------------------------------------
 

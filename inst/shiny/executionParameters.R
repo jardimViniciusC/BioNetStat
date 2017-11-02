@@ -1,6 +1,6 @@
 # Gene set properties ----------------------------------------------------------
 
-# Vector of the gene set ids (the position of the set in the list of gene 
+# Vector of the gene set ids (the position of the set in the list of gene
 # sets) that were filtered.
 filteredGeneSets <- reactive({
     if (is.null(exprInput()))
@@ -35,12 +35,12 @@ output$geneSetsCount <- renderUI({
         paste(n, "variable set was filtered.")
     else
         paste(n, "variable sets were filtered.")
-}) 
+})
 # - Minimum gene set size
 output$minSize <- renderUI({
     min <- as.numeric(ifelse(is.null(minSize()), 16, minSize()))
     max <- as.numeric(ifelse(is.null(maxSize()), 1024, maxSize()))
-    numericInput("minSize", "Minimum variable set size", min, min=min, max=max)
+    numericInput("minSize", "Minimum variable set size", 10, min=min, max=max)
 })
 # - Maximum gene set size
 output$maxSize <- renderUI({
@@ -59,7 +59,7 @@ output$maxSize <- renderUI({
 #     classes <- combn(names, 2)
 #     options <- vector()
 #     for (i in 1:ncol(classes)) {
-#         options[i] <- paste(classes[1, i], classes[2, i]) 
+#         options[i] <- paste(classes[1, i], classes[2, i])
 #     }
 #     selectInput("classes", "Choose the phenotype classes you want to test:",
 #                 options)
@@ -73,7 +73,7 @@ output$predefGeneSets <- renderUI({
 
 output$correlationMeasure <- renderUI({
 
-    selectInput("correlationMeasure", "Select a dependence measure:", 
+    selectInput("correlationMeasure", "Select a dependence measure:",
                 rownames(correlationMeasures))
 })
 
@@ -93,7 +93,7 @@ output$networkTest <- renderUI({
     if (input$networkType == "weighted")
         i <- union(i, which(networkTestsMatrix[,"Type"] == "weighted"))
     else if (input$networkType == "unweighted")
-        i <- union(i, which(networkTestsMatrix[,"Type"] == "unweighted")) 
+        i <- union(i, which(networkTestsMatrix[,"Type"] == "unweighted"))
     names <- rownames(networkTestsMatrix)[i]
     selectInput("networkTest", "Select a method to compare networks:",
                  names)

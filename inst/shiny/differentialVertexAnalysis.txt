@@ -1,0 +1,6 @@
+Name Function Source Type Description
+"Degree centrality" "degreeCentralityVertexTest" "" "both" ""
+"Betweenness centrality" "betweennessCentralityVertexTest" "" "both" ""
+"Closeness centrality" "closenessCentralityVertexTest" "" "both" ""
+"Eigenvector centrality" "eigenvectorCentralityVertexTest" "" "both" ""
+"Local clustering coefficient" "clusteringCoefficientVertexTest" "" "both" ""

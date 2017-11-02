@@ -163,9 +163,6 @@ shinyUI(fluidPage(
             wellPanel(
               h5("Nodes Test"),
               uiOutput("vertexFunction"),
-              h5("Run differential node analysis"),
-              # actionButton("startVertex", "Start analysis"),
-              # bsAlert(inputId = "vertexResultsWarning"),
               uiOutput("vertexScoresType"),
               uiOutput("downloadVertexAnalysisTable")
             ),
@@ -320,8 +317,8 @@ shinyUI(fluidPage(
             #   plotOutput("exprBoxplot")
             # )
           )
-        ),
-        value = "Further analyses"
+        )#,
+        # value = "Further analyses"
 
 
       ),

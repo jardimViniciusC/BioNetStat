@@ -1,16 +1,10 @@
 geneScoresComparison <- reactive({
     data <- plotSelectedData()
     if (is.null(data)) {
-        c1 <- "Class 1"
-        c2 <- "Class 2"
+      data<-list(classes=c("Class 1","Class 2"))
     }
-    else {
-        c1 <- data$classes[[1]][1]
-        c2 <- data$classes[[1]][2]
-    }
-    result <- data.frame(matrix(NA, nrow=1, ncol=4))
-    colnames(result) <- c("Gene symbol", paste(c1, "score"), paste(c2, "score"),
-                           paste("Difference between", c1, "and", c2, "scores"))
+    result <- data.frame(matrix(NA, nrow=1, ncol=1+length(data$classes)))
+    colnames(result) <- c("Nodes", paste(data$classes,"score",sep = " "))
     if (is.null(data))
         return(result)
     adjMatrix <- plotAdjacencyMatrix()
@@ -18,26 +12,15 @@ geneScoresComparison <- reactive({
     signedCorrelation <- input$signedCorrelation
     if (is.null(data) || is.null(adjMatrix) || is.null(geneScore))
         return(result)
-    
     adjacencyMatrix <- function(expr) {
         M <- adjMatrix(expr)
         return(abs(M))
     }
-
-    r <- match.fun(geneScoresMatrix[geneScore, 2])(data$expr, data$labels, 
-                                          adjacencyMatrix)
-
-    genes <- rownames(data$expr)
-
-    result <- data.frame(matrix(NA, nrow=length(genes), ncol=4))
-    colnames(result) <- c("Gene symbol", paste(c1, "score"), paste(c2, "score"),
-                           paste("Difference between", c1, "and", c2, "scores"))
-
-    result[, 1] <- genes
-    result[, 2] <- round(r[[1]], 6)
-    result[, 3] <- round(r[[2]], 6)
-    result[, 4] <- round(r[[1]] - r[[2]], 6)
-
+    r <- match.fun(geneScoresMatrix[geneScore, 2])(data$expr, data$labels,
+                                                   adjacencyMatrix)
+    result <- do.call(cbind,r)
+    result<-cbind(rownames(result),result)
+    colnames(result) <- c("Nodes", paste(data$classes,"score",sep = " "))
     return(result)
 })
 
@@ -45,7 +28,7 @@ geneScoresComparison <- reactive({
 
 #_____Gene scores tab
 
-# Render radio buttons to choose gene scores comparison file format. 
+# Render radio buttons to choose gene scores comparison file format.
 output$geneScoresType <- renderUI({
     if (is.null(geneScoresComparison())) {
         return(NULL)
@@ -62,8 +45,8 @@ output$downloadGeneScoresButton <- renderUI({
     downloadButton("downloadGeneScores", "Save gene scores")
 })
 
-# Prepare file with the statistics of the absolute differences between 
-# correlations for download 
+# Prepare file with the statistics of the absolute differences between
+# correlations for download
 output$downloadGeneScores <- downloadHandler(
     filename = function() {
         data <- plotSelectedData()
@@ -73,14 +56,14 @@ output$downloadGeneScores <- downloadHandler(
         geneScore <- input$geneScore
         geneScore <-  gsub(" ", "_", tolower(geneScore))
         name <- paste(input$selectGeneSet, "_gene_scores_", c1, "_vs_", c2, "_",
-                      input$networkType , "_", input$plotCorrelationMeasure, 
+                      input$networkType , "_", input$plotCorrelationMeasure,
                       "_", input$plotAssociationMeasure,
-                      ifelse(input$networkType == "unweighted", 
+                      ifelse(input$networkType == "unweighted",
                       paste("_threshold=", input$plotEdgeThreshold, sep=""),
                       ""),  sep="")
         if (input$geneScoresType == "R data")
             name <- paste(name, ".RData", sep="")
-        else 
+        else
             name <- paste(name, ".csv", sep="")
         return(name)
     },
@@ -100,17 +83,17 @@ output$geneScore <- renderUI({
     if (input$networkType == "weighted")
         i <- union(i, which(geneScoresMatrix[,"Type"] == "weighted"))
     else if (input$networkType == "unweighted")
-        i <- union(i, which(geneScoresMatrix[,"Type"] == "unweighted")) 
+        i <- union(i, which(geneScoresMatrix[,"Type"] == "unweighted"))
     names <- rownames(geneScoresMatrix)[i]
     selectInput("geneScore", "Select a method to compute the gene scores:",
                         names)
 })
 
-#output$geneScoresComparison  <- renderDataTable({
-#    return(geneScoresComparison())
-#})
-
-output$geneScoresComparison  <- renderChart2({
-    table <- geneScoresComparison()
-    return(dTable(table))
+output$geneScoresComparison  <- renderDataTable({
+   return(geneScoresComparison())
 })
+
+# output$geneScoresComparison  <- renderChart2({
+#     table <- geneScoresComparison()
+#     return(dTable(table))
+# })
