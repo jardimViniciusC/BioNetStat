@@ -45,6 +45,16 @@ for (i in 1:nrow(geneScoresMatrix)) {
 }
 rownames(geneScoresMatrix) <- geneScores
 
+# Vector that maps gene score methods to functions
+differentialVertexAnalysis <- as.matrix(read.table("differentialVertexAnalysis.txt",  header=T))
+vertexScore <- c()
+for (i in 1:nrow(differentialVertexAnalysis)) {
+  if (!is.na(differentialVertexAnalysis[i,3]))
+    source(differentialVertexAnalysis[i,3])
+  vertexScore[i] <- differentialVertexAnalysis[i,1]
+}
+rownames(differentialVertexAnalysis) <- vertexScore
+
 # Vector that maps gene set score methods network comparison to functions
 networkScoresMatrix <- as.matrix(read.table("networkScores.txt",  header=T))
 networkScores <- c()
@@ -61,7 +71,7 @@ rownames(networkScoresMatrix) <- networkScores
 # ------------------------------------------------------------------------------
 
 # Define server logic
-shinyServer(function(input, output, session) {
+shinyServer(function(input, output, session, sessionVertex) {
 
   values <- reactiveValues(canExecute=F, completed=F, expr=NULL, labels=NULL,
                            filteredGeneSets=NULL, classes=NULL,
