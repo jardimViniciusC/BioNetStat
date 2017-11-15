@@ -20,7 +20,7 @@ shinyUI(fluidPage(
     wellPanel(
       h5("Variables values data"),
       fileInput("expr", p(paste("Please, select the text file (*.csv) containing the variables values data"),
-                          img(src="images/info.png", title="Insert table containing the variables in the colums and the samples in the rows. The conditions of measure rows have to be indicated by a factor column")),
+                          img(src="images/info.png", title="Choose a file containing the table with the variables in the colums and the samples in the rows. The conditions of measure rows have to be indicated by a factor column")),
                 accept=c("Comma-Seperated Values", "text/csv", ".csv"))
     ),
     h3("Factors"),
@@ -34,7 +34,7 @@ shinyUI(fluidPage(
       h5("Variable set database"),
       fileInput("geneSets",
                 p(paste("Load the Set of variables file (*.gmt)",
-                      "describing the variables sets"),img(src="images/info.png", title="s")),
+                      "describing the variables sets"),img(src="images/info.png", title="Choose a file containing the groups of variables. The format of the file that has to be inserted is explained in help section.")),
                 accept=c('.gmt'))
     ),
     # Parameters
@@ -167,13 +167,13 @@ shinyUI(fluidPage(
               # actionButton("startVertex", "Start analysis"),
               # bsAlert(inputId = "vertexResultsWarning"),
               uiOutput("vertexScoresType"),
-              uiOutput("downloadVertexAnalysisTable")
+              uiOutput("downloadVertexAnalysisButton")
             ),
             br(),
             dataTableOutput("vertexAnalysisTable")
-          ),
-          tabPanel(
-            "Network visualization plots"#,
+          # ),
+          # tabPanel(
+          #   "Network visualization plots"#,
             # bsCollapsePanel(
             #   "Plot settings",
             #   div(
@@ -236,30 +236,30 @@ shinyUI(fluidPage(
             #     chartOutput("corAbsDiff", "datatables")
             #   )
             # )
-          ),
-          tabPanel(
-            "Gene set properties"#,
-            # wellPanel(
-            #   h5("Gene set network topological properties"),
-            #   uiOutput("networkScore"),
-            #   uiOutput("networkScoreOptions"),
-            #   uiOutput("networkScoresComparison")
-            # )
-          ),
-          tabPanel(
-            "Gene scores",
-            wellPanel(
-              h5("Gene scores"),
-              uiOutput("geneScore"),
-              uiOutput("geneScoresType"),
-              uiOutput("downloadGeneScoresButton")
-            ),
-            br(),
-            dataTableOutput("geneScoresComparison")
-            # chartOutput("geneScoresComparison", "datatables")
-          ),
-          tabPanel(
-            "Gene expression analysis"#,
+          # ),
+          # tabPanel(
+          #   "Gene set properties"#,
+          #   # wellPanel(
+          #   #   h5("Gene set network topological properties"),
+          #   #   uiOutput("networkScore"),
+          #   #   uiOutput("networkScoreOptions"),
+          #   #   uiOutput("networkScoresComparison")
+          #   # )
+          # ),
+          # tabPanel(
+          #   "Gene scores",
+          #   wellPanel(
+          #     h5("Gene scores"),
+          #     uiOutput("geneScore"),
+          #     uiOutput("geneScoresType"),
+          #     uiOutput("downloadGeneScoresButton")
+          #   ),
+          #   br(),
+          #   dataTableOutput("geneScoresComparison")
+          #   # chartOutput("geneScoresComparison", "datatables")
+          # ),
+          # tabPanel(
+          #   "Gene expression analysis"#,
             # bsCollapsePanel(
             #   "Gene expression heatmap",
             #   wellPanel(

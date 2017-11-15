@@ -72,7 +72,6 @@ vertexAnalysisTable <- reactive ({
     withProgress(session, min=1, max=length(geneSets), {
       setProgress(message = 'Analysis in progress',
                   detail = 'This may take a while...')
-      print(3)
       for (i in 1:length(geneSets)) {
         setName <- geneSets[[i]][1]
         setProgress(value = i)
@@ -101,11 +100,9 @@ vertexAnalysisTable <- reactive ({
       }
       if(is.list(result)) results[, "q-value"] <<- round(p.adjust(results[, "Nominal p-value"], method="fdr"),4)#
     })
-    print(4)
     results <- results[[1]]
     results <- cbind(rownames(results), results)
     colnames(results) <- c("Node","Test statistic", "Nominal p-value", "q-value",paste(data$classes,"score",sep = " "))#
-    print(5)
     return(results)
   })
 })
@@ -116,7 +113,7 @@ vertexAnalysisTable <- reactive ({
 
 # Render radio buttons to choose gene scores comparison file format.
 output$vertexScoresType <- renderUI({
-    if (is.null(geneScoresComparison())) {
+    if (is.null(vertexAnalysisTable())) {
         return(NULL)
     }
     radioButtons("vertexScoresType", paste("Select a file format to save the",
@@ -125,40 +122,33 @@ output$vertexScoresType <- renderUI({
 })
 
 # Render button to download the gene scores comparison table
-output$downloadGeneScoresButton <- renderUI({
-    if (is.null(input$geneScoresType))
+output$downloadVertexAnalysisButton <- renderUI({
+    if (is.null(vertexAnalysisTable()))
         return(NULL)
-    downloadButton("downloadGeneScores", "Save gene scores")
+    downloadButton("downloadVertexAnalysisTable", "Save gene scores")
 })
 
 # Prepare file with the statistics of the absolute differences between
 # correlations for download
 output$downloadVertexAnalysisTable <- downloadHandler(
     filename = function() {
-        data <- plotSelectedData()
-        classes <- data$classes
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
-        geneScore <- input$geneScore
-        geneScore <-  gsub(" ", "_", tolower(geneScore))
-        name <- paste(input$selectGeneSet, "_gene_scores_", c1, "_vs_", c2, "_",
-                      input$networkType , "_", input$plotCorrelationMeasure,
-                      "_", input$plotAssociationMeasure,
-                      ifelse(input$networkType == "unweighted",
-                      paste("_threshold=", input$plotEdgeThreshold, sep=""),
-                      ""),  sep="")
-        if (input$geneScoresType == "R data")
-            name <- paste(name, ".RData", sep="")
-        else
-            name <- paste(name, ".csv", sep="")
-        return(name)
+      classes <- values$classes
+      if (input$resultsType == "R data")
+        name <- paste("Vertex_analysis", paste(classes,collapse = "_"),".RData", sep="")
+      else
+        name <- paste("Vertex_analysis", paste(classes,collapse = "_"),".csv" , sep="")
+      return(name)
     },
     content = function(filename) {
-        geneScores <- geneScoresComparison()
-        if (input$geneScoresType == "R data")
-            save(geneScores, file=filename)
-        else
-            write.csv(geneScores, filename, row.names=F)
+        results <- vertexAnalysisTable()
+
+        if (input$resultsType == "R data") {
+          save(results, file=filename)
+        }
+        else {
+          write.table(results, filename, append=T, row.names=F, col.names=T,
+                      sep=",", dec=".",quote = F)
+        }
     }
 )
 

@@ -354,8 +354,6 @@ output$downloadResults <- downloadHandler(
         parameters <- matrix(NA, 18, ncol(results))
         expr <- values$expr
         classes <- input$factorsinput
-        c1 <- classes[1]
-        c2 <- classes[2]
         labels <- values$labels
         associationMsg <- c("correlation"="absolute correlation",
                             "pvalue"="1 - pvalue", "qvalue"="1 - qvalue")
