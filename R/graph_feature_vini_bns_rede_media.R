@@ -972,7 +972,8 @@ degreeCentralityVertexTest <- function(expr, labels, adjacencyMatrix,
   }
   results<-do.call(rbind,results)
   pvalue <- (1 + apply(t(t(results) >= result),2,sum))/(numPermutations + 1)
-  saida<-cbind(result,pvalue,Q.value=p.adjust(pvalue,method="fdr"),t(sp[1:length(G),]))
+  saida<-cbind(round(result,3),round(pvalue,4),Q.value=round(p.adjust(pvalue,method="fdr"),4),round(t(sp[1:length(G),]),3))
+  print(saida)
   rownames(saida)<-colnames(expr)
   saida<-saida[order(saida[,"pvalue"]),]
   colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(as.numeric(lab))))
