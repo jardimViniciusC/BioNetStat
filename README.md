@@ -50,9 +50,5 @@ runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
 Wait for the browser page to open, and enjoy BoiNetStat!
 
-## Example dataset
-### Variables values data (*.csv)
-
-### Classes (*.csv)
-
-### Collection of variables sets (*.gmt)
+## How to use BioNetStat
+The tutorials with examples data sets are in 'Tutorial para uso do BioNetStat em linhas de comando.md' or in 'Tutorial BioNetStat para a interface.md'.
