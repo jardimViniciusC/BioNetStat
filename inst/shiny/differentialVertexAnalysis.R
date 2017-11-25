@@ -59,6 +59,7 @@ vertexAnalysisTable <- reactive ({
     logFile=stdout()
     saida<-list()
     method <- match.fun(differentialVertexAnalysis[vertexFunc, 2])
+    print(method)
     if(is.null(geneSets)) geneSets <- list(c("all",colnames(expr)))
     results <- data.frame(matrix(NA, nrow=length(geneSets), ncol=5+length(classes)))#
     names <- array(NA, length(geneSets))
