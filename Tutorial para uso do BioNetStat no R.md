@@ -8,8 +8,12 @@ library(devtools)
 install_github("jardimViniciusC/BioNetStat")
 library(BioNetStat)
 ```
+Para usar a Interface grafica do BioNetStat basta carregar a biblioteca 'shiny' (caso ela não esteja instalada, leia o arquivo README.md) e rodar a função que carrega a interface.
+```
 library(shiny)
 runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
+```
+Um guia de como usar a interface gráfica está nas aba 'Help' da própria interface ou em 'Tutorial BioNetStat para a interface.md'.
 
 ## Lendo a tabela de valores das variáveis
 A função 'readVarFile', lê apenas os valores numéricos da tabela que serão usados para a construção do grafo. Neste exemplo a tabela 'cancer_data.csv' é formada por valores de expressão de 134 genes.
