@@ -34,38 +34,43 @@ A função readGmtFile lê uma tabela que indica os na primeira coluna os nomes 
 varSets<-readGmtFile(fileName = "~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/dados_de_teste/c2.cp.v5.2.symbols.gmt")
 ```
 ## Escolhendo os parâmetros para construção da matriz de adjacência
+
+Nessa função o usuário escolhe quais os parâmetros para a construção das redes como o método estátístico usado (method), onde é possível escolher entre as correlação de Pearson, Spearman ou Kendall ou então inserir uma função que retorne uma matriz de adjacência. Se o usuário escolher uma das três correlações ele deve selecionar qual valor será usado como força de associação ("corr", "pvalue", "fdr") em 'association', a força que será usada como threshold na construção das redes ("corr", "pvalue", "fdr") e o valor numérico (entre 0 e 1) usado como threshold, em 'thr.value'. Além disso é possivel escolher se a rede terá peso ou não nas arestas em 'weighted'.
 ```
 funAdjMat<-adjacencyMatrix(method = "pearson",association = "corr",threshold = "corr",thr.value = 0.5,weighted = T)
 ```
-# Teste das funções que comparam redes
+
+# Comparando as redes
+
+A função 'diffNetAnalysis' realiza o teste de comparação de múltiplas redes. Para comparar as redes é necessário escolher um dos métodos de comparação em 'method'. Nos argumentos 'varFile', 'labels' e 'varSets', o usruário insere os objetos da matriz de valores, a classificação das amostras e os grupos de variáveis, respectivamente. A função que constrói a matriz de correlação é inserida em 'adjacencyMatrix'. O usuário deve definir o numero de permutações para o cálculo do p-valor ('numPermutations'), o numero mínimo de vértices usados para construir as redes ('min.vert'). Se o usuário escolher comparar as redes pelas distribuições do espectro ou de grau ele deve selecionar qual medidad de largura de banda será usada em 'options', podendo ser 'bandwidth'='Silverman' ou 'bandwidth'='Sturges'.
 ```
+# Choose one structural property
 metodos<-list(spectralDistributionTest, spectralEntropyTest, degreeDistributionTest,degreeCentralityTest,
            betweennessCentralityTest, closenessCentralityTest, eigenvectorCentralityTest,
            clusteringCoefficientTest)
-res<-list()
-for(i in 1:length(metodos)){
-  res<-diffNetAnalysis(method = metodos[i],options = list("bandwidth"="Silverman"),varFile = matriz,
-                labels = labmat, varSets = NULL,adjacencyMatrix = funAdjMat, numPermutations = 10, print = T,
-                seed = F,min.vert = 10, resultsFile ="resultados.RData" )
-  print(res)
-
-}
+           
+res<-diffNetAnalysis(method = metodos[1],varFile = matriz, labels = labmat, varSets = NULL,adjacencyMatrix = funAdjMat,
+                numPermutations = 1000, min.vert = 10,options = list("bandwidth"="Silverman"))
+res
 ```
-############## Teste das funções que comparam vertices #######################
+# Comparando a importância dos vértices
 
+A função 'diffNetAnalysis' também realiza o teste de comparação de vertices em múltiplas redes. Da mesma forma, é necessário escolher um dos métodos de comparação (metodos) em 'method'. Nos argumentos 'varFile', 'labels' e 'varSets', o usruário insere os objetos da matriz de valores, a classificação das amostras e os grupos de variáveis, respectivamente. A função que constrói a matriz de correlação é inserida em 'adjacencyMatrix'. O usuário deve definir o numero de permutações para o cálculo do p-valor ('numPermutations'), o numero mínimo de vértices usados para construir as redes ('min.vert').
+```
 metodos<-list(degreeCentralityVertexTest,betweennessCentralityVertexTest, closenessCentralityVertexTest, eigenvectorCentralityVertexTest,
               clusteringCoefficientVertexTest)
 
-for(i in metodos){
-  res<-diffNetAnalysis(method = i,options = list("bandwidth"="Silverman"),varFile = matriz,
-                       labels = labmat, varSets = NULL,adjacencyMatrix = funAdjMat, numPermutations = 10, print = T,
+  res<-diffNetAnalysis(method = metodos[1],options = list("bandwidth"="Silverman"),varFile = matriz,
+                       labels = labmat, varSets = NULL,adjacencyMatrix = funAdjMat, numPermutations = 1000, print = T,
                        seed = F,min.vert = 10, resultsFile ="resultados.RData" )
-  print(head(res$all))
+  res$all
+```
 
-}
+# Teste das funções que constróem mapas metabólicos
 
-############## Teste das funções que constróem mapas metabólicos #######################
+```
 colnames(matriz)<-nomes.matriz2
 res
 
 centralityPathPlot(gene.data = res$all, threshold = NULL, thr.value = 0.5 ,species = "hsa",pathway.id = "05200",file.name = "teste")
+```
