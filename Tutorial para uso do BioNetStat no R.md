@@ -20,10 +20,6 @@ Os dados usados neste exemplo
 ```
 matriz<-readVarFile(fileName = "~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/dados_de_teste/cancer_data.csv",sep = ";",dec=".")
 
-nomes.matriz1<-c(do.call(cbind,lapply(strsplit(x=names(matriz),split = "_"), function(x) x[1])))
-nomes.matriz2<-c(do.call(cbind,lapply(strsplit(x=names(matriz),split = "_"), function(x) x[2])))
-colnames(matriz)<-nomes.matriz1
-
 labmat<-doLabels(fileName = "~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/dados_de_teste/cancer_data.csv")
 
 labmat2<-doLabels(fileName = "~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/dados_de_teste/cancer_data.csv",factorName = "histologic_diagnosis",classes = c("Oligodendroglioma","Astrocytoma"))
@@ -40,7 +36,7 @@ Nessa função o usuário escolhe quais os parâmetros para a construção das r
 funAdjMat<-adjacencyMatrix(method = "pearson",association = "corr",threshold = "corr",thr.value = 0.5,weighted = T)
 ```
 
-# Comparando as redes
+## Comparando as redes
 
 A função 'diffNetAnalysis' realiza o teste de comparação de múltiplas redes. Para comparar as redes é necessário escolher um dos métodos de comparação em 'method'. Nos argumentos 'varFile', 'labels' e 'varSets', o usruário insere os objetos da matriz de valores, a classificação das amostras e os grupos de variáveis, respectivamente. A função que constrói a matriz de correlação é inserida em 'adjacencyMatrix'. O usuário deve definir o numero de permutações para o cálculo do p-valor ('numPermutations'), o numero mínimo de vértices usados para construir as redes ('min.vert'). Se o usuário escolher comparar as redes pelas distribuições do espectro ou de grau ele deve selecionar qual medidad de largura de banda será usada em 'options', podendo ser 'bandwidth'='Silverman' ou 'bandwidth'='Sturges'.
 ```
@@ -53,7 +49,7 @@ res<-diffNetAnalysis(method = metodos[1],varFile = matriz, labels = labmat, varS
                 numPermutations = 1000, min.vert = 10,options = list("bandwidth"="Silverman"))
 res
 ```
-# Comparando a importância dos vértices
+## Comparando a importância dos vértices
 
 A função 'diffNetAnalysis' também realiza o teste de comparação de vertices em múltiplas redes. Da mesma forma, é necessário escolher um dos métodos de comparação (metodos) em 'method'. Nos argumentos 'varFile', 'labels' e 'varSets', o usruário insere os objetos da matriz de valores, a classificação das amostras e os grupos de variáveis, respectivamente. A função que constrói a matriz de correlação é inserida em 'adjacencyMatrix'. O usuário deve definir o numero de permutações para o cálculo do p-valor ('numPermutations'), o numero mínimo de vértices usados para construir as redes ('min.vert').
 ```
@@ -66,9 +62,12 @@ metodos<-list(degreeCentralityVertexTest,betweennessCentralityVertexTest, closen
   res$all
 ```
 
-# Teste das funções que constróem mapas metabólicos
+## Teste das funções que constróem mapas metabólicos
 
 ```
+nomes.matriz1<-c(do.call(cbind,lapply(strsplit(x=names(matriz),split = "_"), function(x) x[1])))
+nomes.matriz2<-c(do.call(cbind,lapply(strsplit(x=names(matriz),split = "_"), function(x) x[2])))
+colnames(matriz)<-nomes.matriz1
 colnames(matriz)<-nomes.matriz2
 res
 
