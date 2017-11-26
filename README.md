@@ -19,7 +19,7 @@ biocLite("preprocessCore")
 biocLite("GO.db")
 biocLite("AnnotationDbi")
 biocLite("pathview")
-install.packages(c("WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools")) 
+install.packages(c("WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools","shiny")) 
 ```
 
 2. a. If pathview don't install try to ilstall this libraries in linux shell terminal.
@@ -33,9 +33,8 @@ $ sudo apt-get install libssl-dev
 source("http://bioconductor.org/biocLite.R")
 biocLite("pathview")
 ```
-3. Please, install versions 0.8.0 and 0.20 for shiny and shinyBS, respectively. We are working to make the CoGA package compatible with the new versions of the packages as soon as possible. To install the recommended versions for shiny and shinyBS, just type the following commands on the R command-line:
+3. Please, install version 0.20 for shinyBS. We are working to make the BioNetStat package compatible with the new versions of the packages as soon as possible. To install the recommended versions for shinyBS, just type the following commands on the R command-line:
 ```
-devtools::install_version("shiny", "0.8.0")
 devtools::install_version("shinyBS", "0.20")
 ```
 4. Install the BioNetStat (BNS) package
