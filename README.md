@@ -46,6 +46,7 @@ install_github("jardimViniciusC/BioNetStat")
 5. To run BNS, just type the following code:
 ```
 library(BioNetStat)
+library(shiny)
 runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
 Wait for the browser page to open, and enjoy BoiNetStat!
