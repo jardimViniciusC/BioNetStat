@@ -12,7 +12,7 @@ R (>= 3.0.0), shiny (>= 0.8.0), WGCNA, igraph, shinyBS, RColorBrewer, Hmisc, pat
 
 1. If don't have the R software installed in our computer, download and install it (check out the [R home page](http://www.r-project.org/))
 2. Open the R command line interface, and install all BNS dependencies (if they have not been installed yet):
-```
+```Rscript
 source("http://bioconductor.org/biocLite.R")
 biocLite("impute")
 biocLite("preprocessCore")
@@ -23,27 +23,27 @@ install.packages(c("WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO
 ```
 
 2. a. If pathview don't install try to ilstall this libraries in linux shell terminal.
-```
+```Rscript
 $ sudo apt-get install libxml2-dev
 $ sudo apt-get install libcurl4-openssl-dev
 $ sudo apt-get install libssl-dev
 ```
 2. b. And, try to install 'pathview' again
-```
+```Rscript
 source("http://bioconductor.org/biocLite.R")
 biocLite("pathview")
 ```
 3. Please, install version 0.20 for shinyBS. We are working to make the BioNetStat package compatible with the new versions of the packages as soon as possible. To install the recommended versions for shinyBS, just type the following commands on the R command-line:
-```
+```Rscript
 devtools::install_version("shinyBS", "0.20")
 ```
 4. Install the BioNetStat (BNS) package
-```
+```Rscript
 library(devtools)
 install_github("jardimViniciusC/BioNetStat")
 ```
 5. To run BNS, just type the following code:
-```
+```Rscript
 library(BioNetStat)
 library(shiny)
 runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
