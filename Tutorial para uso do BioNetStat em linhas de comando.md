@@ -16,7 +16,7 @@ runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 Um guia de como usar a interface gráfica está nas aba 'Help' da própria interface ou em 'Tutorial BioNetStat para a interface.md'.
 
 ## Dados de teste
-Para realizar esse tutorial faça o download da tabela de [valores das variáveis](github.com/jardimViniciusC/BioNetStat/data/bnsDataTest.csv) e dos [grupos de variáveis](github.com/jardimViniciusC/BioNetStat/data/c2.cp.v5.2.symbols.gmt).
+Para realizar esse tutorial faça o download da tabela de [valores das variáveis](data/bnsDataTest.csv) e dos [grupos de variáveis](github.com/jardimViniciusC/BioNetStat/data/c2.cp.v5.2.symbols.gmt).
 
 ## Lendo a tabela de valores das variáveis
 A função 'readVarFile', lê apenas os valores numéricos da tabela que serão usados para a construção do grafo. Neste exemplo a tabela 'cancer_data.csv' é formada por valores de expressão de 134 genes.
