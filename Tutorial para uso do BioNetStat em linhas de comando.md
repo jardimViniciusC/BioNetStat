@@ -25,16 +25,16 @@ A função 'doLabels' lê, na mesma tabela, uma coluna que definirá a qual esta
 
 Os dados usados neste exemplo 
 ```Rscript
-matriz<-readVarFile(fileName = "~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/dados_de_teste/cancer_data.csv",sep = ";",dec=".")
+matriz<-readVarFile(fileName = "~/path_to_file/bnsDataTest.csv",sep = ";",dec=".")
 
-labmat<-doLabels(fileName = "~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/dados_de_teste/cancer_data.csv")
+labmat<-doLabels(fileName = "~/path_to_file/bnsDataTest.csv")
 
-labmat2<-doLabels(fileName = "~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/dados_de_teste/cancer_data.csv",factorName = "histologic_diagnosis",classes = c("Oligodendroglioma","Astrocytoma"))
+labmat2<-doLabels(fileName = "~/path_to_file/bnsDataTest.csv",factorName = "histologic_diagnosis",classes = c("Oligodendroglioma","Astrocytoma"))
 ```
 ## Lendo o arquivo que indica os grupos de variáveis
 A função readGmtFile lê uma tabela que indica os na primeira coluna os nomes dos grupos e nas colunas seguintes as variáveis que pertencem a cada grupo. Neste arquivo, as colunas devem ser delimitadas por tabulação.
 ```Rscript
-varSets<-readGmtFile(fileName = "~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/dados_de_teste/c2.cp.v5.2.symbols.gmt")
+varSets<-readGmtFile(fileName = "~/path_to_file/c2.cp.v5.2.symbols.gmt")
 ```
 ## Escolhendo os parâmetros para construção da matriz de adjacência
 
@@ -67,16 +67,4 @@ metodos<-list(degreeCentralityVertexTest,betweennessCentralityVertexTest, closen
                        labels = labmat, varSets = NULL,adjacencyMatrix = funAdjMat, numPermutations = 1000, print = T,
                        seed = F,min.vert = 10, resultsFile ="resultados.RData" )
   res$all
-```
-
-## Teste das funções que constróem mapas metabólicos
-
-```Rscript
-nomes.matriz1<-c(do.call(cbind,lapply(strsplit(x=names(matriz),split = "_"), function(x) x[1])))
-nomes.matriz2<-c(do.call(cbind,lapply(strsplit(x=names(matriz),split = "_"), function(x) x[2])))
-colnames(matriz)<-nomes.matriz1
-colnames(matriz)<-nomes.matriz2
-res
-
-centralityPathPlot(gene.data = res$all, threshold = NULL, thr.value = 0.5 ,species = "hsa",pathway.id = "05200",file.name = "teste")
 ```
