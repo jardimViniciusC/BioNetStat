@@ -8,4 +8,4 @@ library(BioNetStat)
 runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
 Ao iniciar o BioNetStat você verá essa figura.
-![Image of BioNetStat](https://octodex.github.com/images/yaktocat.png)
+![Image of BioNetStat](BioNetStat/inst/shiny/www/images/bionetstat_open_image.png )
