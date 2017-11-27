@@ -7,6 +7,7 @@ library(shiny)
 library(BioNetStat)
 runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
+### Carregando os arquivos
 Ao iniciar o BioNetStat você verá essa figura.
 ![Image of BioNetStat](/inst/shiny/www/images/bionetstat_open_image.png)
 
@@ -17,3 +18,20 @@ Após a seleção da tabela de valores de variáveis, é possivel carregar o arq
 
 Após a seleção da tabela de variáveis, a escolha dos estados comparados e do grupo de variáveis o programa ficará como na imagem a seguir:
 ![Image of BioNetStatFiles](/inst/shiny/www/images/bionetstat_selectedData_image.png)
+
+### Selecionando os parâmetros
+
+Com todos os arquivos de entrada já carregados é necessário escolher os parâmetros utilizados para comparar as redes:
+1. Número mínimo e máximo de variáveis (nós) que estarão nas redes comparadas em 'Variable sets size range'. O programa retorna a quantidade de conjuntos de variáveis que estão entre esses valores.
+2. Medida de dependência usada para inferir a rede de correlação.
+3. Força de associação que será usada como limiar para a formação de uma aresta entre dois nós e qual o valor de limiar usado.
+4. Tipo de rede que será construída, com ou sem peso nas arestas. No caso de redes com peso, qual a medida de associação será usada como peso das arestas.
+5. Método de comparação das redes. Se o usuário escolher comparar as redes pelas distribuições do espectro ou de grau ele deve selecionar qual medidad de largura de banda será usada em 'Bandwidth', podendo ser 'Silverman' ou 'Sturges'.
+6. Numero de permutações e se será usada uma semente para os testes de permutação aleatória.
+
+![Image of BioNetStatparameters](/inst/shiny/www/images/bionetstat_selectingParameters_image.png)
+
+### Rodando a análise diferencial de múltiplas redes
+Após carregar os arquivos e selecionar os parâmetros de análise, clique em 'Start analysis' para realizar a comparação das redes.
+
+![Image of BioNetStatrunning](/inst/shiny/www/images/bionetstat_runningMethod_image.png)
