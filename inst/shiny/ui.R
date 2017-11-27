@@ -28,8 +28,6 @@ shinyUI(fluidPage(
     uiOutput("classes"),
 
     uiOutput("factors"),
-    # uiOutput("factor2"),
-
     wellPanel(
       h5("Variable set database"),
       fileInput("geneSets",
@@ -38,11 +36,7 @@ shinyUI(fluidPage(
                 accept=c('.gmt'))
     ),
     # Parameters
-    # h3("2. Set parameters"),
-    # wellPanel(
-    #   h5("Classes (conditions) being compared"),
-    #   uiOutput("classes")
-    # ),
+    h3("2. Set parameters"),
     wellPanel(
       h5("Variable sets size range"),
       p("Enter the minimum and maximum variable set sizes."),
@@ -52,15 +46,16 @@ shinyUI(fluidPage(
     ),
     wellPanel(
       h5("Method for network inference"),
-      uiOutput("correlationMeasure"),
-      radioButtons(
-        "associationMeasure",
-        "",
-        c("Absolute correlation"="correlation", "1 - p-value"="pvalue",
-          "1 - q-value"="qvalue")
-      )
+      uiOutput("correlationMeasure")
     ),
     wellPanel(
+      h5("Measure to set the association used as threshold"),
+      radioButtons(
+        "associationMeasure",
+        "Association measure",
+        c("Absolute correlation"="correlation", "1 - p-value"="pvalue",
+          "1 - q-value"="qvalue")
+      ),
       h5("Minimum value threshold for link construction"),
       uiOutput("linkFormation")
     ),
