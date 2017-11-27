@@ -16,4 +16,4 @@ O arquivo será carregado e o programa irá identificar as colunas que classific
 Após a seleção da tabela de valores de variáveis, é possivel carregar o arquivo 'grupo de variáveis' (opcional) em 'Variable set database'. Em nosso tutorial o arquivo selecionado pode ser 'c2.cp.v5.2.symbols.gmt' que define os grupos de variáveis de acordo com as vias gênicas as quais elas estão associadas. Caso o usuário não carregue nenhum arquivo, o programa irá comparar as redes com todas as variáveis carregadas no arquivo 'Variables values data'
 
 Após a seleção da tabela de variáveis, a escolha dos estados comparados e do grupo de variáveis o programa ficará como na imagem a seguir:
-![Image of BioNetStatFiles](/inst/shiny/www/images/bionetstat_open_image.png)
+![Image of BioNetStatFiles](/inst/shiny/www/images/bionetstat_selectedData_image.png)
