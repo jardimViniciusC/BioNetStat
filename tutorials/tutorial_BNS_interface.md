@@ -1,4 +1,4 @@
-# Tutorial para inteface do BioNet Stat
+# Tutorial para inteface do BioNetStat
 
 Após a instalação do BioNetStat explicada em [README](/README.md), é necessário apenas abrir o R e rodar os seguintes comandos.
 ```Rscript
@@ -35,3 +35,20 @@ Com todos os arquivos de entrada já carregados é necessário escolher os parâ
 Após carregar os arquivos e selecionar os parâmetros de análise, clique em 'Start analysis' para realizar a comparação das redes.
 
 ![Image of BioNetStatrunning](/inst/shiny/www/images/bionetstat_runningMethod_image.png)
+
+### Resultados
+Enquanto a análise é realizada, o programa mostrará essa imagem:
+![Image of BioNetStatwaiting](/inst/shiny/www/images/bionetstat_execution_image.png)
+
+Quando a análise tiver terminado o programa mostrará os parâmetros usados para realizar a análise.
+![Image of BioNetStatres1](/inst/shiny/www/images/bionetstat_results1_image.png)
+
+A tabela final é apresentada como na figura a seguir:
+![Image of BioNetStatres2](/inst/shiny/www/images/bionetstat_results2_image.png)
+
+#### Análise diferencial de vértices
+É possível também realizar a comparação da importância do vértices. Na aba 'Further analysis' é possível selecionar os grupos de variáveis de acordo com seu critério de corte. O grupo de variáveis é escolhido e a o programa irá gerar a comparação de vértices pela centralidade de grau.
+![Image of BioNetStatresVert1](/inst/shiny/www/images/bionetstat_resultsVert1_image.png)
+
+Quando a tabela aparece é possível selecionar outros propriedades estruturais para comparar os vértices do grafos. A tabela resultante da análise diferencial de vértices é mostrada como na figura a seguir.
+![Image of BioNetStatresVert2](/inst/shiny/www/images/bionetstat_resultsVert2_image.png)

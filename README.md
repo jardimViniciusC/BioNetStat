@@ -53,10 +53,6 @@ If you want to use a Graphical interface type
 ```Rscript
 runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
-or
-```Rscript
-runBNS()
-```
 Wait for the browser page to open, and enjoy BoiNetStat!
 
 ## How to use BioNetStat?
