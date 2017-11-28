@@ -335,7 +335,7 @@ output$resultsType <- renderUI({
 output$downloadResultsButton <- renderUI({
     if (!values$completed)
         return(NULL)
-    downloadButton("downloadResults", "Creat table of results")
+    downloadButton("downloadResults", "Create table of results")
 })
 
 # Prepare results file for download
