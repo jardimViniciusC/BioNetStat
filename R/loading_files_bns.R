@@ -214,7 +214,7 @@ readGmtFile <- function(fileName) {
 #'
 #' Run BNS on the browser user interface.
 #' @export
-runBNS <- function(){
+runBioNetStat <- function(){
   library(shiny)
   shiny::runApp(system.file('shiny', package='BioNetStat'))
 }
