@@ -1,4 +1,13 @@
 ################################################################################################################
+#' Run BNS
+#'
+#' Run BNS on the browser user interface.
+#' @export
+runBioNetStat <- function(){
+  shiny::runApp(system.file('shiny', package='BioNetStat'))
+}
+
+################################################################################################################
 #' Read variable values matrix
 #' @param fileName the name of the file which the data are to be read from. Each row of the table appears as one line of the file. If it does not contain an absolute path, the file name is relative to the current working directory, getwd().
 #' @param path the path to the directory that contains the file
@@ -208,13 +217,3 @@ readGmtFile <- function(fileName) {
   if(is.list(result)) results[, "Q-value"] <- p.adjust(results[, "Nominal p-value"], method="fdr")
   return(results)
  }
-
-################################################################################################################
-#' Run BNS
-#'
-#' Run BNS on the browser user interface.
-#' @export
-runBioNetStat <- function(){
-  library(shiny)
-  shiny::runApp(system.file('shiny', package='BioNetStat'))
-}
