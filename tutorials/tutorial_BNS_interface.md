@@ -29,7 +29,7 @@ Com todos os arquivos de entrada já carregados é necessário escolher os parâ
 5. Método de comparação das redes. Se o usuário escolher comparar as redes pelas distribuições do espectro ou de grau ele deve selecionar qual medidad de largura de banda será usada em 'Bandwidth', podendo ser 'Silverman' ou 'Sturges'.
 6. Numero de permutações e se será usada uma semente para os testes de permutação aleatória.
 
-![Image of BioNetStatparameters](/inst/shiny/www/images/bionetstat_selectingParameters_image.png)
+![Image of BioNetStatparameters](/inst/shiny/www/images/bionetstat_setingParameters_image.png)
 
 ### Rodando a análise diferencial de múltiplas redes
 Após carregar os arquivos e selecionar os parâmetros de análise, clique em 'Start analysis' para realizar a comparação das redes.
