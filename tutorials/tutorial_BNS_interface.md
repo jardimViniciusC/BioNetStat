@@ -1,4 +1,4 @@
-# Tutorial para inteface do BioNet Stat
+# Tutorial para inteface do BioNetStat
 
 Após a instalação do BioNetStat explicada em [README](/README.md), é necessário apenas abrir o R e rodar os seguintes comandos.
 ```Rscript
