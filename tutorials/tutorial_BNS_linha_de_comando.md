@@ -1,21 +1,12 @@
 # Tutorial para uso do BioNetStat em linhas de comando
 
-## Instalando o pacote "devtools" para baixar o pacote via GitHub
+Após a instalação do BioNetStat explicada em [README](/README.md), é necessário apenas abrir o R e rodar os seguintes comandos.
 ```Rscript
-install.packages("devtools")
 library(devtools)
-```
-## Instalando o BioNetStat
-```Rscript
-install_github("jardimViniciusC/BioNetStat")
+library(shiny)
 library(BioNetStat)
 ```
-Para usar a Interface grafica do BioNetStat basta carregar a biblioteca 'shiny' (caso ela não esteja instalada, leia o arquivo README.md) e rodar a função que carrega a interface.
-```Rscript
-library(shiny)
-runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
-```
-Um guia de como usar a interface gráfica está nas aba 'Help' da própria interface ou em 'Tutorial BioNetStat para a interface.md'.
+Um guia de como usar a interface gráfica está nas aba 'Help' da própria interface ou em [Tutorial BioNetStat para a interface](tutorials/tutorial_BNS_linha_de_comando.md).
 
 ## Dados de teste
 Para realizar esse tutorial faça o download da tabela de [valores das variáveis](data/bnsDataTest.csv) e dos [grupos de variáveis](data/c2.cp.v5.2.symbols.gmt).
