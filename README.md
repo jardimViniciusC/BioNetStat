@@ -6,7 +6,7 @@ Package to perform network analysis. BioNetStat is able to compare two or more c
 
 ## Installation
 ### Dependencies
-R (>= 3.0.0), shiny (>= 0.8.0), WGCNA, igraph, shinyBS, RColorBrewer, Hmisc, pathway, psych, RJSONIO, whisker, yaml, pheatmap, preprocessCore, GO.db, AnnotationDbi, impute, and ggplot2
+R (>= 3.0.0), shiny, WGCNA, igraph, shinyBS, RColorBrewer, Hmisc, pathway, psych, RJSONIO, whisker, yaml, pheatmap, preprocessCore, GO.db, AnnotationDbi, impute, and ggplot2
 
 ### Installation steps
 
@@ -19,7 +19,7 @@ biocLite("preprocessCore")
 biocLite("GO.db")
 biocLite("AnnotationDbi")
 biocLite("pathview")
-install.packages(c("WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools","shiny")) 
+install.packages(c("shiny","WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools")) 
 ```
 
 2. a. If pathview don't install try to ilstall this libraries in linux shell terminal.
