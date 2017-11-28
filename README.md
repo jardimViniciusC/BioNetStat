@@ -60,4 +60,4 @@ runBNS()
 Wait for the browser page to open, and enjoy BoiNetStat!
 
 ## How to use BioNetStat?
-The tutorials with examples data sets are in ['Tutorial para uso do BioNetStat em linhas de comando.md'](tutorials/Tutorial para Interface de BNS.md) or in ['Tutorial BioNetStat para a interface.md'](tutorials/Tutorial para uso do BioNetStat em linhas de comando.md).
+The tutorials with examples data sets are in [Tutorial para uso do BioNetStat em linhas de comando.md](tutorials/Tutorial para Interface de BNS.md) or in [Tutorial BioNetStat para a interface.md](tutorials/Tutorial para uso do BioNetStat em linhas de comando.md).
