@@ -6,7 +6,7 @@ Package to perform network analysis. BioNetStat is able to compare two or more c
 
 ## Installation
 ### Dependencies
-R (>= 3.0.0), shiny (>= 0.8.0), WGCNA, igraph, shinyBS, RColorBrewer, Hmisc, pathway, psych, RJSONIO, whisker, yaml, pheatmap, preprocessCore, GO.db, AnnotationDbi, impute, and ggplot2
+R (>= 3.0.0), shiny, WGCNA, igraph, shinyBS, RColorBrewer, Hmisc, pathway, psych, RJSONIO, whisker, yaml, pheatmap, preprocessCore, GO.db, AnnotationDbi, impute, and ggplot2
 
 ### Installation steps
 
@@ -19,10 +19,10 @@ biocLite("preprocessCore")
 biocLite("GO.db")
 biocLite("AnnotationDbi")
 biocLite("pathview")
-install.packages(c("WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools","shiny")) 
+install.packages(c("shiny","WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools")) 
 ```
 
-2. a. If pathview don't install try to ilstall this libraries in linux shell terminal.
+2. a. If 'pathview' package don't install, try to install this libraries in linux shell terminal.
 ```Rscript
 $ sudo apt-get install libxml2-dev
 $ sudo apt-get install libcurl4-openssl-dev
@@ -42,13 +42,22 @@ devtools::install_version("shinyBS", "0.20")
 library(devtools)
 install_github("jardimViniciusC/BioNetStat")
 ```
-5. To run BNS, just type the following code:
+## Running BioNetStat
+
+After installed and the next time you want to use BioNetStat, to run, just type the following code:
 ```Rscript
 library(BioNetStat)
 library(shiny)
+```
+If you want to use a Graphical interface type
+```Rscript
 runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
+```
+or
+```Rscript
+runBNS()
 ```
 Wait for the browser page to open, and enjoy BoiNetStat!
 
-## How to use BioNetStat
-The tutorials with examples data sets are in 'Tutorial para uso do BioNetStat em linhas de comando.md' or in 'Tutorial BioNetStat para a interface.md'.
+## How to use BioNetStat?
+The tutorials with examples data sets are in [Tutorial para uso do BioNetStat em linhas de comando](tutorials/tutorial_BNS_interface.md ) or in [Tutorial BioNetStat para a interface](tutorials/tutorial_BNS_linha_de_comando.md).
