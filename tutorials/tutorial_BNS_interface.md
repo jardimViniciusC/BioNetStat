@@ -37,18 +37,20 @@ Após carregar os arquivos e selecionar os parâmetros de análise, clique em 'S
 ![Image of BioNetStatrunning](/inst/shiny/www/images/bionetstat_runningMethod_image.png)
 
 ### Resultados
-Enquanto a análise é realizada, o programa mostrará essa imagem:
+1. Enquanto a análise é realizada, o programa mostrará essa imagem:
 ![Image of BioNetStatwaiting](/inst/shiny/www/images/bionetstat_execution_image.png)
 
-Quando a análise tiver terminado o programa mostrará os parâmetros usados para realizar a análise.
+2. Quando a análise tiver terminado o programa mostrará os parâmetros usados para realizar a análise.
 ![Image of BioNetStatres1](/inst/shiny/www/images/bionetstat_results1_image.png)
 
-A tabela final é apresentada como na figura a seguir:
+3. A tabela final é apresentada como na figura a seguir:
 ![Image of BioNetStatres2](/inst/shiny/www/images/bionetstat_results2_image.png)
 
 #### Análise diferencial de vértices
-É possível também realizar a comparação da importância do vértices. Na aba 'Further analysis' é possível selecionar os grupos de variáveis de acordo com seu critério de corte. O grupo de variáveis é escolhido e a o programa irá gerar a comparação de vértices pela centralidade de grau.
+4. É possível também realizar a comparação da importância do vértices. Na aba 'Further analysis' é possível selecionar os grupos de variáveis de acordo com seu critério de corte. O grupo de variáveis é escolhido e a o programa irá gerar a comparação de vértices pela centralidade de grau.
+
 ![Image of BioNetStatresVert1](/inst/shiny/www/images/bionetstat_resultsVert1_image.png)
 
-Quando a tabela aparece é possível selecionar outros propriedades estruturais para comparar os vértices do grafos. A tabela resultante da análise diferencial de vértices é mostrada como na figura a seguir.
+5. Quando a tabela aparece é possível selecionar outros propriedades estruturais para comparar os vértices do grafos. A tabela resultante da análise diferencial de vértices é mostrada como na figura a seguir.
+
 ![Image of BioNetStatresVert2](/inst/shiny/www/images/bionetstat_resultsVert2_image.png)
