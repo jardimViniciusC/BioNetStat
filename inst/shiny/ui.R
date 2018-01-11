@@ -167,6 +167,8 @@ shinyUI(fluidPage(
             dataTableOutput("vertexAnalysisTable"),
             bsCollapsePanel(
               "KEGG pathway visualization",
+                fileInput("keggCodes", h5(paste("Please, select the codes table (*.csv) containing the variables names and coresponding Kegg code")),
+                          accept=c("Comma-Seperated Values", "text/csv", ".csv"),placeholder = "Select a file"),
               div(
                 class="span4",
                 h5("Colors selection"),
@@ -178,12 +180,12 @@ shinyUI(fluidPage(
               selectInput(
                 "thresholdSelected",
                 h5("Association measure"),
-                c("Test statistics"="statistic", "p-value"="pvalue",
-                  "q-value"="qvalue")
+                c("p-value"="pvalue",
+                  "q-value"="qvalue","Test statistics"="statistic")
               ),
               uiOutput("thrValue"),
               textInput("speciesID", label = h5("Write the code of the species that you want to analyze"), value = "hsa"),
-              textInput("pathID", label = h5("Write the code of the pathway that you want to analyze"), value = "Enter text..."),
+              textInput("pathID", label = h5("Write the code of the pathway that you want to analyze"), value = "05200"),
               checkboxInput("keggNative", label = "Kegg Native plot", value = TRUE),
               downloadButton("downloadKeggMap","Save the Kegg Map")
             )

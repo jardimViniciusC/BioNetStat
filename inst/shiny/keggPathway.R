@@ -28,44 +28,36 @@ output$thrValue <- renderUI({
   table<-vertexAnalysisTable()
   if(is.null(table))
     return(NULL)
-  switch(input$thresholdSelected, "statistic"= sliderInput("correlationValue",h5("Minimum value (threshold) for link construction"),min=min(as.numeric(table[,2])), max=max(as.numeric(table[,2])), value = min(as.numeric(table[,2]))),
-         "pvalue" = sliderInput("pvalueThreshold", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.05),
-         "qvalue" = sliderInput("qvalueThreshold", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.05))
+  switch(input$thresholdSelected, "statistic"= sliderInput("thrValue",h5("Minimum value (threshold) for link construction"),min=min(as.numeric(table[,2])), max=max(as.numeric(table[,2])), value = min(as.numeric(table[,2]))),
+         "pvalue" = sliderInput("thrValue", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.05),
+         "qvalue" = sliderInput("thrValue", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.05))
 })
 
 # Prepare file with the statistics of the absolute differences between
 # correlations for download
 output$downloadKeggMap <- downloadHandler(
-  filename = function() {
-      name <- paste("keggPath.csv" , sep="")
-    return(name)
-  },
-  content = function(filename) {
+  filename = paste("data-", Sys.Date(), ".csv", sep="")
+    ,
+  content = function(file) {
     results <- vertexAnalysisTable()
+    fileCodes<-input$keggCodes
+    codes<-read.csv(fileCodes$datapath)
     if(input$selectingDataType=="gene")
-      centralityPathPlot(gene.data=results, cpd.data=NULL, threshold=input$thresholdSelected, thr.value=input$thrValue, species=input$speciesID , pathway.id=input$pathID, kegg.native=input$keggNative, file.name=filename,
-                       limit = list(gene = max.gene, cdp = max.cpd), bins = list(gene = 15,cpd = 15), both.dirs= list(gene = F,cpd = F),
+      if(!dir.exists(file.path("/tmp/", "pathMap"))) dir.create("/tmp/pathMap")
+      setwd("/tmp/pathMap")
+      l<-which(results[,1] %in% codes[,1])
+      print(results[,1])
+      print(codes[,1])
+      print(which(codes[,1] %in% results[,1]))
+      print(codes[l,2])
+      results[,1]<-codes[l,2]
+      centralityPathPlot(gene.data=results, cpd.data=NULL, threshold=input$thresholdSelected, thr.value=input$thrValue, species=input$speciesID , pathway.id=input$pathID, kegg.native=input$keggNative, file.name="file",
+                       limit = NULL, bins = list(gene = 15,cpd = 15), both.dirs= list(gene = F,cpd = F),
                        mid =list(gene = "white", cpd = "white"),high = list(gene = "red",cpd = "red"))
+      tar(tarfile = file, files ="/tmp/pathMap")
+      file.remove(list.files())
   }
 )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 output$exprKeegMapDimensions <- renderUI({
   format <- input$exprKeegMapFormat
