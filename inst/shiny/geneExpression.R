@@ -1,17 +1,18 @@
-exprBoxplot <- function(expr, labels, title="", 
+exprBoxplot <- function(expr, labels, title="",
                         ylab="Expression level") {
     data <- data.frame(labels=labels, expr=expr)
-    ggplot2::qplot(labels, expr, data=data, geom=c("boxplot", "jitter"), 
+    ggplot2::qplot(labels, expr, data=data, geom=c("boxplot", "jitter"),
        color=labels, main=title, xlab="", ylab=ylab)
 }
 
 exprHeatmap <- function(expr, labels, col, clusterCols, clusterRows) {
+    expr<-t(expr)
     annotation <- data.frame(Class=labels)
     rownames(annotation) <- colnames(expr)
     c <- c("#FF0000FF", "#33FF00FF")
     names(c) <- unique(labels)
     colors <- list(Group=c)
-    pheatmap::pheatmap(expr, annotation = annotation, annotation_cols=colors, col=col, 
+    pheatmap::pheatmap(expr, annotation = annotation, annotation_cols=colors, col=col,
         cluster_cols=clusterCols, cluster_rows=clusterRows, scale="none", border_color=F)
 }
 
@@ -41,26 +42,31 @@ canPlotExprHeatmap <- reactive({
 diffExprTests <- reactive({
     data <- plotSelectedData()
     result <- data.frame(matrix(NA, nrow=1, ncol=5))
-    colnames(result) <- c("Gene symbol", "Difference between means", 
-                          "Difference between means test p-value", 
+    colnames(result) <- c("Gene symbol", "Difference between means",
+                          "Difference between means test p-value",
                           "Difference in location",
                           "Wilcoxon-Mann-Whitney test p-value")
     if (is.null(data))
         return(result)
     expr <- data$expr
     labels <- data$labels
-    genes <- rownames(expr)
+    classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
+    c1 <- classes[[1]][1]
+    c2 <- classes[[1]][2]
+    class <- input$factorsinput
+    cla<-cbind(levels(as.factor(class)),c(0:(length(class)-1)))
+    genes <- names(expr)
     result <- data.frame(matrix(NA, nrow=length(genes), ncol=5))
-    colnames(result) <- c("Gene symbol", "Difference between means", 
+    colnames(result) <- c("Variable symbol", "Difference between means",
                           "Difference between means test p-value", "Difference in location",
                           "Wilcoxon-Mann-Whitney test p-value")
     for (i in 1:length(genes)) {
-        result[i,"Gene symbol"] <- genes[i]
-        expr1 <- expr[i, labels==0]
-        expr2 <- expr[i, labels==1]
+        result[i,"Variable symbol"] <- genes[i]
+        expr1 <- expr[labels==cla[cla[,1]==c1,2], i]
+        expr2 <- expr[labels==cla[cla[,1]==c2,2], i]
         t <-  t.test(expr1, expr2)
-        result[i,"Difference between means"] <- round(t$estimate[1] - 
-                                                      t$estimate[2], 6) 
+        result[i,"Difference between means"] <- round(t$estimate[1] -
+                                                      t$estimate[2], 6)
         result[i,"Difference between means test p-value"] <- t$p.value
         w <- wilcox.test(expr1, expr2, conf.int=T)
         result[i,"Difference in location"] <- round(w$estimate, 6)
@@ -80,7 +86,7 @@ output$exprHeatmapColors  <- renderUI({
     if (is.null(data)) {
         return(NULL)
     }
-    selectInput("exprHeatmapColors", "Select a color scheme:", 
+    selectInput("exprHeatmapColors", "Select a color scheme:",
                  c("Green-Black-Red", "Blue-White-Red",
                     "Green-Yellow-Red", "Blue-Yellow-Red"))
 })
@@ -102,12 +108,14 @@ output$exprHeatmap <- renderPlot({
     col <- exprHeatmapColors()
     data <- plotSelectedData()
     clustering <- input$exprHeatmapClustering
-    classes <- data$classes
+    classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
     c1 <- classes[[1]][1]
     c2 <- classes[[1]][2]
+    class <- input$factorsinput
+    cla<-cbind(levels(as.factor(class)),c(0:(length(class)-1)))
     labels <- data$labels
-    expr <- cbind(data$expr[,labels==0], data$expr[,labels==1])
-    l <- c(rep(c1, length(which(labels==0))), rep(c2, length(which(labels==1))))
+    expr <- rbind(data$expr[labels==cla[cla[,1]==c1,2],], data$expr[labels==cla[cla[,1]==c2,2],])
+    l <- c(rep(c1, length(which(labels==cla[cla[,1]==c1,2]))), rep(c2, length(which(labels==cla[cla[,1]==c2,2]))))
     clusterCols <- F
     clusterRows <- F
     if (!is.null(clustering)) {
@@ -125,21 +133,21 @@ output$exprHeatmapDimensions <- renderUI({
     min <- 1
     max <- 100
     defaultWidth <- 755
-    defaultHeight <- 480 
+    defaultHeight <- 480
     unit <- "pixels"
     if (is.null(input$exprHeatmapFormat))
         return(NULL)
     if (input$exprHeatmapFormat == "PDF") {
         min <- 10
         max <- 10000
-        defaultWidth <- 11 
+        defaultWidth <- 11
         defaultHeight <- 7
-        unit <- "inches" 
+        unit <- "inches"
     }
     div(p(paste("Enter the plot dimensions (in ", unit, "):", sep=""),
-        numericInput("exprWidth", "Width:", 
+        numericInput("exprWidth", "Width:",
                      defaultWidth, min=min, max=max),
-        numericInput("exprHeight", 
+        numericInput("exprHeight",
                      "Height:", defaultHeight, min=min,
                      max=max)))
 })
@@ -151,7 +159,7 @@ output$downloadExprHeatmapButton <- renderUI({
         return(NULL)
     w <- input$exprWidth
     h <- input$exprHeight
-    if (is.na(w) || is.na(h) || is.null(w) || is.null(h) || w < 1 || h < 1 
+    if (is.na(w) || is.na(h) || is.null(w) || is.null(h) || w < 1 || h < 1
         || !is.numeric(w) || !is.numeric(h))
         return(NULL)
     if (is.null(input$exprHeatmapFormat))
@@ -159,7 +167,7 @@ output$downloadExprHeatmapButton <- renderUI({
     downloadButton("downloadExprHeatmap", "Save gene expression heatmap")
 })
 
-# Prepare expression heatmap for download 
+# Prepare expression heatmap for download
 output$downloadExprHeatmap <- downloadHandler(
     filename = function() {
         data <- plotSelectedData()
@@ -171,9 +179,9 @@ output$downloadExprHeatmap <- downloadHandler(
             ext <- ".png"
         else if (format == "JPG")
             ext <- ".jpg"
-        else 
+        else
             ext <- ".pdf"
-        name <- paste(input$selectGeneSet, "_expression_heatmap_", c1, 
+        name <- paste(input$selectGeneSet, "_expression_heatmap_", c1,
                       "_vs_", c2, ext, sep="")
     },
     content = function(filename) {
@@ -184,14 +192,14 @@ output$downloadExprHeatmap <- downloadHandler(
         c2 <- classes[[1]][2]
         labels <- data$labels
         expr <- cbind(data$expr[,labels==0], data$expr[,labels==1])
-        l <- c(rep(c1, length(which(labels==0))), 
+        l <- c(rep(c1, length(which(labels==0))),
                rep(c2, length(which(labels==1))))
         format <- input$exprHeatmapFormat
         if (format == "PNG")
             saveFunction <- png
         else if (format == "JPG")
             saveFunction <- jpeg
-        else 
+        else
             saveFunction <- pdf
         saveFunction(filename, width=input$exprWidth, height=input$exprHeight)
         clusterCols <- F
@@ -208,7 +216,7 @@ output$downloadExprHeatmap <- downloadHandler(
     }
 )
 
-# Render radio buttons to choose gene scores comparison file format. 
+# Render radio buttons to choose gene scores comparison file format.
 output$diffExprTestsType <- renderUI({
     if (is.null(diffExprTests())) {
         return(NULL)
@@ -220,7 +228,7 @@ output$diffExprTestsType <- renderUI({
 
 # Render button to download plots
 output$downloadDiffExprTestsButton <- renderUI({
-    if (is.null(diffExprTests())) 
+    if (is.null(diffExprTests()))
         return(NULL)
     downloadButton("downloadDiffExprTests", "Save results")
 })
@@ -232,7 +240,7 @@ output$downloadDiffExprTests <- downloadHandler(
         classes <- data$classes
         c1 <- classes[[1]][1]
         c2 <- classes[[1]][2]
-        name <- paste(input$selectGeneSet, "_diff_expr_tests_", c1, "_vs_", c2, 
+        name <- paste(input$selectGeneSet, "_diff_expr_tests_", c1, "_vs_", c2,
                       sep="")
         if (input$diffExprTestsType == "CSV")
             name <- paste(name, ".csv", sep="")
@@ -248,48 +256,50 @@ output$downloadDiffExprTests <- downloadHandler(
     }
 )
 
-#output$diffExprTests <- renderDataTable({
-#    table <- diffExprTests()
-    #if (!is.null(table))
-        #colnames(table)[1] <- "Gene symbol <img src=\"images/info.png\" title=\"teste\" />"
-#    return(table)
-#}, options=list(aoColumns = list(list(bSearchable = FALSE), 
-#                                 list(bSearchable = FALSE),
-#                                 list(bSearchable = FALSE), 
-#                                 list(bSearchable = FALSE),
-#                                 list(bSearchable = FALSE))))
+output$diffExprTests <- renderDataTable({
+   table <- diffExprTests()
+if (!is.null(table))
+# colnames(table)[1] <- "Gene symbol <img src=\"images/info.png\" title=\"teste\" />"
+   return(table)
+}#, options=list(aoColumns = list(list(bSearchable = FALSE),
+                                # list(bSearchable = FALSE),
+                                # list(bSearchable = FALSE),
+                                # list(bSearchable = FALSE),
+                                # list(bSearchable = FALSE)))
+)
 
-output$diffExprTests <- renderChart2({
-    table <- diffExprTests()
-    data <- plotSelectedData()
-    name2 <- "Difference between means"
-    name4 <- "Difference in location"
-    c1 <- "population 1"
-    c2 <- "population 2"
-    if (!is.null(data)) {
-        c1 <- data$classes[[1]][1]
-        c2 <- data$classes[[1]][2]
-        name2 <- paste(name2, " (", c1, " - ", c2, ")", sep="")
-        name4 <- paste(name4, " (", c1, " - ", c2, ")", sep="")
-    }
-
-    colnames(table)[2] <- name2
-    colnames(table)[3] <- paste("Difference between means test p-value <img ",
-                                "src=\"images/info.png\" title=\"P-value of the ", 
-                                "t-test for the null hypothesis that ",
-                                "the means of the two populations are equal.\"",
-                                "/>", sep="")
-    colnames(table)[4] <- paste(name4, " <img src=\"images/info.png\" title=\"Median ",
-                                "of the difference between a sample from ", c1,
-                                " and a sample from ", c2, ".\"/>", sep="") 
-    colnames(table)[5] <- paste("Difference between meadians test p-value <img",
-                                " src=\"images/info.png\" title=",
-                                "\"Wilcoxon-Mann-Whitney test p-value. The ",
-                                "null hypothesis is that the medians are ",
-                                "equal.\"/>", sep="")
-
-    return(dTable(table))
-})
+# output$diffExprTests <- renderChart2({
+#     table <- diffExprTests()
+#     data <- plotSelectedData()
+#     name2 <- "Difference between means"
+#     name4 <- "Difference in location"
+#     c1 <- "population 1"
+#     c2 <- "population 2"
+#     if (!is.null(data)) {
+#         classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
+#         c1 <- classes[[1]][1]
+#         c2 <- classes[[1]][2]
+#         name2 <- paste(name2, " (", c1, " - ", c2, ")", sep="")
+#         name4 <- paste(name4, " (", c1, " - ", c2, ")", sep="")
+#     }
+#
+#     colnames(table)[2] <- name2
+#     colnames(table)[3] <- paste("Difference between means test p-value <img ",
+#                                 "src=\"images/info.png\" title=\"P-value of the ",
+#                                 "t-test for the null hypothesis that ",
+#                                 "the means of the two populations are equal.\"",
+#                                 "/>", sep="")
+#     colnames(table)[4] <- paste(name4, " <img src=\"images/info.png\" title=\"Median ",
+#                                 "of the difference between a sample from ", c1,
+#                                 " and a sample from ", c2, ".\"/>", sep="")
+#     colnames(table)[5] <- paste("Difference between meadians test p-value <img",
+#                                 " src=\"images/info.png\" title=",
+#                                 "\"Wilcoxon-Mann-Whitney test p-value. The ",
+#                                 "null hypothesis is that the medians are ",
+#                                 "equal.\"/>", sep="")
+#
+#     return(dTable(table))
+# })
 
 # Render select inputs of a gene
 output$selectGene <- renderUI({
@@ -302,7 +312,7 @@ output$selectGene <- renderUI({
     genes <- searchGeneSet()
     if (is.null(genes))
         return(NULL)
-    i <- which(genes %in% rownames(expr))
+    i <- which(genes %in% names(expr))
     if (length(i) == 0)
         return(NULL)
     genes <- genes[i]
@@ -317,15 +327,17 @@ output$exprBoxplot <- renderPlot({
     if (is.null(gene))
         return(NULL)
     data <- plotSelectedData()
-    if (!(gene %in% rownames(data$expr)))
+    if (!(gene %in% names(data$expr)))
         return(NULL)
-    classes <- data$classes
+    classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
     c1 <- classes[[1]][1]
     c2 <- classes[[1]][2]
+    class <- input$factorsinput
+    cla<-cbind(levels(as.factor(class)),c(0:(length(class)-1)))
     labels <- data$labels
-    expr <- cbind(data$expr[,labels==0], data$expr[,labels==1])
-    l <- c(rep(c1, length(which(labels==0))), rep(c2, length(which(labels==1))))
-    plot(exprBoxplot(expr[gene, ], l, gene))
+    expr <- rbind(data$expr[labels==cla[cla[,1]==c1,2],], data$expr[labels==cla[cla[,1]==c2,2],])
+    l <- c(rep(c1, length(which(labels==cla[cla[,1]==c1,2]))), rep(c2, length(which(labels==cla[cla[,1]==c2,2]))))
+    plot(exprBoxplot(expr[,gene], l, gene))
 })
 
 output$exprBoxplotDimensions <- renderUI({
@@ -343,7 +355,7 @@ output$exprBoxplotDimensions <- renderUI({
     }
     div(
         p(paste("Enter the plot dimensions (in ", unit, "):", sep="")),
-        numericInput("boxplotWidth", "Width:", default, min=min, 
+        numericInput("boxplotWidth", "Width:", default, min=min,
             max=max),
         numericInput("boxplotHeight", "Height:", default, min=min,
             max=max)
@@ -360,7 +372,7 @@ output$downloadExprBoxplotButton <- renderUI({
         return(NULL)
     w <- input$boxplotWidth
     h <- input$boxplotHeight
-    if (is.na(w) || is.na(h) || is.null(w) || is.null(h) || w < 1 || h < 1 
+    if (is.na(w) || is.na(h) || is.null(w) || is.null(h) || w < 1 || h < 1
         || !is.numeric(w) || !is.numeric(h))
         return(NULL)
     downloadButton("downloadExprBoxplot", "Save boxplot")
@@ -378,9 +390,9 @@ output$downloadExprBoxplot <- downloadHandler(
             ext <- ".png"
         else if (format == "JPG")
             ext <- ".jpg"
-        else 
+        else
             ext <- ".pdf"
-        name <- paste(input$selectGene, "_boxplot_", c1, "_vs_", c2, ext, 
+        name <- paste(input$selectGene, "_boxplot_", c1, "_vs_", c2, ext,
                       sep="")
     },
     content = function(filename) {
@@ -389,7 +401,7 @@ output$downloadExprBoxplot <- downloadHandler(
             saveFunction <- png
         else if (format == "JPG")
             saveFunction <- jpeg
-        else 
+        else
             saveFunction <- pdf
         data <- plotSelectedData()
         classes <- data$classes
@@ -398,9 +410,9 @@ output$downloadExprBoxplot <- downloadHandler(
         labels <- data$labels
         gene <- input$selectGene
         expr <- cbind(data$expr[,labels==0], data$expr[,labels==1])
-        l <- c(rep(c1, length(which(labels==0))), 
+        l <- c(rep(c1, length(which(labels==0))),
                rep(c2, length(which(labels==1))))
-        saveFunction(filename, width=input$boxplotWidth, 
+        saveFunction(filename, width=input$boxplotWidth,
                      height=input$boxplotHeight)
         plot(exprBoxplot(expr[gene, ], l, gene))
         dev.off()

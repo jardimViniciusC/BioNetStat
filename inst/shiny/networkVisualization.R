@@ -43,8 +43,8 @@ canPlotHeatmaps <- reactive({
         geneSets <- values$filteredGeneSets
         classes <- values$classes
     }
-    
-    if (is.null(expr) || is.null(labels) || is.null(geneSets) || 
+
+    if (is.null(expr) || is.null(labels) || is.null(geneSets) ||
         is.null(classes))
         return(F)
 
@@ -62,7 +62,7 @@ corAbsDiff <- reactive({
 
     colnames(result) <- c("Gene 1", "Gene 2", paste(c1, "association"),
                           paste(c2, "association"), legend)
-    
+
     if (is.null(data))
         return(result)
     classes <- data$classes
@@ -72,9 +72,9 @@ corAbsDiff <- reactive({
     option <- input$heatmapDiffOptions
     if (is.null(option))
         return(result)
-    c1 <- classes[[1]][1]
-    c2 <- classes[[1]][2]
-    genes <- rownames(expr)
+    c1 <- input$selectClassNetwork1
+    c2 <- input$selectClassNetwork2
+    genes <- colnames(expr)
     names <- combn(genes, 2)
     r <- adjacencyMatrices()
     n <- length(genes)
@@ -89,7 +89,7 @@ corAbsDiff <- reactive({
         diff <- abs(diff)
         legend <- "Absolute difference between gene associations"
     }
-    
+
     result <- data.frame(matrix(NA, nrow=ncol(names), ncol=5))
 
     colnames(result) <- c("Gene 1", "Gene 2", paste(c1, "association"),
@@ -98,12 +98,12 @@ corAbsDiff <- reactive({
         g1 <- names[1, i]
         g2 <- names[2, i]
         result[i, "Gene 1"] <- g1
-        result[i, "Gene 2"] <- g2 
+        result[i, "Gene 2"] <- g2
         result[i, paste(c1, "association")] <- round(r1[g1, g2], 6)
         result[i, paste(c2, "association")] <- round(r2[g1, g2], 6)
         result[i, legend] <- round(diff[g1, g2], 6)
     }
-    
+
     return(result)
 })
 
@@ -112,8 +112,34 @@ corAbsDiff <- reactive({
 # _____Network visualization plots tab
 
 # Render select input for heatmap colors
+
+# Render a select input of the classes that will be tested
+output$factorsToNetViz1 <- renderUI({
+  if (is.null(input$factorsinput))
+    return(NULL)
+  classes <- input$factorsinput
+  # options <- vector()
+  # for (i in 1:ncol(classes)) {
+  #   options[i] <- paste(classes[1, i], classes[2, i])
+  # }
+  selectizeInput("selectClassNetwork1", p(h4(strong("Classes\n")),h5("Choose two conditions to be visualized:",img(src="images/info.png", title="Select only two states (samples) you want to visualize the networks and compare. "))),
+                           choices = classes, multiple=F)#c(options)
+})
+output$factorsToNetViz2 <- renderUI({
+  if (is.null(input$factorsinput))
+    return(NULL)
+  classes <- input$factorsinput
+  claN<-input$selectClassNetwork1
+  # options <- vector()
+  # for (i in 1:ncol(classes)) {
+  #   options[i] <- paste(classes[1, i], classes[2, i])
+  # }
+  selectizeInput("selectClassNetwork2", p(h4(strong("Classes\n")),h5("Choose two conditions to be visualized:",img(src="images/info.png", title="Select only two states (samples) you want to visualize the networks and compare. "))),
+                 choices = classes[!(classes==claN)], multiple=F)#c(options)
+})
+
 output$heatmapColors  <- renderUI({
-    selectInput("heatmapColors", "Select a color scheme:", 
+    selectInput("heatmapColors", "Select a color scheme:",
                  c("Green-Black-Red", "Blue-White-Red",
                     "Green-Yellow-Red", "Blue-Yellow-Red"))
 })
@@ -133,7 +159,7 @@ output$networkPlotDimensions <- renderUI({
     }
     div(
         p(paste("Enter the plot dimensions (in ", unit, "):", sep="")),
-        numericInput("networkPlotWidth", "Width:", default, min=min, 
+        numericInput("networkPlotWidth", "Width:", default, min=min,
             max=max),
         numericInput("networkPlotHeight", "Height:", default, min=min,
             max=max)
@@ -147,15 +173,15 @@ output$downloadNetworkPlot1Button <- renderUI({
     data <- plotSelectedData()
     if (is.null(data))
         return(NULL)
-    c1 <- data$classes[[1]][1]
+    c1 <- input$selectClassNetwork1
     w <- input$networkPlotWidth
     h <- input$networkPlotHeight
-    if (is.na(w) || is.na(h) || is.null(w) || is.null(h) || w < 1 || h < 1 
+    if (is.na(w) || is.na(h) || is.null(w) || is.null(h) || w < 1 || h < 1
         || !is.numeric(w) || !is.numeric(h))
         return(NULL)
     if (is.null(input$networkPlotFormat))
         return(NULL)
-    downloadButton("downloadNetworkPlot1", 
+    downloadButton("downloadNetworkPlot1",
                    paste("Save", c1, "network plot"))
 })
 
@@ -166,15 +192,15 @@ output$downloadNetworkPlot2Button <- renderUI({
     data <- plotSelectedData()
     if (is.null(data))
         return(NULL)
-    c2 <- data$classes[[1]][2]
+    c2 <-input$selectClassNetwork2
     w <- input$networkPlotWidth
     h <- input$networkPlotHeight
-    if (is.na(w) || is.na(h) || is.null(w) || is.null(h) || w < 1 || h < 1 
+    if (is.na(w) || is.na(h) || is.null(w) || is.null(h) || w < 1 || h < 1
         || !is.numeric(w) || !is.numeric(h))
         return(NULL)
     if (is.null(input$networkPlotFormat))
         return(NULL)
-    downloadButton("downloadNetworkPlot2", 
+    downloadButton("downloadNetworkPlot2",
                    paste("Save", c2, "network plot"))
 })
 
@@ -188,7 +214,7 @@ output$downloadNetworkDiffPlotButton <- renderUI({
     c2 <- data$classes[[1]][2]
     w <- input$networkPlotWidth
     h <- input$networkPlotHeight
-    if (is.na(w) || is.na(h) || is.null(w) || is.null(h) || w < 1 || h < 1 
+    if (is.na(w) || is.na(h) || is.null(w) || is.null(h) || w < 1 || h < 1
         || !is.numeric(w) || !is.numeric(h))
         return(NULL)
     if (is.null(input$networkPlotFormat))
@@ -201,43 +227,42 @@ output$downloadNetworkPlot1 <- downloadHandler(
     filename = function() {
         data <- plotSelectedData()
         classes <- data$classes
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
-        format <- input$networkPlotFormat 
+        c1 <- input$selectClassNetwork1
+        c2 <- input$selectClassNetwork2
+        format <- input$networkPlotFormat
         if (format == "PNG")
             ext <- ".png"
         else if (format == "JPG")
-            ext <- ".jpg"  
-        else 
+            ext <- ".jpg"
+        else
             ext <- ".pdf"
         name <- paste(input$selectGeneSet, "_", c1, "_network_",
-                      input$networkType , "_", input$correlationMeasure, 
+                      input$networkType , "_", input$correlationMeasure,
                       "_", input$associationMeasure,
-                      ifelse(input$networkType == "unweighted", 
-                             paste("_threshold=", input$plotEdgeThreshold, "_", 
+                      ifelse(input$networkType == "unweighted",
+                             paste("_threshold=", input$plotEdgeThreshold, "_",
                                    sep=""), ""), ext, sep="")
     },
     content = function(filename) {
         data <- plotSelectedData()
-        classes <- data$classes
-        r <- adjacencyMatrices() 
+        r <- adjacencyMatrices()
         breaks <- seq(-1, 1, 0.05)
         n <- nrow(r)
         ord <- genesOrder(r[, 1:n])
         col <- heatmapColors()
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
+        c1 <- input$selectClassNetwork1
+        c2 <- input$selectClassNetwork2
         format <- input$networkPlotFormat
         if (format == "PNG")
-           saveFunction <- png 
+           saveFunction <- png
         else if (format == "JPG")
             saveFunction <- jpeg
-        else 
+        else
             saveFunction <- pdf
-        saveFunction(filename, width=input$networkPlotWidth, 
+        saveFunction(filename, width=input$networkPlotWidth,
                      height=input$networkPlotHeight)
         pheatmap::pheatmap(r[ord, ord], col=col, cluster_rows=F, cluster_cols=F,
-                 border_color=F, scale="none", breaks=breaks, 
+                 border_color=F, scale="none", breaks=breaks,
                  main=paste(c1, "network"))
         dev.off()
     }
@@ -247,44 +272,42 @@ output$downloadNetworkPlot1 <- downloadHandler(
 output$downloadNetworkPlot2 <- downloadHandler(
     filename = function() {
         data <- plotSelectedData()
-        classes <- data$classes
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
-        format <- input$networkPlotFormat 
+        c1 <- input$selectClassNetwork1
+        c2 <- input$selectClassNetwork2
+        format <- input$networkPlotFormat
         if (format == "PNG")
             ext <- ".png"
         else if (format == "JPG")
-            ext <- ".jpg"  
-        else 
+            ext <- ".jpg"
+        else
             ext <- ".pdf"
         name <- paste(input$selectGeneSet, "_", c2, "_network_",
-                      input$networkType , "_", input$correlationMeasure, 
+                      input$networkType , "_", input$correlationMeasure,
                       "_", input$associationMeasure,
-                      ifelse(input$networkType == "unweighted", 
-                             paste("_threshold=", input$plotEdgeThreshold, "_", 
+                      ifelse(input$networkType == "unweighted",
+                             paste("_threshold=", input$plotEdgeThreshold, "_",
                                    sep=""), ""), ext, sep="")
     },
     content = function(filename) {
         data <- plotSelectedData()
-        classes <- data$classes
-        r <- adjacencyMatrices() 
+        r <- adjacencyMatrices()
         breaks <- seq(-1, 1, 0.05)
         n <- nrow(r)
         ord <- genesOrder(r[, 1:n])
         col <- heatmapColors()
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
+        c1 <- input$selectClassNetwork1
+        c2 <- input$selectClassNetwork2
         format <- input$networkPlotFormat
         if (format == "PNG")
-           saveFunction <- png 
+           saveFunction <- png
         else if (format == "JPG")
             saveFunction <- jpeg
-        else 
+        else
             saveFunction <- pdf
-        saveFunction(filename, width=input$networkPlotWidth, 
+        saveFunction(filename, width=input$networkPlotWidth,
                      height=input$networkPlotHeight)
         pheatmap::pheatmap(r[ord, n + ord], col=col, cluster_rows=F, cluster_cols=F,
-                 border_color=F, scale="none", breaks=breaks, 
+                 border_color=F, scale="none", breaks=breaks,
                  main=paste(c2, "network"))
         dev.off()
     }
@@ -295,42 +318,40 @@ output$downloadNetworkPlot2 <- downloadHandler(
 output$downloadNetworkDiffPlot <- downloadHandler(
     filename = function() {
         data <- plotSelectedData()
-        classes <- data$classes
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
+        c1 <- input$selectClassNetwork1
+        c2 <- input$selectClassNetwork2
         if (input$heatmapDiffOptions == "abs")
-            main <- paste("_abs_diff_between_", c1, "_and_", "_networks_", 
+            main <- paste("_abs_diff_between_", c1, "_and_", "_networks_",
                           sep="")
         else if (input$heatmapDiffOptions == paste(c2, "-", c1))
-            main <- paste("_diff_between_", c2, "_and_", c1, "_networks_", 
+            main <- paste("_diff_between_", c2, "_and_", c1, "_networks_",
                          sep="")
         else
-            main <- paste("_diff_between_", c1, "_and_", c2, "_networks_", 
+            main <- paste("_diff_between_", c1, "_and_", c2, "_networks_",
                           sep="")
-        format <- input$networkPlotFormat 
+        format <- input$networkPlotFormat
         if (format == "PNG")
             ext <- ".png"
         else if (format == "JPG")
-            ext <- ".jpg"  
-        else 
+            ext <- ".jpg"
+        else
             ext <- ".pdf"
         name <- paste(input$selectGeneSet, main,
-                      input$networkType , "_", input$correlationMeasure, 
+                      input$networkType , "_", input$correlationMeasure,
                       "_", input$associationMeasure,
-                      ifelse(input$networkType == "unweighted", 
-                             paste("_threshold=", input$plotEdgeThreshold, "_", 
+                      ifelse(input$networkType == "unweighted",
+                             paste("_threshold=", input$plotEdgeThreshold, "_",
                                    sep=""), ""), ext, sep="")
     },
     content = function(filename) {
         data <- plotSelectedData()
-        classes <- data$classes
-        r <- adjacencyMatrices() 
+        r <- adjacencyMatrices()
         breaks <- seq(-1, 1, 0.05)
         n <- nrow(r)
         ord <- genesOrder(r[, 1:n])
         col <- heatmapColors()
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
+        c1 <- input$selectClassNetwork1
+        c2 <- input$selectClassNetwork2
         diff <- r[, 1:n] - r[, (n+1):(2*n)]
         format <- input$networkPlotFormat
         if (input$heatmapDiffOptions == "abs") {
@@ -339,30 +360,30 @@ output$downloadNetworkDiffPlot <- downloadHandler(
         }
         else if (input$heatmapDiffOptions == paste(c2, "-", c1)) {
             diff <- -diff
-            main <- paste("Differences between", c2, "and", c1, 
+            main <- paste("Differences between", c2, "and", c1,
                           "association degrees")
         }
         else {
-            main <- paste("Differences between", c1, "and", c2, 
+            main <- paste("Differences between", c1, "and", c2,
                           "association degrees")
         }
 
         if (format == "PNG")
-           saveFunction <- png 
+           saveFunction <- png
         else if (format == "JPG")
             saveFunction <- jpeg
-        else 
+        else
             saveFunction <- pdf
-        saveFunction(filename, width=input$networkPlotWidth, 
+        saveFunction(filename, width=input$networkPlotWidth,
                      height=input$networkPlotHeight)
         #pheatmap(r[ord, ord], col=col, cluster_rows=F, cluster_cols=F,
-        #         border_color=F, scale="none", breaks=breaks, 
+        #         border_color=F, scale="none", breaks=breaks,
         #         main=paste(c1, "network"))
         #pheatmap(r[ord, n + ord], col=col, cluster_rows=F, cluster_cols=F,
-        #         border_color=F, scale="none", breaks=breaks, 
+        #         border_color=F, scale="none", breaks=breaks,
         #         main=paste(c2, "network"))
-        pheatmap::pheatmap(diff[ord, ord], col=col, cluster_rows=F, 
-                 cluster_cols=F, border_color=F, scale="none", 
+        pheatmap::pheatmap(diff[ord, ord], col=col, cluster_rows=F,
+                 cluster_cols=F, border_color=F, scale="none",
                  main=main)
         dev.off()
     }
@@ -373,19 +394,19 @@ output$heatmapClass1 <- renderPlot({
     data <- plotSelectedData()
     if (is.null(data))
         return(NULL)
-    classes <- data$classes
+    classes <- input$selectClassNetwork1
     if (!canPlotHeatmaps())
         return(NULL)
     r <- adjacencyMatrices()
     if (is.null(r))
-        return(NULL) 
+        return(NULL)
     breaks <- seq(-1, 1, 0.05)
     n <- nrow(r)
     col <- heatmapColors()
     ord <- genesOrder(r[, 1:n])
     pheatmap::pheatmap(r[ord, ord], col=col, cluster_rows=F, cluster_cols=F,
-             border_color=F, scale="none", breaks=breaks, 
-             main=paste(classes[[1]][1], "network"))
+             border_color=F, scale="none", breaks=breaks,
+             main=paste(classes, "network"))
 })
 
 # Render gene correlation matrix for class 2
@@ -393,19 +414,19 @@ output$heatmapClass2 <- renderPlot({
     data <- plotSelectedData()
     if (is.null(data))
         return(NULL)
-    classes <- data$classes
+    classes <- input$selectClassNetwork2
     if (!canPlotHeatmaps())
         return(NULL)
     r <- adjacencyMatrices()
     if (is.null(r))
-        return(NULL) 
+        return(NULL)
     breaks <- seq(-1, 1, 0.05)
     n <- nrow(r)
     col <- heatmapColors()
     ord <- genesOrder(r[, 1:n])
-    pheatmap::pheatmap(r[ord, n + ord], col=col, cluster_rows=F, 
+    pheatmap::pheatmap(r[ord, n + ord], col=col, cluster_rows=F,
              cluster_cols=F, border_color=F, scale="none", breaks=breaks,
-             main=paste(classes[[1]][2], "network"))
+             main=paste(classes, "network"))
 })
 
 # Render matrix of differences options
@@ -413,12 +434,12 @@ output$heatmapDiffOptions <- renderUI({
     data <- plotSelectedData()
     if (is.null(data))
         return(NULL)
-    classes <- data$classes
+    classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
     if (!canPlotHeatmaps())
         return(NULL)
     c1 <- classes[[1]][1]
     c2 <- classes[[1]][2]
-    options <- c(paste(c1, "-", c2), 
+    options <- c(paste(c1, "-", c2),
                  paste(c2, "-", c1),
                  "Absolute differences between the association degrees"="abs")
     radioButtons("heatmapDiffOptions", "Choose a matrix of differences:",
@@ -430,12 +451,12 @@ output$heatmapDiff <- renderPlot({
     data <- plotSelectedData()
     if (is.null(data))
         return(NULL)
-    classes <- data$classes
+    classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
     if (is.null(input$heatmapDiffOptions))
         return(NULL)
     r <- adjacencyMatrices()
     if (is.null(r))
-        return(NULL) 
+        return(NULL)
     n <- nrow(r)
     col <- heatmapColors()
 
@@ -449,20 +470,20 @@ output$heatmapDiff <- renderPlot({
     }
     else if (input$heatmapDiffOptions == paste(c2, "-", c1)) {
         diff <- -diff
-        main <- paste("Differences between", c2, "and", c1, 
+        main <- paste("Differences between", c2, "and", c1,
                       "association degrees")
     }
     else {
-        main <- paste("Differences between", c1, "and", c2, 
+        main <- paste("Differences between", c1, "and", c2,
                       "association degrees")
     }
     ord <- genesOrder(r[, 1:n])
-    pheatmap::pheatmap(diff[ord, ord], col=col, cluster_rows=F, 
-             cluster_cols=F, border_color=F, scale="none", 
+    pheatmap::pheatmap(diff[ord, ord], col=col, cluster_rows=F,
+             cluster_cols=F, border_color=F, scale="none",
              main=main)
 })
 
-# Render select inputs of two genes 
+# Render select inputs of two genes
 output$selectGenes <- renderUI({
     if (!canPlotHeatmaps())
         return(NULL)
@@ -470,20 +491,20 @@ output$selectGenes <- renderUI({
     if (is.null(data))
         return(NULL)
     expr <- data$expr
-    genes <- rownames(expr)
+    genes <- colnames(expr)
     if (is.null(genes))
         return(NULL)
     genes <- sort(genes)
-    div(class="row-fluid", 
-        div(class="span4", 
+    div(class="row-fluid",
+        div(class="span4",
             selectInput("gene1", "Select a gene:", genes)),
-        div(class="span4", 
+        div(class="span4",
             selectInput("gene2", "Select another gene:", genes)))
 })
 
 
 # Render the correlation between two genes
-output$corr <- renderTable({
+output$corr <- renderDataTable({
     if (!canPlotHeatmaps())
         return(NULL)
     if (is.null(input$gene1) || is.null(input$gene2))
@@ -493,8 +514,8 @@ output$corr <- renderTable({
         return(NULL)
     expr <- data$expr
     labels <- data$expr
-    classes <- data$classes
-    genes <- rownames(expr)
+    classes <- c(input$selectClassNetwork1,input$selectClassNetwork2)
+    genes <- colnames(expr)
     i1 <- which(genes == input$gene1)
     i2 <- which(genes == input$gene2)
     if(length(i1) == 0 || length(i2) == 0)
@@ -503,25 +524,25 @@ output$corr <- renderTable({
     r <- adjacencyMatrices()
     if(is.null(r))
         return(NULL)
-    #p1 <- cor.test(expr[input$gene1, labels==0], expr[input$gene2, 
+    #p1 <- cor.test(expr[input$gene1, labels==0], expr[input$gene2,
     #               labels==0], method=correlationMeasure)$p.value
-    #p2 <- cor.test(expr[input$gene1, labels==1], expr[input$gene2, 
+    #p2 <- cor.test(expr[input$gene1, labels==1], expr[input$gene2,
     #               labels==1], method=correlationMeasure)$p.value
     #m <- matrix(NA, 2, 2)
     m <- matrix(NA, 1, 2)
     rownames(m) <- c("Association degree")
-    colnames(m) <- c(classes[[1]][1], classes[[1]][2])
+    colnames(m) <- c(classes[1], classes[2])
     m[1,1] <- r[i1, i2]
     m[1,2] <- r[i1, i2+n]
     #m[2,1] <- p1
     #m[2,2] <- p2
     return(m)
-    #p(h5(classes[[1]][1], " correlation: "), r[i1, i2], br(), 
+    #p(h5(classes[[1]][1], " correlation: "), r[i1, i2], br(),
      # h5(classes[[1]][2], " correlation: "), r[i1, i2+n])
 })
 
-# Render radio buttons that show the file with the statistics of the 
-# absolute differences between the gene correlations format options. 
+# Render radio buttons that show the file with the statistics of the
+# absolute differences between the gene correlations format options.
 output$absDiffType <- renderUI({
     if (is.null(corAbsDiff())) {
         return(NULL)
@@ -531,16 +552,16 @@ output$absDiffType <- renderUI({
                   c("CSV", "R data"))
 })
 
-# Render button to download the statistics of the absolute differences 
-# between correlations 
+# Render button to download the statistics of the absolute differences
+# between correlations
 output$downloadAbsDiffButton <- renderUI({
     if (is.null(input$absDiffType))
         return(NULL)
     downloadButton("downloadAbsDiff", "Save list of association degrees")
 })
 
-# Prepare file with the statistics of the absolute differences between 
-# correlations for download 
+# Prepare file with the statistics of the absolute differences between
+# correlations for download
 output$downloadAbsDiff <- downloadHandler(
     filename = function() {
         data <- plotSelectedData()
@@ -548,16 +569,16 @@ output$downloadAbsDiff <- downloadHandler(
         c1 <- classes[[1]][1]
         c2 <- classes[[1]][2]
 
-        name <- paste(input$selectGeneSet, "_gene_association_degrees_", c1, 
+        name <- paste(input$selectGeneSet, "_gene_association_degrees_", c1,
                       "_vs_", c2, "_",
-                      input$networkType , "_", input$correlationMeasure, 
+                      input$networkType , "_", input$correlationMeasure,
                       "_", input$associationMeasure,
-                      ifelse(input$networkType == "unweighted", 
-                             paste("_threshold=", input$plotEdgeThreshold, "_", 
+                      ifelse(input$networkType == "unweighted",
+                             paste("_threshold=", input$plotEdgeThreshold, "_",
                              sep=""), ""), sep="")
         if (input$absDiffType == "R data")
             name <- paste(name, ".RData", sep="")
-        else 
+        else
             name <- paste(name, ".csv", sep="")
         return(name)
     },
@@ -570,13 +591,13 @@ output$downloadAbsDiff <- downloadHandler(
     }
 )
 
-# Render table containing the average absolute difference of the gene 
+# Render table containing the average absolute difference of the gene
 #correlations
-#output$corAbsDiff <- renderDataTable({
-#    corAbsDiff()
-#})
-
-output$corAbsDiff <- renderChart2({
-    table <- corAbsDiff()
-    return(dTable(table))
+output$corAbsDiff <- renderDataTable({
+   corAbsDiff()
 })
+
+# output$corAbsDiff <- renderChart2({
+#     table <- corAbsDiff()
+#     return(dTable(table))
+# })

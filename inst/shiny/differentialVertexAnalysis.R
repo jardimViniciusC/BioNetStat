@@ -4,9 +4,8 @@ vertexAnalysisTable <- reactive ({
   classes <- data$classes
   results <- data.frame(matrix(NA, 1, ncol=4+length(classes)))#
   colnames(results) <- ifelse(is.null(classes),c("Node","Test statistic", "Nominal p-value", "q-value"),c("Node","Test statistic", "Nominal p-value", "q-value",paste(data$classes,"score",sep = " ")))#
-
   if (!values$canExecute || input$start==0)
-    return(results)
+    return(NULL)
   # createAlert(session, inputId = "resultsWarning",
   # message = paste("The analysis is running..."),
   # type = "info",
@@ -29,8 +28,7 @@ vertexAnalysisTable <- reactive ({
     options <- NULL
     seed <- values$seed
     printParameters <- function(){print(values$parameters)}
-    if (is.null(expr) || is.null(labels) ||# is.null(geneSets) ||
-        is.null(numPermutations) || is.null(correlationMeasure))
+    if (is.null(expr) | is.null(labels) | is.null(numPermutations) | is.null(correlationMeasure))# is.null(geneSets) ||
       return(NULL)
     # if (associationMeasure=="correlation")
     #     col <- 1
@@ -59,7 +57,6 @@ vertexAnalysisTable <- reactive ({
     logFile=stdout()
     saida<-list()
     method <- match.fun(differentialVertexAnalysis[vertexFunc, 2])
-    print(method)
     if(is.null(geneSets)) geneSets <- list(c("all",colnames(expr)))
     results <- data.frame(matrix(NA, nrow=length(geneSets), ncol=5+length(classes)))#
     names <- array(NA, length(geneSets))

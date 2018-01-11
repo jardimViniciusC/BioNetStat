@@ -18,72 +18,65 @@ shinyUI(fluidPage(
     # Input files
     h3("1. Load data"),
     wellPanel(
-      h5("Variables values data"),
-      fileInput("expr", p(paste("Please, select the text file (*.csv) containing the variables values data"),
+      h4(strong("Variables values data")),
+      fileInput("expr", h5(paste("Please, select the text file (*.csv) containing the variables values data"),
                           img(src="images/info.png", title="Choose a file containing the table with the variables in the colums and the samples in the rows. The conditions of measure rows have to be indicated by a factor column")),
-                accept=c("Comma-Seperated Values", "text/csv", ".csv"))
+                accept=c("Comma-Seperated Values", "text/csv", ".csv"),placeholder = "Select a variable values file")
     ),
-    h3("Factors"),
-
     uiOutput("classes"),
-
     uiOutput("factors"),
     wellPanel(
-      h5("Variable set database"),
+      h4(strong("Variable set database")),
       fileInput("geneSets",
-                p(paste("Load the Set of variables file (*.gmt)",
+                h5(paste("Load the Set of variables file (*.gmt)",
                       "describing the variables sets"),img(src="images/info.png", title="Choose a file containing the groups of variables. The format of the file that has to be inserted is explained in help section.")),
-                accept=c('.gmt'))
+                accept=c('.gmt'),placeholder = "Select a variables groups file")
     ),
     # Parameters
     h3("2. Set parameters"),
     wellPanel(
-      h5("Variable sets size range"),
-      p("Enter the minimum and maximum variable set sizes."),
+      h4(strong("Variable sets size range")),
+      h5("Enter the minimum and maximum variable set sizes."),
       uiOutput("minSize"),
       uiOutput("maxSize"),
       uiOutput("geneSetsCount")
     ),
     wellPanel(
-      h5("Method for network inference"),
-      uiOutput("correlationMeasure")
-    ),
-    wellPanel(
-      h5("Measure to set the association used as threshold"),
+      h3("Network construction"),
+      h4(strong("a. Network type")),
       radioButtons(
+        "networkType",
+        h5("Select what network type will be compared"),
+        c("Weighted"="weighted", "Unweighted"="unweighted")
+      ),
+      h4(strong("b. Method for network inference")),
+      uiOutput("correlationMeasure"),
+      h4(strong("c. Method for selecting the network links")),
+      selectInput(
         "associationMeasure",
-        "Association measure",
+        h5("Association measure"),
         c("Absolute correlation"="correlation", "1 - p-value"="pvalue",
           "1 - q-value"="qvalue")
       ),
-      h5("Minimum value threshold for link construction"),
-      uiOutput("linkFormation")
-    ),
-    wellPanel(
-      h5("Network type"),
-      radioButtons(
-        "networkType",
-        "",
-        c("Weighted"="weighted", "Unweighted"="unweighted")
-      ),
+      uiOutput("linkFormation"),
       conditionalPanel(
         "input.networkType=='weighted'",
         radioButtons(
           "edgeWeight",
-          "Enter a association value to define the network edges weights:",
+          h4(strong("d. Enter a association value to define the network edges weights:")),
           c("Absolute correlation"="correlation", "1 - p-value"="pvalue",
             "1 - q-value"="qvalue")
         )
       )
     ),
     wellPanel(
-      h5("Method for networks comparison"),
+      h4(strong("Method for networks comparison")),
       uiOutput("networkTest"),
       uiOutput("networkTestDescription"),
       uiOutput("networkTestOptions")
     ),
     wellPanel(
-      h5("Permutation test settings"),
+      h4(strong("Permutation test settings")),
       numericInput("numPermutations",
                    "Enter the number of label permutations:",
                    1000, min=0),
@@ -92,7 +85,7 @@ shinyUI(fluidPage(
     ),
     h3("3. Run differential network analysis"),
     wellPanel(
-      actionButton("start", "Start analysis")
+      actionButton("start", "Start analysis", class = "btn-primary")
     )
     ),
   # Main panel ---------------------------------------------------------------
@@ -149,6 +142,12 @@ shinyUI(fluidPage(
 
         br(),
         uiOutput("selectedGeneSet"),
+        div(
+          class="span4",
+          h5("Classes selection"),
+          uiOutput("factorsToNetViz1"),
+          uiOutput("factorsToNetViz2")
+        ),
         br(),
 
         tabsetPanel(
@@ -165,155 +164,218 @@ shinyUI(fluidPage(
               uiOutput("downloadVertexAnalysisButton")
             ),
             br(),
-            dataTableOutput("vertexAnalysisTable")
-          # ),
-          # tabPanel(
-          #   "Network visualization plots"#,
-            # bsCollapsePanel(
-            #   "Plot settings",
-            #   div(
-            #     class="row-fluid",
-            #     div(
-            #       class="span4",
-            #       h5("Colors selection"),
-            #       uiOutput("heatmapColors")
-            #     ),
-            #     div(
-            #       class="span4",
-            #       h5("Plot format"),
-            #       radioButtons(
-            #         "networkPlotFormat",
-            #         "Select a format to save the plots:",
-            #         c("PDF","PNG", "JPG"))
-            #     ),
-            #     div(
-            #       class="span4",
-            #       h5("Plot dimensions"),
-            #       uiOutput("networkPlotDimensions")
-            #     )
-            #   )
-            # ),
-            # bsCollapsePanel(
-            #   "Network visualization",
-            #   conditionalPanel(
-            #     "input.associationMeasure=='correlation'",
-            #     checkboxInput("signedCorrelation",
-            #                   "Show negative correlations")
-            #   ),
-            #   br(),
-            #   div(class="row-fluid",
-            #       div(class="span6", plotOutput("heatmapClass1"),
-            #           uiOutput("downloadNetworkPlot1Button")),
-            #       div(class="span6", plotOutput("heatmapClass2"),
-            #           uiOutput("downloadNetworkPlot2Button"))),
-            #   br(),
-            #   wellPanel(
-            #     h5("Association between two gene products"),
-            #     uiOutput("selectGenes"),
-            #     tableOutput("corr")
-            #   )
-            # ),
-            # bsCollapsePanel(
-            #   "Differences between the gene networks",
-            #   uiOutput("heatmapDiffOptions"),
-            #   br(),
-            #   bsCollapsePanel(
-            #     "Matrix of differences",
-            #     plotOutput("heatmapDiff", width="50%"),
-            #     uiOutput("downloadNetworkDiffPlotButton")),
-            #   bsCollapsePanel(
-            #     "List of gene association degrees",
-            #     wellPanel(
-            #       uiOutput("absDiffType"),
-            #       uiOutput("downloadAbsDiffButton")
-            #     ),
-            #     br(),
-            #     chartOutput("corAbsDiff", "datatables")
-            #   )
-            # )
-          # ),
-          # tabPanel(
-          #   "Gene set properties"#,
-          #   # wellPanel(
-          #   #   h5("Gene set network topological properties"),
-          #   #   uiOutput("networkScore"),
-          #   #   uiOutput("networkScoreOptions"),
-          #   #   uiOutput("networkScoresComparison")
-          #   # )
-          # ),
-          # tabPanel(
-          #   "Gene scores",
-          #   wellPanel(
-          #     h5("Gene scores"),
-          #     uiOutput("geneScore"),
-          #     uiOutput("geneScoresType"),
-          #     uiOutput("downloadGeneScoresButton")
-          #   ),
-          #   br(),
-          #   dataTableOutput("geneScoresComparison")
-          #   # chartOutput("geneScoresComparison", "datatables")
-          # ),
-          # tabPanel(
-          #   "Gene expression analysis"#,
-            # bsCollapsePanel(
-            #   "Gene expression heatmap",
-            #   wellPanel(
-            #     div(
-            #       class="row-fluid",
-            #       div(class="span4",
-            #           h5("Colors selection"),
-            #           uiOutput("exprHeatmapColors"),
-            #           h5("Heatmap clustering options"),
-            #           uiOutput("exprHeatmapClustering")),
-            #       div(
-            #         class="span4",
-            #         h5("Plot format"),
-            #         radioButtons(
-            #           "exprHeatmapFormat",
-            #           "Select a format to save the plots:",
-            #           c("PDF","PNG", "JPG"))
-            #       ),
-            #       div(class="span4",
-            #           h5("Plot dimensions"),
-            #           uiOutput("exprHeatmapDimensions"),
-            #           uiOutput(paste("downloadExpr",
-            #                          "HeatmapButton",
-            #                          sep="")))
-            #     )
-            #   ),
-            #   plotOutput("exprHeatmap", width="100%")
-            # ),
-            # bsCollapsePanel(
-            #   "Tests for differential expression",
-            #   wellPanel(
-            #     uiOutput("diffExprTestsType"),
-            #     uiOutput("downloadDiffExprTestsButton")
-            #   ),
-            #   br(),
-            #   chartOutput("diffExprTests", "datatables")
-            # ),
-            # bsCollapsePanel(
-            #   "Gene expression boxplot",
-            #   wellPanel(
-            #     h5("Gene selection"),
-            #     uiOutput("selectGene")
-            #   ),
-            #   wellPanel(
-            #     div(class="row-fluid",
-            #         div(class="span6",
-            #             h5("Plot format"),
-            #             radioButtons(
-            #               "exprBoxplotFormat",
-            #               "Select a format to save the plots:",
-            #               c("PDF","PNG", "JPG"))),
-            #         div(class="span6",
-            #             h5("Plot dimensions"),
-            #             uiOutput("exprBoxplotDimensions"),
-            #             uiOutput("downloadExprBoxplotButton")))
-            #   ),
-            #   br(),
-            #   plotOutput("exprBoxplot")
-            # )
+            dataTableOutput("vertexAnalysisTable"),
+            bsCollapsePanel(
+              "KEGG pathway visualization",
+              div(
+                class="span4",
+                h5("Colors selection"),
+                radioButtons(
+                  "selectingDataType",
+                  "Select a what kind of data you are analysing:",
+                  c("Genes or/and Proteins"="gene", "Metabolite"="cpd"))
+              ),
+              selectInput(
+                "thresholdSelected",
+                h5("Association measure"),
+                c("Test statistics"="statistic", "p-value"="pvalue",
+                  "q-value"="qvalue")
+              ),
+              uiOutput("thrValue"),
+              textInput("speciesID", label = h5("Write the code of the species that you want to analyze"), value = "hsa"),
+              textInput("pathID", label = h5("Write the code of the pathway that you want to analyze"), value = "Enter text..."),
+              checkboxInput("keggNative", label = "Kegg Native plot", value = TRUE),
+              downloadButton("downloadKeggMap","Save the Kegg Map")
+            )
+          ),
+          ## NETWORK VISUALIZATION
+          tabPanel(
+            "Network visualization plots",
+          bsCollapsePanel(
+            "Plot settings",
+            div(
+              class="row-fluid",
+              div(
+                class="span4",
+                h5("Colors selection"),
+                uiOutput("heatmapColors")
+              ),
+              div(
+                class="span4",
+                h5("Plot format"),
+                radioButtons(
+                  "networkPlotFormat",
+                  "Select a format to save the plots:",
+                  c("PDF","PNG", "JPG"))
+              ),
+              div(
+                class="span4",
+                h5("Plot dimensions"),
+                uiOutput("networkPlotDimensions")
+              )
+            )
+          ),
+          bsCollapsePanel(
+            "Network visualization",
+            conditionalPanel(
+              "input.associationMeasure=='correlation'",
+              checkboxInput("signedCorrelation",
+                            "Show negative correlations")
+            ),
+            br(),
+            div(class="row-fluid",
+                div(class="span6", plotOutput("heatmapClass1"),
+                    uiOutput("downloadNetworkPlot1Button")),
+                div(class="span6", plotOutput("heatmapClass2"),
+                    uiOutput("downloadNetworkPlot2Button"))),
+            br(),
+            wellPanel(
+              h5("Association between two gene products"),
+              uiOutput("selectGenes"),
+
+              dataTableOutput("corr")
+            )
+          ),
+          bsCollapsePanel(
+            "Differences between the gene networks",
+            uiOutput("heatmapDiffOptions"),
+            br(),
+            bsCollapsePanel(
+              "Matrix of differences",
+              plotOutput("heatmapDiff", width="50%"),
+              uiOutput("downloadNetworkDiffPlotButton")),
+            bsCollapsePanel(
+              "List of gene association degrees",
+              wellPanel(
+                uiOutput("absDiffType"),
+                uiOutput("downloadAbsDiffButton")
+              ),
+              br(),
+              dataTableOutput("corAbsDiff")#, "datatables")
+              # chartOutput("corAbsDiff")#, "datatables")
+            )
+          )
+          ),
+          tabPanel(
+            "Gene set properties",
+            wellPanel(
+              h5("Gene set network topological properties"),
+              uiOutput("networkScore"),
+              uiOutput("networkScoreOptions"),
+              uiOutput("networkScoresComparison")
+            )
+          ),
+          tabPanel(
+            "Gene scores",
+            wellPanel(
+              h5("Gene scores"),
+              uiOutput("geneScore"),
+              uiOutput("geneScoresType"),
+              uiOutput("downloadGeneScoresButton")
+            ),
+            br(),
+            dataTableOutput("geneScoresComparison")
+            # chartOutput("geneScoresComparison", "datatables")
+          ),
+          tabPanel(
+            "Gene expression analysis",
+            bsCollapsePanel(
+              "Gene expression heatmap",
+              wellPanel(
+                div(
+                  class="row-fluid",
+                  div(class="span4",
+                      h5("Colors selection"),
+                      uiOutput("exprHeatmapColors"),
+                      h5("Heatmap clustering options"),
+                      uiOutput("exprHeatmapClustering")),
+                  div(
+                    class="span4",
+                    h5("Plot format"),
+                    radioButtons(
+                      "exprHeatmapFormat",
+                      "Select a format to save the plots:",
+                      c("PDF","PNG", "JPG"))
+                  ),
+                  div(class="span4",
+                      h5("Plot dimensions"),
+                      uiOutput("exprHeatmapDimensions"),
+                      uiOutput(paste("downloadExpr",
+                                     "HeatmapButton",
+                                     sep="")))
+                )
+              ),
+              plotOutput("exprHeatmap", width="100%")
+            ),
+            bsCollapsePanel(
+              "Tests for differential expression",
+              wellPanel(
+                uiOutput("diffExprTestsType"),
+                uiOutput("downloadDiffExprTestsButton")
+              ),
+              br(),
+              dataTableOutput("diffExprTests")
+              # chartOutput("diffExprTests", "datatables")
+            ),
+            bsCollapsePanel(
+              "Gene expression boxplot",
+              wellPanel(
+                h5("Gene selection"),
+                uiOutput("selectGene")
+              ),
+              wellPanel(
+                div(class="row-fluid",
+                    div(class="span6",
+                        h5("Plot format"),
+                        radioButtons(
+                          "exprBoxplotFormat",
+                          "Select a format to save the plots:",
+                          c("PDF","PNG", "JPG"))),
+                    div(class="span6",
+                        h5("Plot dimensions"),
+                        uiOutput("exprBoxplotDimensions"),
+                        uiOutput("downloadExprBoxplotButton"))),
+                plotOutput("exprBoxplot", width="100%")
+              )
+            )
+          ),
+          tabPanel(
+            "KEEG pathway visualization",
+            wellPanel(
+              div(
+                class="row-fluid",
+                div(class="span4",
+                    h5("Colors selection"),
+                    uiOutput("exprKeegMapColors"),
+                    h5("Heatmap clustering options"),
+                    uiOutput("exprKeegMapClustering")),
+                div(
+                  class="span4",
+                  h5("Plot format"),
+                  radioButtons(
+                    "exprKeegMapFormat",
+                    "Select a format to save the plots:",
+                    c("PDF","PNG", "JPG"))
+                ),
+                div(class="span4",
+                    h5("Plot dimensions"),
+                    uiOutput("exprKeegMapDimensions"),
+                    uiOutput(paste("downloadExpr2",
+                                   "HeatmapButton",
+                                   sep="")))
+              )
+            ),
+            wellPanel(
+              h5("Nodes Test"),
+              uiOutput("vertexFunction2"),
+              h5("Run differential node analysis"),
+              # actionButton("startVertex", "Start analysis"),
+              # bsAlert(inputId = "vertexResultsWarning"),
+              uiOutput("vertexScoresType2"),
+              uiOutput("downloadVertexAnalysisButton2")
+            ),
+            br(),
+            dataTableOutput("vertexAnalysisTable2")
           )
         ),
         value = "Further analyses"

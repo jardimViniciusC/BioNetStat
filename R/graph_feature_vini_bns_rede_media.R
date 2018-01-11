@@ -387,7 +387,6 @@ spectralEntropies <- function(expr, labels, adjacencyMatrix, options=list(bandwi
     A[[a]]<-adjacencyMatrix(expr[labels==unique(labels)[a],])
   }
   fs<- nSpectralDensities(A)
-  fs <- spectralDensities(A1, A2, bandwidth=options$bandwidth)
   if (sum(is.na(fs)) > 0)
     return(NA)
   entropies<-list()

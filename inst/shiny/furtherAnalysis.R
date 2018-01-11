@@ -65,20 +65,20 @@ plotAdjacencyMatrix <- reactive({
       return(NULL)
     if (is.null(signedCorrelation))
       signedCorrelation <- F
-    if (associationMeasure == "correlation")
-      col <- 1
-    else
-      col <- 2
+    # if (associationMeasure == "correlation")
+    #   col <- 1
+    # else
+    #   col <- 2
     associationEdge<-ifelse(associationMeasure=="correlation",
                             "corr", ifelse(associationMeasure=="qvalue",
                                            "fdr", "pvalue"))
-    adjMatrix <- adjacencyMatrix(correlationMeasures[correlationMeasure, 1],
+    adjacencyMatrix <- adjacencyMatrix(correlationMeasures[correlationMeasure, 1],
                                        associationEdge,
                                        ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
                                                                               "corr", ifelse(edgeWeight=="qvalue",
                                                                                              "fdr", "pvalue")), associationEdge),
                                        threshold,
-                                       ifelse(networkType=="weighted", T, F))
+                                       ifelse(networkType=="weighted", T, F),abs.values =!signedCorrelation )
 })
 
 # Returns a adjacency matrix whose first half columns belongs to the class1 gene
@@ -86,15 +86,18 @@ plotAdjacencyMatrix <- reactive({
 # gene network
 adjacencyMatrices <- reactive({
     data <- plotSelectedData()
+    classes<-c(input$selectClassNetwork1,input$selectClassNetwork2)
+    class <- input$factorsinput
+    cla<-cbind(levels(as.factor(class)),c(0:(length(class)-1)))
     if (is.null(data))
         return(NULL)
     adjMatrix <- plotAdjacencyMatrix()
     if (is.null(adjMatrix))
         return(NULL)
-    r1 <- adjMatrix(data$expr[, data$labels==0])
-    r2 <- adjMatrix(data$expr[, data$labels==1])
+    r1 <- adjMatrix(data$expr[data$labels==cla[cla[,1]==classes[1],2],])
+    r2 <- adjMatrix(data$expr[data$labels==cla[cla[,1]==classes[2],2],])
     #diag(r1) <- diag(r2) <- 1
-    genes <- rownames(data$expr)
+    genes <- colnames(data$expr)
     colnames(r1) <- colnames(r2) <- rownames(r1) <- rownames(r2) <- genes
     r <- cbind(r1, r2)
     colnames(r) <- c(genes, genes)
@@ -232,7 +235,7 @@ output$geneSetInfo <- renderUI ({
     if (is.null(genes))
         return(NULL)
     n1 <- length(genes)
-    i <- which(genes %in% rownames(expr))
+    i <- which(genes %in% colnames(expr))
     n2 <- length(i)
     msg <- paste("You have selected the ", geneSet, ". ", n2, " of the ",
                  n1,
@@ -308,7 +311,7 @@ output$networkScoresComparison  <- renderUI({
     r1 <- round(r[[1]], 6)
     r2 <- round(r[[2]], 6)
     diff <- round(r[[1]]-r[[2]], 6)
-    classes <- data$classes
+    classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
     result <- div(class="row-fluid",
                   div(class="span4",
                       p(h5(paste(classes[[1]][1], " score:", sep="")), r1)),
@@ -323,6 +326,7 @@ output$networkScoresComparison  <- renderUI({
 # Gene scores ------------------------------------------------------------------
 
 source("differentialVertexAnalysis.R", local=T)
+source("keggPathway.R", local=T)
 
 # Network visualization plots --------------------------------------------------
 
