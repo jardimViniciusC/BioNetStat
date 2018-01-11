@@ -95,5 +95,6 @@ shinyServer(function(input, output, session, sessionVertex) {
   # Further analysis ---------------------------------------------------------
 
   source("furtherAnalysis.R", local=T)
+  source("~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/BioNetStat/R/drawing_bns.R")
 
 })

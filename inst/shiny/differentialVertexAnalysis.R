@@ -98,8 +98,8 @@ vertexAnalysisTable <- reactive ({
       }
       if(is.list(result)) results[, "q-value"] <<- round(p.adjust(results[, "Nominal p-value"], method="fdr"),4)#
     })
-    results <- results[[1]]
-    results <- cbind(rownames(results), results)
+    results <- as.data.frame(results[[1]])
+    results <- as.data.frame(cbind(rownames(results), results))
     colnames(results) <- c("Node","Test statistic", "Nominal p-value", "q-value",paste(data$classes,"score",sep = " "))#
     return(results)
   })
