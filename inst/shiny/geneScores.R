@@ -50,7 +50,7 @@ output$downloadGeneScoresButton <- renderUI({
 output$downloadGeneScores <- downloadHandler(
     filename = function() {
         data <- plotSelectedData()
-        classes <- data$classes
+        classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
         c1 <- classes[[1]][1]
         c2 <- classes[[1]][2]
         geneScore <- input$geneScore

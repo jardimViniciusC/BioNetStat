@@ -5,8 +5,8 @@ selecting.list <- function(var.diff.list,threshold,thr.value){
   if(dim(var.diff.list)[1]==0) stop("The differential table have 0 rows")
   if(is.null(threshold)) tab<-var.diff.list[,c(1,5:(dim(var.diff.list)[2]))]
     else{
-      if(threshold=="pvalue")tab<-var.diff.list[var.diff.list$Nominal.p.value<=thr.value,c(1,5:(dim(var.diff.list)[2]))]
-      if(threshold=="qvalue")tab<-var.diff.list[var.diff.list$Q.value<=thr.value,c(1,5:(dim(var.diff.list)[2]))]
+      if(threshold=="pvalue")tab<-var.diff.list[var.diff.list[,3]<=thr.value,c(1,5:(dim(var.diff.list)[2]))]
+      if(threshold=="qvalue")tab<-var.diff.list[var.diff.list[,4]<=thr.value,c(1,5:(dim(var.diff.list)[2]))]
       if(dim(tab)[1]==0) stop("Threshold is too low, the differential table remains with 0 rows")
     }
   rownames(tab)<-tab[,1]
@@ -27,8 +27,8 @@ plot.names<-function(var.diff.list,threshold,thr.value){
   if(dim(var.diff.list)[1]==0) stop("The differential table have 0 rows")
     if(is.null(threshold)) names<-var.diff.list[,1]
     else{
-      if(threshold=="pvalue")names<-var.diff.list[var.diff.list$Nominal.p.value<=thr.value,1]
-      if(threshold=="qvalue")names<-var.diff.list[var.diff.list$Q.value<=thr.value,1]
+      if(threshold=="pvalue")names<-var.diff.list[var.diff.list[,3]<=thr.value,1]
+      if(threshold=="qvalue")names<-var.diff.list[var.diff.list[,4]<=thr.value,1]
       if(length(names)==0) stop("Threshold is too restrict, the differential table remains with 0 rows")
     }
   return(names)

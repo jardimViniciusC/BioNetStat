@@ -213,7 +213,7 @@ output$appMessages <- renderUI({
           optionsMsg <- ""
         else {
           name <- networkTestsMatrix[networkTest, "Options"]
-          # name <- strsplit(name, "=")[[1]][1]
+          name <- strsplit(name, "=")[[1]][1]
           optionsMsg <- paste("*", name, "-", options, "\n")
         }
         thresholdMsg <- ""
@@ -369,7 +369,7 @@ output$downloadResults <- downloadHandler(
           optionsMsg <- ""
         else {
           name <- networkTestsMatrix[values$networkTest, "Options"]
-          # name <- strsplit(name, "=")[[1]][1]
+          name <- strsplit(name, "=")[[1]][1]
           optionsMsg <- paste(tolower(name), "-", options)
         }
         thresholdMsg <- "none (full graph)"

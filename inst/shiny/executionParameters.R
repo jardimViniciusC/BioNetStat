@@ -73,16 +73,16 @@ output$predefGeneSets <- renderUI({
 
 output$correlationMeasure <- renderUI({
 
-    selectInput("correlationMeasure", "Select a dependence measure:",
+    selectInput("correlationMeasure", h5("Select a dependence measure:"),
                 rownames(correlationMeasures))
 })
 
 output$linkFormation <- renderUI({
   if(is.null(input$associationMeasure))
     return()
-  switch(input$associationMeasure, "correlation"= sliderInput("correlationValue","Correlation Threshold",min=0, max=1, value = 0.7),
-         "pvalue" = numericInput("pvalueThreshold", "p-value Threshold",value = 0.95, step=0.01),
-         "qvalue" = numericInput("qvalueThreshold", "q-value Threshold",value = 0.95, step=0.01))
+  switch(input$associationMeasure, "correlation"= sliderInput("correlationValue",h5("Minimum value (threshold) for link construction"),min=0, max=1, value = 0.7),
+         "pvalue" = sliderInput("pvalueThreshold", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.95),
+         "qvalue" = sliderInput("qvalueThreshold", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.95))
 })
 
 # Select predefined gene sets

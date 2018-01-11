@@ -240,8 +240,8 @@ output$classes <- renderUI({
   if (is.null(labelsInput()))
     return(NULL)
   labels <- labelsInput()
-  selectInput("classes", p("Choose the conditions class you want to test:",img(src="images/info.png", title="s")),
-              choices = c(labels))
+  wellPanel(selectInput("classes", p(h4(strong("Factors\n")),h5("Choose the conditions class you want to test:",img(src="images/info.png", title="Select the column of your data table that you want to use to set the samples (rows) states."))),
+              choices = c(labels)))
 })
 
 # Render a select input of the classes that will be tested
@@ -253,8 +253,8 @@ output$factors <- renderUI({
   # for (i in 1:ncol(classes)) {
   #   options[i] <- paste(classes[1, i], classes[2, i])
   # }
-  selectizeInput("factorsinput", p("Choose the conditions to be compared:",img(src="images/info.png", title="s")),
-              choices = classes, multiple=T)#c(options)
+  wellPanel(selectizeInput("factorsinput", p(h4(strong("Classes\n")),h5("Choose the conditions to be compared:",img(src="images/info.png", title="Select which states (samples) you want to bild a network to be compared. "))),
+              choices = classes, multiple=T))#c(options)
 })
 
 # output$factor2 <- renderUI({
