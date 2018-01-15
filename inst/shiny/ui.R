@@ -172,6 +172,7 @@ shinyUI(fluidPage(
               div(
                 class="span4",
                 h5("Colors selection"),
+                uiOutput("exprKeegMapColors"),
                 radioButtons(
                   "selectingDataType",
                   "Select a what kind of data you are analysing:",
@@ -310,6 +311,31 @@ shinyUI(fluidPage(
               plotOutput("exprHeatmap", width="100%")
             ),
             bsCollapsePanel(
+              "KEGG pathway visualization",
+              fileInput("keggCodes2", h5(paste("Please, select the codes table (*.csv) containing the variables names and coresponding Kegg code")),
+                        accept=c("Comma-Seperated Values", "text/csv", ".csv"),placeholder = "Select a file"),
+              div(
+                class="span4",
+                h5("Colors selection"),
+                uiOutput("exprKeegMapColors2"),
+                radioButtons(
+                  "selectingDataType2",
+                  "Select a what kind of data you are analysing:",
+                  c("Genes or/and Proteins"="gene", "Metabolite"="cpd"))
+              ),
+              selectInput(
+                "thresholdSelected2",
+                h5("Association measure"),
+                c("p-value"="pvalue",
+                  "q-value"="qvalue","Test statistics"="statistic")
+              ),
+              uiOutput("thrValue2"),
+              textInput("speciesID2", label = h5("Write the code of the species that you want to analyze"), value = "hsa"),
+              textInput("pathID2", label = h5("Write the code of the pathway that you want to analyze"), value = "05200"),
+              checkboxInput("keggNative2", label = "Kegg Native plot", value = TRUE),
+              downloadButton("downloadKeggMap2","Save the Kegg Map")
+            ),
+            bsCollapsePanel(
               "Tests for differential expression",
               wellPanel(
                 uiOutput("diffExprTestsType"),
@@ -340,44 +366,6 @@ shinyUI(fluidPage(
                 plotOutput("exprBoxplot", width="100%")
               )
             )
-          ),
-          tabPanel(
-            "KEEG pathway visualization",
-            wellPanel(
-              div(
-                class="row-fluid",
-                div(class="span4",
-                    h5("Colors selection"),
-                    uiOutput("exprKeegMapColors"),
-                    h5("Heatmap clustering options"),
-                    uiOutput("exprKeegMapClustering")),
-                div(
-                  class="span4",
-                  h5("Plot format"),
-                  radioButtons(
-                    "exprKeegMapFormat",
-                    "Select a format to save the plots:",
-                    c("PDF","PNG", "JPG"))
-                ),
-                div(class="span4",
-                    h5("Plot dimensions"),
-                    uiOutput("exprKeegMapDimensions"),
-                    uiOutput(paste("downloadExpr2",
-                                   "HeatmapButton",
-                                   sep="")))
-              )
-            ),
-            wellPanel(
-              h5("Nodes Test"),
-              uiOutput("vertexFunction2"),
-              h5("Run differential node analysis"),
-              # actionButton("startVertex", "Start analysis"),
-              # bsAlert(inputId = "vertexResultsWarning"),
-              uiOutput("vertexScoresType2"),
-              uiOutput("downloadVertexAnalysisButton2")
-            ),
-            br(),
-            dataTableOutput("vertexAnalysisTable2")
           )
         ),
         value = "Further analyses"
