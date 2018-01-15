@@ -1,15 +1,3 @@
-# Returns correlation matrix colors
-exprKeegMapColors <- reactive({
-  col <- input$exprKeegMapColors
-  if (col == "Green-Black-Red")
-    return(colorRampPalette(c("green","black", "red"),space="rgb")(41))
-  name <- switch(col,
-                 "Blue-White-Red"= "RdBu",
-                 "Green-Yellow-Red"="RdYlGn",
-                 "Blue-Yellow-Red"="RdYlBu"
-  )
-  return(colorRampPalette(rev(brewer.pal(n=7, name=name)))(41))
-})
 
 # Rendering --------------------------------------------------------------------
 output$exprKeegMapColors  <- renderUI({
@@ -18,8 +6,15 @@ output$exprKeegMapColors  <- renderUI({
     return(NULL)
   }
   selectInput("exprKeegMapColors", "Select a color scheme:",
-              c("Green-Black-Red", "Blue-White-Red",
-                "Green-Yellow-Red", "Blue-Yellow-Red"))
+              c("Green"="green3", "Blue"="blue","Yellow"="yellow", "Red"="red", "Gray"="gray"))
+})
+output$exprKeegMapColors2  <- renderUI({
+  data <- plotSelectedData()
+  if (is.null(data)) {
+    return(NULL)
+  }
+  selectInput("exprKeegMapColors2", "Select a color scheme:",
+              c("Green"="green3", "Blue"="blue","Yellow"="yellow", "Red"="red", "Gray"="gray"))
 })
 
 output$thrValue <- renderUI({
@@ -46,16 +41,32 @@ output$downloadKeggMap <- downloadHandler(
       if(!dir.exists(file.path("/tmp/", "pathMap"))) dir.create("/tmp/pathMap")
       setwd("/tmp/pathMap")
       l<-which(results[,1] %in% codes[,1])
-      print(results[,1])
-      print(codes[,1])
-      print(which(codes[,1] %in% results[,1]))
-      print(codes[l,2])
       results[,1]<-codes[l,2]
       centralityPathPlot(gene.data=results, cpd.data=NULL, threshold=input$thresholdSelected, thr.value=input$thrValue, species=input$speciesID , pathway.id=input$pathID, kegg.native=input$keggNative, file.name="file",
                        limit = NULL, bins = list(gene = 15,cpd = 15), both.dirs= list(gene = F,cpd = F),
-                       mid =list(gene = "white", cpd = "white"),high = list(gene = "red",cpd = "red"))
+                       mid =list(gene = "white", cpd = "white"),high = list(gene = input$exprKeegMapColors,cpd = input$exprKeegMapColors))
       tar(tarfile = file, files ="/tmp/pathMap")
       file.remove(list.files())
+  }
+)
+
+output$downloadKeggMap <- downloadHandler(
+  filename = paste("data-", Sys.Date(), ".csv", sep="")
+  ,
+  content = function(file) {
+    results <- vertexAnalysisTable()
+    fileCodes<-input$keggCodes
+    codes<-read.csv(fileCodes$datapath)
+    if(input$selectingDataType=="gene")
+      if(!dir.exists(file.path("/tmp/", "pathMap"))) dir.create("/tmp/pathMap")
+    setwd("/tmp/pathMap")
+    l<-which(results[,1] %in% codes[,1])
+    results[,1]<-codes[l,2]
+    centralityPathPlot(gene.data=results, cpd.data=NULL, threshold=input$thresholdSelected, thr.value=input$thrValue, species=input$speciesID , pathway.id=input$pathID, kegg.native=input$keggNative, file.name="file",
+                       limit = NULL, bins = list(gene = 15,cpd = 15), both.dirs= list(gene = F,cpd = F),
+                       mid =list(gene = "white", cpd = "white"),high = list(gene = input$exprKeegMapColors,cpd = input$exprKeegMapColors))
+    tar(tarfile = file, files ="/tmp/pathMap")
+    file.remove(list.files())
   }
 )
 
