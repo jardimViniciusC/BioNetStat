@@ -316,8 +316,6 @@ shinyUI(fluidPage(
                         accept=c("Comma-Seperated Values", "text/csv", ".csv"),placeholder = "Select a file"),
               div(
                 class="span4",
-                h5("Colors selection"),
-                uiOutput("exprKeegMapColors2"),
                 radioButtons(
                   "selectingDataType2",
                   "Select a what kind of data you are analysing:",
@@ -329,11 +327,17 @@ shinyUI(fluidPage(
                 c("p-value"="pvalue",
                   "q-value"="qvalue","Test statistics"="statistic")
               ),
+              selectInput(
+                "funSelected",
+                h5("Select an aggregatino function"),
+                c("Mean"="mean",
+                  "Median"="median","Maximum"="max","Minimum"="min")
+              ),
               uiOutput("thrValue2"),
               textInput("speciesID2", label = h5("Write the code of the species that you want to analyze"), value = "hsa"),
               textInput("pathID2", label = h5("Write the code of the pathway that you want to analyze"), value = "05200"),
               checkboxInput("keggNative2", label = "Kegg Native plot", value = TRUE),
-              downloadButton("downloadKeggMap2","Save the Kegg Map")
+              downloadButton("downloadKeggExprMap","Save the Kegg Map")
             ),
             bsCollapsePanel(
               "Tests for differential expression",

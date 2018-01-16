@@ -15,6 +15,7 @@ selecting.list <- function(var.diff.list,threshold,thr.value){
 
 ####################################################################
 var.list<-function(expr,labels,FUN){
+  expr<-t(expr)
   mat<-cbind(labels,expr)
   media<-aggregate(mat,by = list(labels),FUN = FUN)[-1]
   tab<-t(scale(media[,-1]))#gene.id
@@ -140,7 +141,7 @@ pathPlot<- function(gene.data=NULL, cpd.data=NULL, labels, varr.diff.list=NULL, 
 
     if(!is.null(gene.data)) {
       tab.gene<-var.list(gene.data,labels=labels,FUN=FUN)
-      names.gene<-plot.names(gene.data,threshold=threshold,thr.value=thr.value)
+      names.gene<-plot.names(varr.diff.list,threshold=threshold,thr.value=thr.value)
       # max.gene<-max(tab.gene)
     }
     else{
@@ -150,7 +151,7 @@ pathPlot<- function(gene.data=NULL, cpd.data=NULL, labels, varr.diff.list=NULL, 
     }
     if(!is.null(cpd.data)){
       tab.cpd<-var.list(cpd.data,labels=labels,FUN=FUN)
-      names.cpd<-plot.names(var.diff.list=a,threshold=threshold,thr.value=thr.value)
+      names.cpd<-plot.names(varr.diff.list,threshold=threshold,thr.value=thr.value)
       # max.cpd<-max(tab.cpd)
     }
     else{
@@ -159,6 +160,6 @@ pathPlot<- function(gene.data=NULL, cpd.data=NULL, labels, varr.diff.list=NULL, 
       # max.cpd<-1
     }
   if(is.null(cpd.data) & is.null(gene.data)) stop("You have to insert a matrix data")
-  pv.out <- pathview(gene.data = tab.gene[names.gene,], cpd.data = tab.cpd[names.cpd,], pathway.id = pathway.id,
+  pv.out <- pathview(gene.data = tab.gene[rownames(tab.gene) %in% names.gene,], cpd.data = tab.cpd[rownames(tab.cpd) %in% names.cpd,], pathway.id = pathway.id,
                      species = species, out.suffix = file.name, kegg.native = kegg.native)#"05200"
 }

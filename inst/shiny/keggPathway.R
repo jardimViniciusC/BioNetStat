@@ -8,14 +8,14 @@ output$exprKeegMapColors  <- renderUI({
   selectInput("exprKeegMapColors", "Select a color scheme:",
               c("Green"="green3", "Blue"="blue","Yellow"="yellow", "Red"="red", "Gray"="gray"))
 })
-output$exprKeegMapColors2  <- renderUI({
-  data <- plotSelectedData()
-  if (is.null(data)) {
-    return(NULL)
-  }
-  selectInput("exprKeegMapColors2", "Select a color scheme:",
-              c("Green"="green3", "Blue"="blue","Yellow"="yellow", "Red"="red", "Gray"="gray"))
-})
+# output$exprKeegMapColors2  <- renderUI({
+#   data <- plotSelectedData()
+#   if (is.null(data)) {
+#     return(NULL)
+#   }
+#   selectInput("exprKeegMapColors2", "Select a color scheme:",
+#               c("Green"="green3", "Blue"="blue","Yellow"="yellow", "Red"="red", "Gray"="gray"))
+# })
 
 output$thrValue <- renderUI({
   if(is.null(input$thresholdSelected))
@@ -28,6 +28,17 @@ output$thrValue <- renderUI({
          "qvalue" = sliderInput("thrValue", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.05))
 })
 
+output$thrValue2 <- renderUI({
+  if(is.null(input$thresholdSelected2))
+    return(NULL)
+  table<-vertexAnalysisTable()
+  if(is.null(table))
+    return(NULL)
+  switch(input$thresholdSelected2, "statistic"= sliderInput("thrValue2",h5("Minimum value (threshold) for link construction"),min=min(as.numeric(table[,2])), max=max(as.numeric(table[,2])), value = min(as.numeric(table[,2]))),
+         "pvalue" = sliderInput("thrValue2", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.05),
+         "qvalue" = sliderInput("thrValue2", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.05))
+})
+
 # Prepare file with the statistics of the absolute differences between
 # correlations for download
 output$downloadKeggMap <- downloadHandler(
@@ -37,69 +48,53 @@ output$downloadKeggMap <- downloadHandler(
     results <- vertexAnalysisTable()
     fileCodes<-input$keggCodes
     codes<-read.csv(fileCodes$datapath)
-    if(input$selectingDataType=="gene")
-      if(!dir.exists(file.path("/tmp/", "pathMap"))) dir.create("/tmp/pathMap")
-      setwd("/tmp/pathMap")
+    if(!dir.exists(file.path("/tmp/", "pathMap"))) dir.create("/tmp/pathMap")
+    setwd("/tmp/pathMap")
+    if(input$selectingDataType=="gene"){
+        l<-which(results[,1] %in% codes[,1])
+        results[,1]<-codes[l,2]
+        centralityPathPlot(gene.data=results, cpd.data=NULL, threshold=input$thresholdSelected, thr.value=input$thrValue, species=input$speciesID , pathway.id=input$pathID, kegg.native=input$keggNative, file.name="file",
+                         limit = NULL, bins = list(gene = 15,cpd = 15), both.dirs= list(gene = F,cpd = F),
+                         mid =list(gene = "white", cpd = "white"),high = list(gene = input$exprKeegMapColors,cpd = input$exprKeegMapColors))
+    }
+    if(input$selectingDataType=="cpd"){
       l<-which(results[,1] %in% codes[,1])
       results[,1]<-codes[l,2]
-      centralityPathPlot(gene.data=results, cpd.data=NULL, threshold=input$thresholdSelected, thr.value=input$thrValue, species=input$speciesID , pathway.id=input$pathID, kegg.native=input$keggNative, file.name="file",
-                       limit = NULL, bins = list(gene = 15,cpd = 15), both.dirs= list(gene = F,cpd = F),
-                       mid =list(gene = "white", cpd = "white"),high = list(gene = input$exprKeegMapColors,cpd = input$exprKeegMapColors))
+      centralityPathPlot(gene.data=NULL, cpd.data=results, threshold=input$thresholdSelected, thr.value=input$thrValue, species=input$speciesID , pathway.id=input$pathID, kegg.native=input$keggNative, file.name="file",
+                         limit = NULL, bins = list(gene = 15,cpd = 15), both.dirs= list(gene = F,cpd = F),
+                         mid =list(gene = "white", cpd = "white"),high = list(gene = input$exprKeegMapColors,cpd = input$exprKeegMapColors))
+    }
       tar(tarfile = file, files ="/tmp/pathMap")
       file.remove(list.files())
   }
 )
 
-output$downloadKeggMap <- downloadHandler(
+output$downloadKeggExprMap <- downloadHandler(
   filename = paste("data-", Sys.Date(), ".csv", sep="")
   ,
   content = function(file) {
+    data<-plotSelectedData()
+    labels <- data$labels
+    expr<-data$expr
     results <- vertexAnalysisTable()
-    fileCodes<-input$keggCodes
+    fileCodes<-input$keggCodes2
     codes<-read.csv(fileCodes$datapath)
-    if(input$selectingDataType=="gene")
-      if(!dir.exists(file.path("/tmp/", "pathMap"))) dir.create("/tmp/pathMap")
-    setwd("/tmp/pathMap")
-    l<-which(results[,1] %in% codes[,1])
-    results[,1]<-codes[l,2]
-    centralityPathPlot(gene.data=results, cpd.data=NULL, threshold=input$thresholdSelected, thr.value=input$thrValue, species=input$speciesID , pathway.id=input$pathID, kegg.native=input$keggNative, file.name="file",
-                       limit = NULL, bins = list(gene = 15,cpd = 15), both.dirs= list(gene = F,cpd = F),
-                       mid =list(gene = "white", cpd = "white"),high = list(gene = input$exprKeegMapColors,cpd = input$exprKeegMapColors))
+    fun<-input$funSelected
+    if(!dir.exists(file.path("/tmp/", "pathMap"))) dir.create("/tmp/pathMap")
+      setwd("/tmp/pathMap")
+    if(input$selectingDataType=="gene"){
+      l<-match(names(expr),codes[,1])
+      s<-match(results[,1],codes[,1])
+      names(expr)<-codes[l,2]
+      rownames(results)<-results[,1]<-codes[s,2]
+      pathPlot(gene.data=t(expr), cpd.data=NULL, labels, varr.diff.list=results, threshold=input$thresholdSelected2, thr.value=input$thrValue2, FUN=fun,species=input$speciesID2 , pathway.id=input$pathID2, kegg.native=input$keggNative2, file.name="pathExpr")
+    }
+      if(input$selectingDataType=="cpd"){
+        l<-which(results[,1] %in% codes[,1])
+        results[,1]<-codes[l,2]
+        pathPlot(gene.data=NULL, cpd.data=expr, labels, varr.diff.list=results, threshold=input$thresholdSelected2, thr.value=input$thrValue2, FUN=fun,species=input$speciesID2 , pathway.id=input$pathID2, kegg.native=input$keggNative2, file.name="pathExpr")
+      }
     tar(tarfile = file, files ="/tmp/pathMap")
     file.remove(list.files())
   }
 )
-
-output$exprKeegMapDimensions <- renderUI({
-  format <- input$exprKeegMapFormat
-  min <- 1
-  max <- 100
-  defaultWidth <- 755
-  defaultHeight <- 480
-  unit <- "pixels"
-  if (is.null(input$exprKeegMapFormat))
-    return(NULL)
-  if (input$exprKeegMapFormat == "PDF") {
-    min <- 10
-    max <- 10000
-    defaultWidth <- 11
-    defaultHeight <- 7
-    unit <- "inches"
-  }
-  div(p(paste("Enter the plot dimensions (in ", unit, "):", sep=""),
-        numericInput("exprWidth", "Width:",
-                     defaultWidth, min=min, max=max),
-        numericInput("exprHeight",
-                     "Height:", defaultHeight, min=min,
-                     max=max)))
-})
-
-output$exprKeegMapClustering  <- renderUI({
-  data <- plotSelectedData()
-  if (is.null(data)) {
-    return(NULL)
-  }
-  checkboxGroupInput("exprKeegMapClustering", "",
-                     c("Rows (genes)" = "row",
-                       "Columns (samples)" = "col"))
-})
