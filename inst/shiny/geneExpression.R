@@ -66,10 +66,10 @@ diffExprTests <- reactive({
         expr2 <- expr[labels==cla[cla[,1]==c2,2], i]
         t <-  t.test(expr1, expr2)
         result[i,"Difference between means"] <- round(t$estimate[1] -
-                                                      t$estimate[2], 6)
+                                                      t$estimate[2], 4)
         result[i,"Difference between means test p-value"] <- t$p.value
         w <- wilcox.test(expr1, expr2, conf.int=T)
-        result[i,"Difference in location"] <- round(w$estimate, 6)
+        result[i,"Difference in location"] <- round(w$estimate, 4)
         result[i, "Wilcoxon-Mann-Whitney test p-value"] <- w$p.value
     }
     return(result)

@@ -130,7 +130,7 @@ shinyUI(fluidPage(
       tabPanel(
         h5("Further analyses"),
         wellPanel(
-          h5("Gene set selection"),
+          h5("Variable set selection"),
           div(
             class="row-fluid",
             div(class="span6", uiOutput("filterGeneSets"),
@@ -142,14 +142,6 @@ shinyUI(fluidPage(
 
         br(),
         uiOutput("selectedGeneSet"),
-        div(
-          class="span4",
-          h5("Classes selection"),
-          uiOutput("factorsToNetViz1"),
-          uiOutput("factorsToNetViz2")
-        ),
-        br(),
-
         tabsetPanel(
           id="FurtherTabSelected",
           tabPanel(
@@ -185,8 +177,8 @@ shinyUI(fluidPage(
                   "q-value"="qvalue","Test statistics"="statistic")
               ),
               uiOutput("thrValue"),
-              textInput("speciesID", label = h5("Write the code of the species that you want to analyze"), value = "hsa"),
-              textInput("pathID", label = h5("Write the code of the pathway that you want to analyze"), value = "05200"),
+              textInput("speciesID", label = h5("Write the code of the species that you want to analyze"), value = "code"),
+              textInput("pathID", label = h5("Write the code of the pathway that you want to analyze"), value = "code"),
               checkboxInput("keggNative", label = "Kegg Native plot", value = TRUE),
               downloadButton("downloadKeggMap","Save the Kegg Map")
             )
@@ -194,6 +186,13 @@ shinyUI(fluidPage(
           ## NETWORK VISUALIZATION
           tabPanel(
             "Network visualization plots",
+            div(
+              class="span4",
+              h5("Classes selection"),
+              uiOutput("factorsToNetViz1"),
+              uiOutput("factorsToNetViz2")
+            ),
+            br(),
           bsCollapsePanel(
             "Plot settings",
             div(
@@ -233,14 +232,23 @@ shinyUI(fluidPage(
                     uiOutput("downloadNetworkPlot2Button"))),
             br(),
             wellPanel(
-              h5("Association between two gene products"),
+              h5("Association between two variable values"),
               uiOutput("selectGenes"),
 
               dataTableOutput("corr")
             )
           ),
           bsCollapsePanel(
-            "Differences between the gene networks",
+            "Differences between set properties",
+            wellPanel(
+              h5("Node set network topological properties"),
+              uiOutput("networkScore"),
+              uiOutput("networkScoreOptions"),
+              uiOutput("networkScoresComparison")
+            )
+          ),
+          bsCollapsePanel(
+            "Differences between the variable networks",
             uiOutput("heatmapDiffOptions"),
             br(),
             bsCollapsePanel(
@@ -248,42 +256,35 @@ shinyUI(fluidPage(
               plotOutput("heatmapDiff", width="50%"),
               uiOutput("downloadNetworkDiffPlotButton")),
             bsCollapsePanel(
-              "List of gene association degrees",
+              "List of nodes association degrees",
               wellPanel(
                 uiOutput("absDiffType"),
                 uiOutput("downloadAbsDiffButton")
               ),
               br(),
-              dataTableOutput("corAbsDiff")#, "datatables")
+              dataTableOutput("corAbsDiff"),
+              br(),
+              dataTableOutput("sitTable")#, "datatables")
               # chartOutput("corAbsDiff")#, "datatables")
             )
           )
           ),
+          # tabPanel(
+          #   "Node scores",
+          #   wellPanel(
+          #     h5("Node scores"),
+          #     uiOutput("geneScore"),
+          #     uiOutput("geneScoresType"),
+          #     uiOutput("downloadGeneScoresButton")
+          #   ),
+          #   br(),
+          #   dataTableOutput("geneScoresComparison")
+          #   # chartOutput("geneScoresComparison", "datatables")
+          # ),
           tabPanel(
-            "Gene set properties",
-            wellPanel(
-              h5("Gene set network topological properties"),
-              uiOutput("networkScore"),
-              uiOutput("networkScoreOptions"),
-              uiOutput("networkScoresComparison")
-            )
-          ),
-          tabPanel(
-            "Gene scores",
-            wellPanel(
-              h5("Gene scores"),
-              uiOutput("geneScore"),
-              uiOutput("geneScoresType"),
-              uiOutput("downloadGeneScoresButton")
-            ),
-            br(),
-            dataTableOutput("geneScoresComparison")
-            # chartOutput("geneScoresComparison", "datatables")
-          ),
-          tabPanel(
-            "Gene expression analysis",
+            "Variable values analysis",
             bsCollapsePanel(
-              "Gene expression heatmap",
+              "Variable values heatmap",
               wellPanel(
                 div(
                   class="row-fluid",
@@ -334,8 +335,8 @@ shinyUI(fluidPage(
                   "Median"="median","Maximum"="max","Minimum"="min")
               ),
               uiOutput("thrValue2"),
-              textInput("speciesID2", label = h5("Write the code of the species that you want to analyze"), value = "hsa"),
-              textInput("pathID2", label = h5("Write the code of the pathway that you want to analyze"), value = "05200"),
+              textInput("speciesID2", label = h5("Write the code of the species that you want to analyze"), value = "code"),
+              textInput("pathID2", label = h5("Write the code of the pathway that you want to analyze"), value = "code"),
               checkboxInput("keggNative2", label = "Kegg Native plot", value = TRUE),
               downloadButton("downloadKeggExprMap","Save the Kegg Map")
             ),
@@ -350,9 +351,9 @@ shinyUI(fluidPage(
               # chartOutput("diffExprTests", "datatables")
             ),
             bsCollapsePanel(
-              "Gene expression boxplot",
+              "Variable value boxplot",
               wellPanel(
-                h5("Gene selection"),
+                h5("Variable selection"),
                 uiOutput("selectGene")
               ),
               wellPanel(

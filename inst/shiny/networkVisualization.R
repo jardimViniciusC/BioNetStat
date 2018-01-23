@@ -99,12 +99,75 @@ corAbsDiff <- reactive({
         g2 <- names[2, i]
         result[i, "Gene 1"] <- g1
         result[i, "Gene 2"] <- g2
-        result[i, paste(c1, "association")] <- round(r1[g1, g2], 6)
-        result[i, paste(c2, "association")] <- round(r2[g1, g2], 6)
-        result[i, legend] <- round(diff[g1, g2], 6)
+        result[i, paste(c1, "association")] <- round(r1[g1, g2], 5)
+        result[i, paste(c2, "association")] <- round(r2[g1, g2], 5)
+        result[i, legend] <- round(diff[g1, g2], 5)
     }
 
     return(result)
+})
+
+# Returns a matrix of the absolute differences between the gene correlations
+sitTable <- reactive({
+  data <- plotSelectedData()
+
+  c1 <- "Class 1"
+  c2 <- "Class 2"
+  legend <- "Difference between associations"
+  result <- data.frame(matrix(NA, nrow=1, ncol=5))
+
+  colnames(result) <- c("Gene 1", "Gene 2", paste(c1, "association"),
+                        paste(c2, "association"), legend)
+
+  if (is.null(data))
+    return(result)
+  classes <- data$classes
+  expr <- data$expr
+  if (!canPlotHeatmaps())
+    return(result)
+  option <- input$heatmapDiffOptions
+  if (is.null(option))
+    return(result)
+  c1 <- input$selectClassNetwork1
+  c2 <- input$selectClassNetwork2
+  genes <- colnames(expr)
+  names <- combn(genes, 2)
+  r <- adjacencyMatrices()
+  n <- length(genes)
+  r1 <- r[, 1:n]
+  r2 <- r[, (n+1):(2*n)]
+  diff <- r1 - r2
+  legend <- paste("Difference between gene associations (", option, ")",
+                  sep="")
+  if (option ==  paste(c2, "-", c1))
+    diff <- -diff
+  else if (option == "abs") {
+    diff <- abs(diff)
+    legend <- "Absolute difference between gene associations"
+  }
+
+  result <- data.frame(matrix(NA, nrow=ncol(names), ncol=3))
+  result2 <- data.frame(matrix(NA, nrow=ncol(names), ncol=3))
+
+  colnames(result) <- c("Gene 1", "Gene 2","association")
+  colnames(result2) <- c("Gene 1", "Gene 2","association")
+  print(result)
+  for (i in 1:ncol(names)) {
+    g1 <- names[1, i]
+    g2 <- names[2, i]
+    result[i, "Gene 1"] <- paste(g1,c1,sep = "_")
+    result[i, "Gene 2"] <- paste(g2,c1,sep = "_")
+    result[i, "association"] <- round(r1[g1, g2], 5)
+  }
+  for (i in 1:ncol(names)) {
+    g1 <- names[1, i]
+    g2 <- names[2, i]
+    result2[i, "Gene 1"] <- paste(g1,c2,sep = "_")
+    result2[i, "Gene 2"] <- paste(g2,c2,sep = "_")
+    result2[i, "association"] <- round(r2[g1, g2], 5)
+  }
+  res<-rbind(result,result2)
+  return(res)
 })
 
 # Rendering --------------------------------------------------------------------
@@ -595,6 +658,9 @@ output$downloadAbsDiff <- downloadHandler(
 #correlations
 output$corAbsDiff <- renderDataTable({
    corAbsDiff()
+})
+output$sitTable <- renderDataTable({
+  sitTable()
 })
 
 # output$corAbsDiff <- renderChart2({
