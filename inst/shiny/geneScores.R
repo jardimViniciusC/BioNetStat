@@ -19,7 +19,7 @@ geneScoresComparison <- reactive({
     r <- match.fun(geneScoresMatrix[geneScore, 2])(data$expr, data$labels,
                                                    adjacencyMatrix)
     result <- do.call(cbind,r)
-    result<-cbind(rownames(result),result)
+    result<-as.data.frame(cbind(rownames(result),result))
     colnames(result) <- c("Nodes", paste(data$classes,"score",sep = " "))
     return(result)
 })

@@ -16,7 +16,7 @@ vertexAnalysisTable <- reactive ({
     expr <- data$expr
     labels <- data$labels
     classes <- input$factorsinput
-    geneSets <- NULL
+    # geneSets <- list(c("all",colnames(expr)))
     numPermutations <- values$numPermutations
     correlationMeasure <- values$correlationMeasure
     associationMeasure <- values$associationMeasure
@@ -54,51 +54,55 @@ vertexAnalysisTable <- reactive ({
                                                                                              "fdr", "pvalue")), associationEdge),
                                        threshold,
                                        ifelse(networkType=="weighted", T, F))
-    logFile=stdout()
-    saida<-list()
+    # logFile=stdout()
+    # saida<-list()
     method <- match.fun(differentialVertexAnalysis[vertexFunc, 2])
-    if(is.null(geneSets)) geneSets <- list(c("all",colnames(expr)))
-    results <- data.frame(matrix(NA, nrow=length(geneSets), ncol=5+length(classes)))#
-    names <- array(NA, length(geneSets))
-    for (i in 1:length(geneSets)) {
-      names[i] <- geneSets[[i]][1]
-    }
-    rownames(results) <- names
+
+    results <- data.frame(matrix(NA, nrow=ncol(expr), ncol=5+length(classes)))#
+    # names <- array(NA, length(geneSets))
+    # for (i in 1:length(geneSets)) {
+    #   names[i] <- geneSets[[i]][1]
+    # }
+
+    rownames(results) <- names(expr)
     colnames(results) <- c("N of Networks","Set size", "Test statistic", "Nominal p-value", "q-value",classes)#
-    temp <- tempfile(paste(paste(classes,collapse = ", "), "are being compared", sep=""),
-                     fileext=".txt")
-    withProgress(session, min=1, max=length(geneSets), {
-      setProgress(message = 'Analysis in progress',
-                  detail = 'This may take a while...')
-      for (i in 1:length(geneSets)) {
-        setName <- geneSets[[i]][1]
-        setProgress(value = i)
-        msg <- paste("Testing ", setName, " (", i, " of ", length(geneSets),
-                     " sets)", sep="")
-        setProgress(detail = msg)
-        if (print)
-          cat(msg, file=logFile, append=T)
-        genes <- geneSets[[i]][geneSets[[i]] %in% colnames(expr)]
+    # temp <- tempfile(paste(paste(classes,collapse = ", "), "are being compared", sep=""),
+                     # fileext=".txt")
+    # withProgress(session, min=1, max=length(geneSets), {
+      # setProgress(message = 'Analysis in progress',
+                  # detail = 'This may take a while...')
+      # for (i in 1:length(geneSets)) {
+        # setName <- geneSets[[i]][1]
+        # setProgress(value = i)
+        # msg <- paste("Testing ", setName, " (", i, " of ", length(geneSets),
+        #              " sets)", sep="")
+        # setProgress(detail = msg)
+        # if (print)
+          # cat(msg, file=logFile, append=T)
+        # genes <- geneSets[[i]][geneSets[[i]] %in% colnames(expr)]
         if (!is.null(seed))
           set.seed(seed)
-        result <- method(expr[,genes], labels, adjacencyMatrix=
+        # result <- method(expr[,genes], labels, adjacencyMatrix=
+        #                    adjacencyMatrix,  numPermutations=
+        #                    numPermutations, options=options)
+        results <- method(expr, labels, adjacencyMatrix=
                            adjacencyMatrix,  numPermutations=
                            numPermutations, options=options)
-        if(!is.list(result)){
-          saida[[setName]]<-result
-          results<<-saida
-        }
-        if(is.list(result)){
-          results[setName, "N of Networks"] <<- sum(unique(labels)!=-1)
-          results[setName, "Test statistic"] <<- round(result[[1]],4)
-          results[setName, "Nominal p-value"] <<- round(result$p.value,4)
-          results[setName, "Set size"] <<- length(genes)
-          results[setName, 6:ncol(results)] <<- round(result$Partial*100/sum(result$Partial),1)
-        }
-      }
-      if(is.list(result)) results[, "q-value"] <<- round(p.adjust(results[, "Nominal p-value"], method="fdr"),4)#
-    })
-    results <- as.data.frame(results[[1]])
+        # if(!is.list(result)){
+        #   saida[[setName]]<-result
+        #   results<<-saida
+        # }
+        # if(is.list(result)){
+        #   results[setName, "N of Networks"] <<- sum(unique(labels)!=-1)
+        #   results[setName, "Test statistic"] <<- round(result[[1]],4)
+        #   results[setName, "Nominal p-value"] <<- round(result$p.value,4)
+        #   results[setName, "Set size"] <<- length(genes)
+        #   results[setName, 6:ncol(results)] <<- round(result$Partial*100/sum(result$Partial),1)
+        # }
+      # }
+      # if(is.list(result)) results[, "q-value"] <<- round(p.adjust(results[, "Nominal p-value"], method="fdr"),4)#
+    # })
+    results <- as.data.frame(results)
     results <- as.data.frame(cbind(rownames(results), results))
     colnames(results) <- c("Node","Test statistic", "Nominal p-value", "q-value",paste(data$classes,"score",sep = " "))#
     return(results)

@@ -32,7 +32,7 @@ plotSelectedData <- reactive({
         classes <- strsplit(classes, " ")
     if (is.null(filterGeneSets))
       return(NULL)
-    if (filterGeneSets %in% c("tested", "pvalueThreshold", "qvalueThreshold")) {
+    if (filterGeneSets %in% c("all","tested", "pvalueThreshold", "qvalueThreshold")) {
         expr <- values$expr
         labels <- values$labels
         geneSets <- values$filteredGeneSets
@@ -113,13 +113,13 @@ output$filterGeneSets <- renderUI({
     if (values$completed) {
         return(
             radioButtons("filterGeneSets", paste("Choose a collection of",
-                   "gene sets:"),
-                    c("All gene sets with p-values less than the threshold"=
+                   "node sets:"),
+                    c("All nodes sets with p-values less than the threshold"=
                       "pvalueThreshold",
-                      "All gene sets with q-values less than the threshold"=
+                      "All node sets with q-values less than the threshold"=
                       "qvalueThreshold",
-                      "All tested gene sets"="tested",
-                      "All loaded gene sets"="all")
+                      "All tested node sets"="tested",
+                      "All loaded node sets"="all")
             )
         )
     }
@@ -127,9 +127,9 @@ output$filterGeneSets <- renderUI({
              !is.null(labelsInput())) {
         return(
             radioButtons("filterGeneSets", paste("Choose a collection of",
-                         "gene sets:"), c("All filtered gene sets"=
+                         "node sets:"), c("All filtered node sets"=
                                           "filtered",
-                                          "All loaded gene sets"="all")
+                                          "All loaded node sets"="all")
             )
         )
     }
@@ -160,7 +160,6 @@ output$selectGeneSet <- renderUI({
 
     n <- 0
     results <- results()
-
     if (input$filterGeneSets %in% c("pvalueThreshold", "qvalueThreshold")) {
         if (is.null(results))
             return(NULL)
@@ -211,11 +210,10 @@ output$selectGeneSet <- renderUI({
         return(NULL)
 
     if (n == 0)
-        return("No filtered genes set.")
+        return("No filtered nodes set.")
 
     geneSets <- sort(geneSets)
-
-    selectInput("selectGeneSet", "Select a genes set:", choices=geneSets)
+    selectInput("selectGeneSet", "Select a node set:", choices=geneSets)
 })
 
 # Render selected genes set information
@@ -239,7 +237,7 @@ output$geneSetInfo <- renderUI ({
     n2 <- length(i)
     msg <- paste("You have selected the ", geneSet, ". ", n2, " of the ",
                  n1,
-                 " genes in this set were found in your expression data.")
+                 " variables in this set were found in your data table.")
 })
 
 output$selectedGeneSet <- renderUI({
@@ -308,9 +306,9 @@ output$networkScoresComparison  <- renderUI({
 
     r <- match.fun(networkScoresMatrix[networkScore, 2])(data$expr, data$labels,
                                                 adjacencyMatrix, options=options)
-    r1 <- round(r[[1]], 6)
-    r2 <- round(r[[2]], 6)
-    diff <- round(r[[1]]-r[[2]], 6)
+    r1 <- round(r[[1]], 5)
+    r2 <- round(r[[2]], 5)
+    diff <- round(r[[1]]-r[[2]], 5)
     classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
     result <- div(class="row-fluid",
                   div(class="span4",
@@ -326,6 +324,9 @@ output$networkScoresComparison  <- renderUI({
 # Gene scores ------------------------------------------------------------------
 
 source("differentialVertexAnalysis.R", local=T)
+
+# KEGG visualizations ------------------------------------------------------------------
+
 source("keggPathway.R", local=T)
 
 # Network visualization plots --------------------------------------------------
