@@ -1,6 +1,7 @@
 # Returns the analysis results matrix
 vertexAnalysisTable <- reactive ({
   data<-plotSelectedData()
+  vertexFunc <- input$vertexFunction
   classes <- data$classes
   results <- data.frame(matrix(NA, 1, ncol=4+length(classes)))#
   colnames(results) <- ifelse(is.null(classes),c("Node","Test statistic", "Nominal p-value", "q-value"),c("Node","Test statistic", "Nominal p-value", "q-value",paste(data$classes,"score",sep = " ")))#
@@ -23,8 +24,6 @@ vertexAnalysisTable <- reactive ({
     edgeWeight <- input$edgeWeight
     networkType <- values$networkType
     threshold <- input$correlationValue
-
-    vertexFunc <- input$vertexFunction
     options <- NULL
     seed <- values$seed
     printParameters <- function(){print(values$parameters)}

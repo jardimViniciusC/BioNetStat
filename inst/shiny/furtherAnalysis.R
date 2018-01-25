@@ -312,12 +312,12 @@ output$networkScoresComparison  <- renderUI({
     classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
     result <- div(class="row-fluid",
                   div(class="span4",
-                      p(h5(paste(classes[[1]][1], " score:", sep="")), r1)),
+                      p(h4(strong(paste(classes[[1]][1], " score:", sep=""))), r1)),
                   div(class="span4",
-                      p(h5(paste(classes[[1]][2], " score:", sep="")), r2)),
+                      p(h4(strong(paste(classes[[1]][2], " score:", sep=""))), r2)),
                   div(class="span4",
-                      p(h5(paste("Difference between ", classes[[1]][1], " and ",
-                          classes[[1]][2], " scores:", sep="")), diff)))
+                      p(h4(strong(paste("Difference between ", classes[[1]][1], " and ",
+                          classes[[1]][2], " scores:", sep=""))), diff)))
     return(result)
 })
 

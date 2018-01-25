@@ -151,7 +151,6 @@ sitTable <- reactive({
 
   colnames(result) <- c("Gene 1", "Gene 2","association")
   colnames(result2) <- c("Gene 1", "Gene 2","association")
-  print(result)
   for (i in 1:ncol(names)) {
     g1 <- names[1, i]
     g2 <- names[2, i]
@@ -185,7 +184,7 @@ output$factorsToNetViz1 <- renderUI({
   # for (i in 1:ncol(classes)) {
   #   options[i] <- paste(classes[1, i], classes[2, i])
   # }
-  selectizeInput("selectClassNetwork1", p(h4(strong("Classes\n")),h5("Choose two conditions to be visualized:",img(src="images/info.png", title="Select only two states (samples) you want to visualize the networks and compare. "))),
+  selectizeInput("selectClassNetwork1", p(h4(strong("Class 1\n")),h5("Choose the first condition to be visualized:")),
                            choices = classes, multiple=F)#c(options)
 })
 output$factorsToNetViz2 <- renderUI({
@@ -197,7 +196,7 @@ output$factorsToNetViz2 <- renderUI({
   # for (i in 1:ncol(classes)) {
   #   options[i] <- paste(classes[1, i], classes[2, i])
   # }
-  selectizeInput("selectClassNetwork2", p(h4(strong("Classes\n")),h5("Choose two conditions to be visualized:",img(src="images/info.png", title="Select only two states (samples) you want to visualize the networks and compare. "))),
+  selectizeInput("selectClassNetwork2", p(h4(strong("Class 2\n")),h5("Choose the second condition to be visualized:")),
                  choices = classes[!(classes==claN)], multiple=F)#c(options)
 })
 
@@ -505,7 +504,7 @@ output$heatmapDiffOptions <- renderUI({
     options <- c(paste(c1, "-", c2),
                  paste(c2, "-", c1),
                  "Absolute differences between the association degrees"="abs")
-    radioButtons("heatmapDiffOptions", "Choose a matrix of differences:",
+    radioButtons("heatmapDiffOptions", h4(strong("Choose a matrix of differences:")),
                  options)
 })
 
@@ -560,9 +559,9 @@ output$selectGenes <- renderUI({
     genes <- sort(genes)
     div(class="row-fluid",
         div(class="span4",
-            selectInput("gene1", "Select a gene:", genes)),
+            selectInput("gene1", "Select a variable:", genes)),
         div(class="span4",
-            selectInput("gene2", "Select another gene:", genes)))
+            selectInput("gene2", "Select another variable:", genes)))
 })
 
 
@@ -610,8 +609,8 @@ output$absDiffType <- renderUI({
     if (is.null(corAbsDiff())) {
         return(NULL)
     }
-    radioButtons("absDiffType", paste("Select a file format to save the",
-                 "list of gene association degrees:"),
+    radioButtons("absDiffType", h4(strong(paste("Select a file format to save the",
+                 "list of gene association degrees:"))),
                   c("CSV", "R data"))
 })
 
@@ -628,9 +627,8 @@ output$downloadAbsDiffButton <- renderUI({
 output$downloadAbsDiff <- downloadHandler(
     filename = function() {
         data <- plotSelectedData()
-        classes <- data$classes
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
+        c1 <- input$selectClassNetwork1
+        c2 <- input$selectClassNetwork2
 
         name <- paste(input$selectGeneSet, "_gene_association_degrees_", c1,
                       "_vs_", c2, "_",
@@ -659,11 +657,62 @@ output$downloadAbsDiff <- downloadHandler(
 output$corAbsDiff <- renderDataTable({
    corAbsDiff()
 })
-output$sitTable <- renderDataTable({
-  sitTable()
-})
 
 # output$corAbsDiff <- renderChart2({
 #     table <- corAbsDiff()
 #     return(dTable(table))
 # })
+
+
+# Render radio buttons that show the file with the statistics of the
+# absolute differences between the gene correlations format options.
+output$sitTableType <- renderUI({
+  if (is.null(sitTable())) {
+    return(NULL)
+  }
+  radioButtons("sitTableType", h4(strong(paste("Select a file format to save the",
+                                               "list of gene association degrees:"))),
+               c("CSV", "R data","TXT"))
+})
+
+# Render button to download the statistics of the absolute differences
+# between correlations
+output$downloadsitTableButton <- renderUI({
+  if (is.null(input$sitTableType))
+    return(NULL)
+  downloadButton("downloadsitTable", "Save file to be opened in S.I.T. and to visualize and manipulate the network")
+})
+
+# Prepare file with the statistics of the absolute differences between
+# correlations for download
+output$downloadsitTable <- downloadHandler(
+  filename = function() {
+    data <- plotSelectedData()
+    c1 <- input$selectClassNetwork1
+    c2 <- input$selectClassNetwork2
+
+    name <- paste(input$selectGeneSet, "_gene_association_degrees_", c1,
+                  "_vs_", c2, "_",
+                  input$networkType , "_", input$correlationMeasure,
+                  "_", input$associationMeasure,
+                  ifelse(input$networkType == "unweighted",
+                         paste("_threshold=", input$plotEdgeThreshold, "_",
+                               sep=""), ""), sep="")
+    if (input$sitTableType == "R data") name <- paste(name, ".RData", sep="")
+    if (input$sitTableType == "CSV") name <- paste(name, ".csv", sep="")
+    if(input$sitTableType == "TXT") name <- paste(name, ".txt", sep="")
+    return(name)
+  },
+  content = function(filename) {
+    associationDegrees <- sitTable()
+
+    if (input$sitTableType == "R data") save(associationDegrees, file=filename)
+    if (input$sitTableType == "CSV")  write.csv(associationDegrees, filename, row.names=F)
+    if (input$sitTableType == "TXT")  write.table(associationDegrees, filename, row.names=F,sep="\t",dec=",")
+  }
+)
+
+output$sitTable <- renderDataTable({
+  sitTable()
+})
+
