@@ -9,10 +9,11 @@ exprHeatmap <- function(expr, labels, col, clusterCols, clusterRows) {
     expr<-t(expr)
     annotation <- data.frame(Class=labels)
     rownames(annotation) <- colnames(expr)
-    c <- c("#FF0000FF", "#33FF00FF")
+    # c <- c("#FF0000FF", "#33FF00FF")
+    c <- 1:length(unique(labels))
     names(c) <- unique(labels)
-    colors <- list(Group=c)
-    pheatmap::pheatmap(expr, annotation = annotation, annotation_cols=colors, col=col,
+    colors <- list(Group=unique(labels))
+    pheatmap::pheatmap(expr, annotation = annotation, col=col, annotation_cols=colors,
         cluster_cols=clusterCols, cluster_rows=clusterRows, scale="none", border_color=F)
 }
 
@@ -42,35 +43,74 @@ canPlotExprHeatmap <- reactive({
 diffExprTests <- reactive({
     data <- plotSelectedData()
     result <- data.frame(matrix(NA, nrow=1, ncol=5))
-    colnames(result) <- c("Gene symbol", "Difference between means",
-                          "Difference between means test p-value",
-                          "Difference in location",
-                          "Wilcoxon-Mann-Whitney test p-value")
-    if (is.null(data))
+    if(length(input$factorsinput)==2){
+      colnames(result) <- c("Variable symbol", "Difference between means",
+                            "Difference between means test p-value",
+                            "Difference in location",
+                            "Wilcoxon-Mann-Whitney test p-value")
+      if (is.null(data))
+          return(result)
+      expr <- data$expr
+      labels <- data$labels
+      classes <- input$factorsinput
+      c1 <- classes[1]
+      c2 <- classes[2]
+      class <- input$factorsinput
+      cla<-cbind(levels(as.factor(class)),c(0:(length(class)-1)))
+      genes <- names(expr)
+      result <- data.frame(matrix(NA, nrow=length(genes), ncol=5))
+      colnames(result) <- c("Variable symbol", "Difference between means",
+                            "Difference between means test p-value", "Difference in location",
+                            "Wilcoxon-Mann-Whitney test p-value")
+      for (i in 1:length(genes)) {
+          result[i,"Variable symbol"] <- genes[i]
+          expr1 <- expr[labels==cla[cla[,1]==c1,2], i]
+          expr2 <- expr[labels==cla[cla[,1]==c2,2], i]
+          t <-  t.test(expr1, expr2)
+          result[i,"Difference between means"] <- round(t$estimate[1] -
+                                                        t$estimate[2], 4)
+          result[i,"Difference between means test p-value"] <- t$p.value
+          w <- wilcox.test(expr1, expr2, conf.int=T)
+          result[i,"Difference in location"] <- round(w$estimate, 4)
+          result[i, "Wilcoxon-Mann-Whitney test p-value"] <- w$p.value
+      }
+    }
+    else{
+      colnames(result) <- c("Variable symbol", "F-value",
+                            "Analisys of veriance test p-value",
+                            "F-value",
+                            "Kruskal-Wallis test p-value")
+      if (is.null(data))
         return(result)
-    expr <- data$expr
-    labels <- data$labels
-    classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
-    c1 <- classes[[1]][1]
-    c2 <- classes[[1]][2]
-    class <- input$factorsinput
-    cla<-cbind(levels(as.factor(class)),c(0:(length(class)-1)))
-    genes <- names(expr)
-    result <- data.frame(matrix(NA, nrow=length(genes), ncol=5))
-    colnames(result) <- c("Variable symbol", "Difference between means",
-                          "Difference between means test p-value", "Difference in location",
-                          "Wilcoxon-Mann-Whitney test p-value")
-    for (i in 1:length(genes)) {
+      expr <- data$expr
+      labels <- data$labels
+      class <- input$factorsinput
+      cla<-cbind(levels(as.factor(class)),c(0:(length(class)-1)))
+      genes <- names(expr)
+      result <- data.frame(matrix(NA, nrow=length(genes), ncol=5))
+      colnames(result) <- c("Variable symbol", "F-value",
+                            "Analisys of veriance test p-value",
+                            "F-value KS",
+                            "Kruskal-Wallis test p-value")
+      for (i in 1:length(genes)) {
         result[i,"Variable symbol"] <- genes[i]
-        expr1 <- expr[labels==cla[cla[,1]==c1,2], i]
-        expr2 <- expr[labels==cla[cla[,1]==c2,2], i]
-        t <-  t.test(expr1, expr2)
-        result[i,"Difference between means"] <- round(t$estimate[1] -
-                                                      t$estimate[2], 4)
-        result[i,"Difference between means test p-value"] <- t$p.value
-        w <- wilcox.test(expr1, expr2, conf.int=T)
-        result[i,"Difference in location"] <- round(w$estimate, 4)
-        result[i, "Wilcoxon-Mann-Whitney test p-value"] <- w$p.value
+        expr<-list()
+        for(j in 1:length(class)){
+          expr[[j]]<-data$expr[labels==cla[cla[,1]==class[j],2],]
+        }
+        expr <- do.call(rbind,expr)
+        l<-list()
+        for(j in 1:length(class)){
+          l[[j]]<-rep(class[j], sum(labels==cla[cla[,1]==class[j],2]))
+        }
+        l<-do.call(c,l)
+        t <-anova(lm(expr[,i]~as.factor(l)))
+        result[i,"F-value"] <- round(t$`F value`[1], 4)
+        result[i,"Analisys of veriance test p-value"] <- t$`Pr(>F)`[1]
+        k<-kruskal.test(expr[,i],as.factor(l))
+        result[i,"F-value KS"] <- round(k$statistic, 4)
+        result[i, "Kruskal-Wallis test p-value"] <- k$p.value
+      }
     }
     return(result)
 })
@@ -108,14 +148,19 @@ output$exprHeatmap <- renderPlot({
     col <- exprHeatmapColors()
     data <- plotSelectedData()
     clustering <- input$exprHeatmapClustering
-    classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
-    c1 <- classes[[1]][1]
-    c2 <- classes[[1]][2]
     class <- input$factorsinput
     cla<-cbind(levels(as.factor(class)),c(0:(length(class)-1)))
     labels <- data$labels
-    expr <- rbind(data$expr[labels==cla[cla[,1]==c1,2],], data$expr[labels==cla[cla[,1]==c2,2],])
-    l <- c(rep(c1, length(which(labels==cla[cla[,1]==c1,2]))), rep(c2, length(which(labels==cla[cla[,1]==c2,2]))))
+    expr<-list()
+    for(i in 1:length(class)){
+      expr[[i]]<-data$expr[labels==cla[cla[,1]==class[i],2],]
+    }
+    expr <- do.call(rbind,expr)
+    l<-list()
+    for(i in 1:length(class)){
+      l[[i]]<-rep(class[i], sum(labels==cla[cla[,1]==class[i],2]))
+    }
+    l<-do.call(c,l)
     clusterCols <- F
     clusterRows <- F
     if (!is.null(clustering)) {
@@ -152,7 +197,6 @@ output$exprHeatmapDimensions <- renderUI({
                      max=max)))
 })
 
-
 # Render button to download plots
 output$downloadExprHeatmapButton <- renderUI({
     if (!canPlotExprHeatmap())
@@ -171,9 +215,7 @@ output$downloadExprHeatmapButton <- renderUI({
 output$downloadExprHeatmap <- downloadHandler(
     filename = function() {
         data <- plotSelectedData()
-        classes <- data$classes
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
+        classes <- input$factorsinput
         format <- input$exprHeatmapFormat
         if (format == "PNG")
             ext <- ".png"
@@ -181,19 +223,24 @@ output$downloadExprHeatmap <- downloadHandler(
             ext <- ".jpg"
         else
             ext <- ".pdf"
-        name <- paste(input$selectGeneSet, "_expression_heatmap_", c1,
-                      "_vs_", c2, ext, sep="")
+        name <- paste(input$selectGeneSet, "_expression_heatmap_", paste(classes,collapse = "_"), ext, sep="")
     },
     content = function(filename) {
         data <- plotSelectedData()
-        classes <- data$classes
+        class <- input$factorsinput
+        cla<-cbind(levels(as.factor(class)),c(0:(length(class)-1)))
         col <- exprHeatmapColors()
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
         labels <- data$labels
-        expr <- cbind(data$expr[,labels==0], data$expr[,labels==1])
-        l <- c(rep(c1, length(which(labels==0))),
-               rep(c2, length(which(labels==1))))
+        expr<-list()
+        for(i in 1:length(class)){
+          expr[[i]]<-data$expr[labels==cla[cla[,1]==class[i],2],]
+        }
+        expr <- do.call(rbind,expr)
+        l<-list()
+        for(i in 1:length(class)){
+          l[[i]]<-rep(class[i], sum(labels==cla[cla[,1]==class[i],2]))
+        }
+        l<-do.call(c,l)
         format <- input$exprHeatmapFormat
         if (format == "PNG")
             saveFunction <- png
@@ -237,10 +284,8 @@ output$downloadDiffExprTestsButton <- renderUI({
 output$downloadDiffExprTests <- downloadHandler(
     filename = function() {
         data <- plotSelectedData()
-        classes <- data$classes
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
-        name <- paste(input$selectGeneSet, "_diff_expr_tests_", c1, "_vs_", c2,
+        classes <- input$factorsinput
+        name <- paste(input$selectGeneSet, "_diff_expr_tests_", paste(classes,collapse = "_"),
                       sep="")
         if (input$diffExprTestsType == "CSV")
             name <- paste(name, ".csv", sep="")
@@ -329,14 +374,19 @@ output$exprBoxplot <- renderPlot({
     data <- plotSelectedData()
     if (!(gene %in% names(data$expr)))
         return(NULL)
-    classes <- list(c(input$selectClassNetwork1,input$selectClassNetwork2))
-    c1 <- classes[[1]][1]
-    c2 <- classes[[1]][2]
     class <- input$factorsinput
     cla<-cbind(levels(as.factor(class)),c(0:(length(class)-1)))
     labels <- data$labels
-    expr <- rbind(data$expr[labels==cla[cla[,1]==c1,2],], data$expr[labels==cla[cla[,1]==c2,2],])
-    l <- c(rep(c1, length(which(labels==cla[cla[,1]==c1,2]))), rep(c2, length(which(labels==cla[cla[,1]==c2,2]))))
+    expr<-list()
+    for(j in 1:length(class)){
+      expr[[j]]<-data$expr[labels==cla[cla[,1]==class[j],2],]
+    }
+    expr <- do.call(rbind,expr)
+    l<-list()
+    for(j in 1:length(class)){
+      l[[j]]<-rep(class[j], sum(labels==cla[cla[,1]==class[j],2]))
+    }
+    l<-do.call(c,l)
     plot(exprBoxplot(expr[,gene], l, gene))
 })
 
@@ -382,9 +432,7 @@ output$downloadExprBoxplotButton <- renderUI({
 output$downloadExprBoxplot <- downloadHandler(
     filename = function() {
         data <- plotSelectedData()
-        classes <- data$classes
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
+        classes <- input$factorsinput
         format <- input$exprBoxplotFormat
         if (format == "PNG")
             ext <- ".png"
@@ -392,7 +440,7 @@ output$downloadExprBoxplot <- downloadHandler(
             ext <- ".jpg"
         else
             ext <- ".pdf"
-        name <- paste(input$selectGene, "_boxplot_", c1, "_vs_", c2, ext,
+        name <- paste(input$selectGene, "_boxplot_", paste(classes,collapse = "_"), ext,
                       sep="")
     },
     content = function(filename) {
@@ -404,17 +452,23 @@ output$downloadExprBoxplot <- downloadHandler(
         else
             saveFunction <- pdf
         data <- plotSelectedData()
-        classes <- data$classes
-        c1 <- classes[[1]][1]
-        c2 <- classes[[1]][2]
-        labels <- data$labels
         gene <- input$selectGene
-        expr <- cbind(data$expr[,labels==0], data$expr[,labels==1])
-        l <- c(rep(c1, length(which(labels==0))),
-               rep(c2, length(which(labels==1))))
+        class <- input$factorsinput
+        cla<-cbind(levels(as.factor(class)),c(0:(length(class)-1)))
+        labels <- data$labels
+        expr<-list()
+        for(j in 1:length(class)){
+          expr[[j]]<-data$expr[labels==cla[cla[,1]==class[j],2],]
+        }
+        expr <- do.call(rbind,expr)
+        l<-list()
+        for(j in 1:length(class)){
+          l[[j]]<-rep(class[j], sum(labels==cla[cla[,1]==class[j],2]))
+        }
+        l<-do.call(c,l)
         saveFunction(filename, width=input$boxplotWidth,
                      height=input$boxplotHeight)
-        plot(exprBoxplot(expr[gene, ], l, gene))
+        plot(exprBoxplot(expr[,gene], l, gene))
         dev.off()
     }
 )

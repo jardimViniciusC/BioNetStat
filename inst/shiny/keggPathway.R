@@ -6,7 +6,7 @@ output$exprKeegMapColors  <- renderUI({
     return(NULL)
   }
   selectInput("exprKeegMapColors", "Select a color scheme:",
-              c("Green"="green3", "Blue"="blue","Yellow"="yellow", "Red"="red", "Gray"="gray"))
+              c("Green"="green3", "Blue"="blue","Yellow"="yellow", "Red"="red", "Black"="black"))
 })
 # output$exprKeegMapColors2  <- renderUI({
 #   data <- plotSelectedData()
@@ -42,7 +42,7 @@ output$thrValue2 <- renderUI({
 # Prepare file with the statistics of the absolute differences between
 # correlations for download
 output$downloadKeggMap <- downloadHandler(
-  filename = paste("data-", Sys.Date(), ".csv", sep="")
+  filename = paste("data", Sys.Date(),input$speciesID, input$pathID, "centrality_bns.tar", sep="_")
     ,
   content = function(file) {
     results <- vertexAnalysisTable()
@@ -70,7 +70,7 @@ output$downloadKeggMap <- downloadHandler(
 )
 
 output$downloadKeggExprMap <- downloadHandler(
-  filename = paste("data-", Sys.Date(), ".csv", sep="")
+  filename = paste("data", Sys.Date(),input$speciesID2, input$pathID2, "expression_bns.tar", sep="_")
   ,
   content = function(file) {
     data<-plotSelectedData()
@@ -98,3 +98,18 @@ output$downloadKeggExprMap <- downloadHandler(
     file.remove(list.files())
   }
 )
+
+output$codeFile <- renderText({
+  fileCodes<-input$keggCodes
+  if(is.null(fileCodes)) return (NULL)
+  codes<-read.csv(fileCodes$datapath)
+  if(ncol(codes)==2) return(NULL)
+  if(ncol(codes)!=2) return("The kegg code file has to has to have just two columns. The fisrt one with the variables names and the second one with the respective kegg codes")
+})
+output$codeFile2 <- renderText({
+  fileCodes<-input$keggCodes2
+  if(is.null(fileCodes)) return (NULL)
+  codes<-read.csv(fileCodes$datapath)
+  if(ncol(codes)==2) return(NULL)
+  if(ncol(codes)!=2) return("The kegg code file has to has to have just two columns. The fisrt one with the variables names and the second one with the respective kegg codes")
+})

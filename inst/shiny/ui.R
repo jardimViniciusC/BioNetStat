@@ -1,16 +1,16 @@
 # ------------------------------------------------------------------------------
-# CoGA User Interface (UI) definition VINICIUS
+# BioNetStat User Interface (UI) definition
 # ------------------------------------------------------------------------------
 library(shiny)
 # library(shinyBs)
 # library(BioNetStat)
 # Define UI for application
-shinyUI(fluidPage(
+shinyUI(fluidPage(theme = "bootstrap.css",
 
 #   # Application title --------------------------------------------------------
   headerPanel(
     p(img(src="images/figuraBNS.png"), align="center"),
-    windowTitle="CoGA"
+    windowTitle="BioNetStat"
   ),
 
   # Sidebar to load data and set application parameters ----------------------
@@ -121,9 +121,6 @@ shinyUI(fluidPage(
         ),
         dataTableOutput("results"),# 'datatables'
         # chartOutput('results', 'datatables'),
-        wellPanel(
-          uiOutput("downloadNetworksButton")
-        ),
         value = "Analysis results"
       ),
       # Further analysis tab
@@ -147,9 +144,9 @@ shinyUI(fluidPage(
           tabPanel(
             "Nodes differential analysis",
             wellPanel(
-              h5("Nodes Test"),
+              h4("Nodes Test"),
               uiOutput("vertexFunction"),
-              h5("Run differential node analysis"),
+              h4("Run differential node analysis"),
               # actionButton("startVertex", "Start analysis"),
               # bsAlert(inputId = "vertexResultsWarning"),
               uiOutput("vertexScoresType"),
@@ -159,11 +156,14 @@ shinyUI(fluidPage(
             dataTableOutput("vertexAnalysisTable"),
             bsCollapsePanel(
               "KEGG pathway visualization",
-                fileInput("keggCodes", h5(paste("Please, select the codes table (*.csv) containing the variables names and coresponding Kegg code")),
+              h4(strong("KEGG codes")),
+                fileInput("keggCodes", h5(tagList("Please, select the codes table (*.csv) containing the variables names and coresponding Kegg code. The KEGG codes can be find in ", a("KEGG website.", href="http://www.kegg.jp/",target="_blank"))),
                           accept=c("Comma-Seperated Values", "text/csv", ".csv"),placeholder = "Select a file"),
+              textOutput("codeFile"),
+              tags$head(tags$style("#codeFile{color: red}")),
               div(
                 class="span4",
-                h5("Colors selection"),
+                h4(strong("Colors selection")),
                 uiOutput("exprKeegMapColors"),
                 radioButtons(
                   "selectingDataType",
@@ -172,15 +172,18 @@ shinyUI(fluidPage(
               ),
               selectInput(
                 "thresholdSelected",
-                h5("Association measure"),
+                h4(strong("Association measure")),
                 c("p-value"="pvalue",
                   "q-value"="qvalue","Test statistics"="statistic")
               ),
               uiOutput("thrValue"),
-              textInput("speciesID", label = h5("Write the code of the species that you want to analyze"), value = "code"),
-              textInput("pathID", label = h5("Write the code of the pathway that you want to analyze"), value = "code"),
+              h4(strong("Specie code")),
+              textInput("speciesID", label = h5("Write the code of the species that you want to analyze. The species codes can be find in ", a("KEGG website.", href="http://www.kegg.jp/kegg/pathway.html",target="_blank")), value = "code"),
+              h4(strong("Path code")),
+              textInput("pathID", label = h5("Write the code of the pathway that you want to analyze. The pathways codes can be find in ", a("KEGG website.", href="http://www.kegg.jp/kegg/catalog/org_list.html",target="_blank")), value = "code"),
               checkboxInput("keggNative", label = "Kegg Native plot", value = TRUE),
-              downloadButton("downloadKeggMap","Save the Kegg Map")
+              downloadButton("downloadKeggMap","Save the Kegg Map"),
+              h5("The download of kegg map may take a while.")
             )
           ),
           ## NETWORK VISUALIZATION
@@ -188,7 +191,7 @@ shinyUI(fluidPage(
             "Network visualization plots",
             div(
               class="span4",
-              h5("Classes selection"),
+              h3("Classes selection"),
               uiOutput("factorsToNetViz1"),
               uiOutput("factorsToNetViz2")
             ),
@@ -199,12 +202,12 @@ shinyUI(fluidPage(
               class="row-fluid",
               div(
                 class="span4",
-                h5("Colors selection"),
+                h4(strong("Colors selection")),
                 uiOutput("heatmapColors")
               ),
               div(
                 class="span4",
-                h5("Plot format"),
+                h4(strong("Plot format")),
                 radioButtons(
                   "networkPlotFormat",
                   "Select a format to save the plots:",
@@ -212,7 +215,7 @@ shinyUI(fluidPage(
               ),
               div(
                 class="span4",
-                h5("Plot dimensions"),
+                h4(strong("Plot dimensions")),
                 uiOutput("networkPlotDimensions")
               )
             )
@@ -232,7 +235,7 @@ shinyUI(fluidPage(
                     uiOutput("downloadNetworkPlot2Button"))),
             br(),
             wellPanel(
-              h5("Association between two variable values"),
+              h4(strong("Association between two variable values")),
               uiOutput("selectGenes"),
 
               dataTableOutput("corr")
@@ -241,7 +244,7 @@ shinyUI(fluidPage(
           bsCollapsePanel(
             "Differences between set properties",
             wellPanel(
-              h5("Node set network topological properties"),
+              h4(strong("Node set network topological properties")),
               uiOutput("networkScore"),
               uiOutput("networkScoreOptions"),
               uiOutput("networkScoresComparison")
@@ -262,11 +265,19 @@ shinyUI(fluidPage(
                 uiOutput("downloadAbsDiffButton")
               ),
               br(),
-              dataTableOutput("corAbsDiff"),
-              br(),
-              dataTableOutput("sitTable")#, "datatables")
+              dataTableOutput("corAbsDiff")#, "datatables")
               # chartOutput("corAbsDiff")#, "datatables")
             )
+          ),
+          bsCollapsePanel(
+            "List of nodes association to be read by S.I.T.",
+            wellPanel(
+              uiOutput("sitTableType"),
+              uiOutput("downloadsitTableButton")
+            ),
+            br(),
+            dataTableOutput("sitTable")#, "datatables")
+            # chartOutput("corAbsDiff")#, "datatables")
           )
           ),
           # tabPanel(
@@ -289,20 +300,20 @@ shinyUI(fluidPage(
                 div(
                   class="row-fluid",
                   div(class="span4",
-                      h5("Colors selection"),
+                      h4(strong("Colors selection")),
                       uiOutput("exprHeatmapColors"),
-                      h5("Heatmap clustering options"),
+                      h4(strong("Heatmap clustering options")),
                       uiOutput("exprHeatmapClustering")),
                   div(
                     class="span4",
-                    h5("Plot format"),
+                    h4(strong("Plot format")),
                     radioButtons(
                       "exprHeatmapFormat",
                       "Select a format to save the plots:",
                       c("PDF","PNG", "JPG"))
                   ),
                   div(class="span4",
-                      h5("Plot dimensions"),
+                      h4(strong("Plot dimensions")),
                       uiOutput("exprHeatmapDimensions"),
                       uiOutput(paste("downloadExpr",
                                      "HeatmapButton",
@@ -313,8 +324,13 @@ shinyUI(fluidPage(
             ),
             bsCollapsePanel(
               "KEGG pathway visualization",
-              fileInput("keggCodes2", h5(paste("Please, select the codes table (*.csv) containing the variables names and coresponding Kegg code")),
+              h4(strong("KEGG codes")),
+              fileInput("keggCodes2", h5(tagList("Please, select the codes table (*.csv) containing the variables names and coresponding Kegg code. The KEGG codes can be find in ", a("KEGG website.", href="http://www.kegg.jp/",target="_blank"))),
                         accept=c("Comma-Seperated Values", "text/csv", ".csv"),placeholder = "Select a file"),
+              textOutput("codeFile2"),
+              tags$head(tags$style("#codeFile2{color: red}")),#;
+                                 # font-size: 20px;
+                                 # font-style: italic;
               div(
                 class="span4",
                 radioButtons(
@@ -324,19 +340,21 @@ shinyUI(fluidPage(
               ),
               selectInput(
                 "thresholdSelected2",
-                h5("Association measure"),
+                h4(strong("Association measure")),
                 c("p-value"="pvalue",
                   "q-value"="qvalue","Test statistics"="statistic")
               ),
               selectInput(
                 "funSelected",
-                h5("Select an aggregatino function"),
+                h4(strong("Select an aggregation function")),
                 c("Mean"="mean",
                   "Median"="median","Maximum"="max","Minimum"="min")
               ),
               uiOutput("thrValue2"),
-              textInput("speciesID2", label = h5("Write the code of the species that you want to analyze"), value = "code"),
-              textInput("pathID2", label = h5("Write the code of the pathway that you want to analyze"), value = "code"),
+              h4(strong("Specie code")),
+              textInput("speciesID2", label = h5("Write the code of the species that you want to analyze. The species codes can be find in ", a("KEGG website.", href="http://www.kegg.jp/kegg/pathway.html",target="_blank")), value = "code"),
+              h4(strong("Path code")),
+              textInput("pathID2", label = h5("Write the code of the pathway that you want to analyze. The pathways codes can be find in ", a("KEGG website.", href="http://www.kegg.jp/kegg/catalog/org_list.html",target="_blank")), value = "code"),
               checkboxInput("keggNative2", label = "Kegg Native plot", value = TRUE),
               downloadButton("downloadKeggExprMap","Save the Kegg Map")
             ),
@@ -353,19 +371,19 @@ shinyUI(fluidPage(
             bsCollapsePanel(
               "Variable value boxplot",
               wellPanel(
-                h5("Variable selection"),
+                h4(strong("Variable selection")),
                 uiOutput("selectGene")
               ),
               wellPanel(
                 div(class="row-fluid",
                     div(class="span6",
-                        h5("Plot format"),
+                        h4(strong("Plot format")),
                         radioButtons(
                           "exprBoxplotFormat",
                           "Select a format to save the plots:",
                           c("PDF","PNG", "JPG"))),
                     div(class="span6",
-                        h5("Plot dimensions"),
+                        h4(strong("Plot dimensions")),
                         uiOutput("exprBoxplotDimensions"),
                         uiOutput("downloadExprBoxplotButton"))),
                 plotOutput("exprBoxplot", width="100%")
