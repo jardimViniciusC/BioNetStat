@@ -78,11 +78,11 @@ output$correlationMeasure <- renderUI({
 })
 
 output$linkFormation <- renderUI({
-  if(is.null(input$associationMeasure))
+  if(is.null(input$thrMeasure))
     return()
-  switch(input$associationMeasure, "correlation"= sliderInput("correlationValue",h5("Minimum value (threshold) for link construction"),min=0, max=1, value = 0.7),
-         "pvalue" = sliderInput("pvalueThreshold", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.95),
-         "qvalue" = sliderInput("qvalueThreshold", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.95))
+  switch(input$thrMeasure, "correlation"= sliderInput("thrValue",h5("Minimum value (threshold) for link construction"),min=0, max=1, value = 0.7),
+         "pvalue" = sliderInput("thrValue", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.95),
+         "qvalue" = sliderInput("thrValue", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.95))
 })
 
 # Select predefined gene sets
