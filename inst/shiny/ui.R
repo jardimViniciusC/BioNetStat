@@ -53,7 +53,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
       uiOutput("correlationMeasure"),
       h4(strong("c. Method for selecting the network links")),
       selectInput(
-        "associationMeasure",
+        "thrMeasure",
         h5("Association measure"),
         c("Absolute correlation"="correlation", "1 - p-value"="pvalue",
           "1 - q-value"="qvalue")

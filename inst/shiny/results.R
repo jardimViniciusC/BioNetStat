@@ -20,12 +20,12 @@ results <- reactive ({
         geneSets <- values$filteredGeneSets
         numPermutations <- values$numPermutations
         correlationMeasure <- values$correlationMeasure
-        associationMeasure <- values$associationMeasure
+        thrMeasure <- values$thrMeasure
         edgeWeight <- input$edgeWeight
         networkType <- values$networkType
-        threshold <- input$correlationValue
-        # threshold <- ifelse(associationMeasure=="correlation",
-        #                     input$correlationValue, ifelse(associationMeasure=="qvalue",
+        threshold <- input$thrValue
+        # threshold <- ifelse(thrMeasure=="correlation",
+        #                     input$correlationValue, ifelse(thrMeasure=="qvalue",
         #                                                    input$qvalueThreshold, input$pvalueThreshold))
         networkTest <- values$networkTest
         options <- values$networkTestOptions
@@ -34,7 +34,7 @@ results <- reactive ({
         if (is.null(expr) || is.null(labels) ||# is.null(geneSets) ||
             is.null(numPermutations) || is.null(correlationMeasure))
             return(NULL)
-        # if (associationMeasure=="correlation")
+        # if (thrMeasure=="correlation")
         #     col <- 1
         # else
         #     col <- 2
@@ -47,17 +47,17 @@ results <- reactive ({
         }
         # networkInference <-
         #              match.fun(correlationMeasures[correlationMeasure, col])
-        associationEdge<-ifelse(associationMeasure=="correlation",
-                                "corr", ifelse(associationMeasure=="qvalue",
+        thrEdge<-ifelse(thrMeasure=="correlation",
+                                "corr", ifelse(thrMeasure=="qvalue",
                                                "fdr", "pvalue"))
         print <- F
-        adjacencyMatrix <- adjacencyMatrix(correlationMeasures[correlationMeasure, 1],
-                                           associationEdge,
-                                           ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
-                                                                                  "corr", ifelse(edgeWeight=="qvalue",
-                                                                                                 "fdr", "pvalue")), associationEdge),
-                                           threshold,
-                                           ifelse(networkType=="weighted", T, F))
+        adjacencyMatrix <- adjacencyMatrix(method = correlationMeasures[correlationMeasure, 1],
+                                           association = ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
+                                                                                                "corr", ifelse(edgeWeight=="qvalue",
+                                                                                                               "fdr", "pvalue")), thrEdge),
+                                           threshold = thrEdge,
+                                           thr.value = 1-threshold,
+                                           weighted = ifelse(networkType=="weighted", T, F))
         logFile=stdout()
         method <- match.fun(networkTestsMatrix[networkTest, 2])
         if(is.null(geneSets)) geneSets <- list(c("all",colnames(expr)))
@@ -124,7 +124,7 @@ output$appMessages <- renderUI({
         max <- input$maxSize
         numPermutations <- input$numPermutations
         correlationMeasure <- input$correlationMeasure
-        associationMeasure <- input$associationMeasure
+        thrMeasure <- input$thrMeasure
         networkTest <- input$networkTest
         networkType <- input$networkType
         threshold <- input$edgeWeight
@@ -196,8 +196,9 @@ output$appMessages <- renderUI({
         # classes <- strsplit(classes, " ")
         l <- labels()
         names <- input$factorsinput
-
-        phen <- paste(paste(names, " (", table(l)[-1],
+        if(any(names(table(l))=="-1")) samples<-table(l)[-which(names(table(l))=="-1")]
+        else samples<-table(l)
+        phen <- paste(paste(names, " (", samples,
                       " samples)",
                       sep=""),collapse = ", ")
         associationMsg <- c("correlation"="absolute correlation",
@@ -230,7 +231,7 @@ output$appMessages <- renderUI({
                   max, "\n",
                   "* Network type - ", networkType, "\n",
                   "* Association measure - ", correlationMeasure, " (",
-                  associationMsg[associationMeasure], ")", "\n",
+                  associationMsg[thrMeasure], ")", "\n",
                   thresholdMsg,
                   "* Method for networks comparison - ", networkTest, "\n",
                   optionsMsg,
@@ -256,7 +257,7 @@ output$appMessages <- renderUI({
                   max, br(),
                   "* Network type - ", networkType, br(),
                   "* Association measure - ", correlationMeasure, " (",
-                  associationMsg[associationMeasure], ")", br(),
+                  associationMsg[thrMeasure], ")", br(),
                   thresholdMsg,
                   "* Method for networks comparison - ", networkTest, br(),
                   optionsMsg,
@@ -272,7 +273,7 @@ output$appMessages <- renderUI({
         values$canExecute <- T
         values$classes <- classes
         values$correlationMeasure <- correlationMeasure
-        values$associationMeasure <- associationMeasure
+        values$thrMeasure <- thrMeasure
         values$networkTest <- networkTest
         values$networkType <- networkType
         values$threshold <- threshold
@@ -410,7 +411,7 @@ output$downloadResults <- downloadHandler(
         parameters[13, 2] <- values$networkType
         parameters[14, 1] <- "Association measure:"
         parameters[14, 2] <- paste(values$correlationMeasure, " (",
-                                   associationMsg[values$associationMeasure],
+                                   associationMsg[values$thrMeasure],
                                    ")", sep="")
         parameters[15, 1] <- "Association degree threshold for edge selection:"
         parameters[15, 2] <- thresholdMsg
@@ -453,7 +454,7 @@ output$isCompleted <- renderUI({
           cat(paste("\n", msg, "\n", sep=""))
           updateTabsetPanel(session, "tabSelected",
                             selected="Analysis results")
-          return(h5("Results"))
+          return(h4(strong("Results")))
         }
         else
           return(NULL)

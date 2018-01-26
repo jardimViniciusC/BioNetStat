@@ -55,30 +55,30 @@ plotSelectedData <- reactive({
 
 plotAdjacencyMatrix <- reactive({
     correlationMeasure <- input$correlationMeasure
-    associationMeasure <- input$associationMeasure
+    thrMeasure <- input$thrMeasure
     networkType <- input$networkType
     threshold <- input$correlationValue
     edgeWeight <- input$edgeWeight
     signedCorrelation <- input$signedCorrelation
     if(is.null(correlationMeasure) ||
-       is.null(associationMeasure) || is.null(networkType))
+       is.null(thrMeasure) || is.null(networkType))
       return(NULL)
     if (is.null(signedCorrelation))
       signedCorrelation <- F
-    # if (associationMeasure == "correlation")
+    # if (thrMeasure == "correlation")
     #   col <- 1
     # else
     #   col <- 2
-    associationEdge<-ifelse(associationMeasure=="correlation",
-                            "corr", ifelse(associationMeasure=="qvalue",
-                                           "fdr", "pvalue"))
-    adjacencyMatrix <- adjacencyMatrix(correlationMeasures[correlationMeasure, 1],
-                                       associationEdge,
-                                       ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
-                                                                              "corr", ifelse(edgeWeight=="qvalue",
-                                                                                             "fdr", "pvalue")), associationEdge),
-                                       threshold,
-                                       ifelse(networkType=="weighted", T, F),abs.values =!signedCorrelation )
+    thrEdge<-ifelse(thrMeasure=="correlation",
+                    "corr", ifelse(thrMeasure=="qvalue",
+                                   "fdr", "pvalue"))
+    adjacencyMatrix <- adjacencyMatrix(method = correlationMeasures[correlationMeasure, 1],
+                                       association = ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
+                                                                                            "corr", ifelse(edgeWeight=="qvalue",
+                                                                                                           "fdr", "pvalue")), thrEdge),
+                                       threshold = thrEdge,
+                                       thr.value = 1-threshold,
+                                       weighted = ifelse(networkType=="weighted", T, F))
 })
 
 # Returns a adjacency matrix whose first half columns belongs to the class1 gene

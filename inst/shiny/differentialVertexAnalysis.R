@@ -20,7 +20,7 @@ vertexAnalysisTable <- reactive ({
     # geneSets <- list(c("all",colnames(expr)))
     numPermutations <- values$numPermutations
     correlationMeasure <- values$correlationMeasure
-    associationMeasure <- values$associationMeasure
+    thrMeasure <- values$thrMeasure
     edgeWeight <- input$edgeWeight
     networkType <- values$networkType
     threshold <- input$correlationValue
@@ -29,7 +29,7 @@ vertexAnalysisTable <- reactive ({
     printParameters <- function(){print(values$parameters)}
     if (is.null(expr) | is.null(labels) | is.null(numPermutations) | is.null(correlationMeasure))# is.null(geneSets) ||
       return(NULL)
-    # if (associationMeasure=="correlation")
+    # if (thrMeasure=="correlation")
     #     col <- 1
     # else
     #     col <- 2
@@ -42,17 +42,17 @@ vertexAnalysisTable <- reactive ({
     # }
     # networkInference <-
     #              match.fun(correlationMeasures[correlationMeasure, col])
-    associationEdge<-ifelse(associationMeasure=="correlation",
-                            "corr", ifelse(associationMeasure=="qvalue",
-                                           "fdr", "pvalue"))
+    thrEdge<-ifelse(thrMeasure=="correlation",
+                    "corr", ifelse(thrMeasure=="qvalue",
+                                   "fdr", "pvalue"))
     print <- F
-    adjacencyMatrix <- adjacencyMatrix(correlationMeasures[correlationMeasure, 1],
-                                       associationEdge,
-                                       ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
-                                                                              "corr", ifelse(edgeWeight=="qvalue",
-                                                                                             "fdr", "pvalue")), associationEdge),
-                                       threshold,
-                                       ifelse(networkType=="weighted", T, F))
+    adjacencyMatrix <- adjacencyMatrix(method = correlationMeasures[correlationMeasure, 1],
+                                       association = ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
+                                                                                            "corr", ifelse(edgeWeight=="qvalue",
+                                                                                                           "fdr", "pvalue")), thrEdge),
+                                       threshold = thrEdge,
+                                       thr.value = 1-threshold,
+                                       weighted = ifelse(networkType=="weighted", T, F))
     # logFile=stdout()
     # saida<-list()
     method <- match.fun(differentialVertexAnalysis[vertexFunc, 2])
