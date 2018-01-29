@@ -54,7 +54,7 @@ If you want to use a Graphical interface type
 ```Rscript
 runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
-Wait for the browser page to open, and enjoy BoiNetStat!
+Wait for the browser page to open, and enjoy BioNetStat!
 
 ## How to use BioNetStat?
 The tutorials with examples data sets are in [Tutorial para uso do BioNetStat em linhas de comando](tutorials/tutorial_BNS_linha_de_comando.md) or in [Tutorial BioNetStat para a interface](tutorials/tutorial_BNS_interface.md ).
