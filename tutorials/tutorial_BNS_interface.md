@@ -11,8 +11,6 @@ runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 Ao iniciar o BioNetStat você verá essa imagem.
 ![Image of BioNetStat](/inst/shiny/www/images/bionetstat_open_image.png)
 
-![Image of BioNetStat](/inst/shiny/www/images/bionetstat_open_image.png)
-
 Caso você esteja usando o Rstudio uma janela alternativa será aberta, o BNS funcionará de maneira mais eficiente se for usado no browser do seu navegador, por isso clique em "open in browser" na esquerda superior da tela e o BNS será inicia no navegador como na primeira figura.
 ![Image of BioNetStat_rstudio](/inst/shiny/www/images/bionetstat_open_image_Rstudio.png)
 
@@ -76,3 +74,39 @@ No mapa KEGG, você observará um que os retangulos ou os círculos estão divid
 ![Image of BioNetStatresVert6](/inst/shiny/www/images/bionetstat_resultsVert6_image.png)
 Ao clicar no botão para salver é necessário esperar para que o programa faça o donwload do mapa, salve-o no diretório "Downloads" em um arquivo compactado. A visualização se encontra dentro do arquivo compactado.
 ![Image of BioNetStatresVert7](/inst/shiny/www/images/bionetstat_resultsVert7_image.png).
+
+#### Visualização das redes
+
+A visualização das redes nos ajuda a compreender as mudanças dos padrões de maneira mais facil. Essa visualização pode ser feita de diversas maneiras e algumas delas estão disponíveis no BioNetStat na aba "Network visualization plots". Como diversos estados podem ser comparados pelo BNS nesta seção é necessário escolher apenas dois deles para serem visualizados e comparados por vez.
+
+![Image of BioNetStatclassSelection](/inst/shiny/www/images/bionetstat_class_selection.png)
+
+A primeira forma de visualizar as redes é em forma de heatmaps das matrizes de adjacência (matriz que representa a rede). inicialmente o usuário pode escolher os parametros (cor,formato e tamanho) para a construção da figura.
+![Image of BioNetStatplotSettings](/inst/shiny/www/images/bionetstat_plot_settings.png)
+
+7. E então pode visualizar as redes dos estados selecionados.
+![Image of BioNetStatplotSettings](/inst/shiny/www/images/bionetstat_network_vis.png)
+
+8. É possível o usuário comparar a associação entre pares de variáveis escolhidas nos tratamentos analisados:
+![Image of BioNetStatplotSettings](/inst/shiny/www/images/bionetstat_assoc.png)
+
+9. As redes produzidas podem ser comparadas através de propriedades estruturais globais como entropia espectral da rede ou centralidade de grau média:
+![Image of BioNetStatplotSettings](/inst/shiny/www/images/bionetstat_top_properties.png)
+
+10. A matriz de diferenças permite analizar para todos os pares de variáveis como sua relação muda entre os estados.
+![Image of BioNetStatplotSettings](/inst/shiny/www/images/bionetstat_comparison_net.png)
+
+11. A lista de associação entre as variáveis no permite ter uma ideia mais precisa das diferenças entre as forças de associação nos dois estados.
+![Image of BioNetStatplotSettings](/inst/shiny/www/images/bionetstat_association_list.png)
+
+12. Por fim, a rede pode ser exportada para o programa de integração de níveis biológicos S.I.T. (System Integration Tool) onde a rede pode ser visualizadas e manipulada.
+![Image of BioNetStatplotSettings](/inst/shiny/www/images/bionetstat_sit_list.png)
+
+#### Estudo o comportamento das variáveis
+
+O BioNetStat disponibiliza também um estudo do comportamento das variáveis para que o usuário possa ter uma visão completa do seu objeto de estudo.
+Inicialmente 
+
+
+
+
