@@ -67,7 +67,7 @@ Após carregar os arquivos e selecionar os parâmetros de análise, clique em 'S
 6. Outra funcionalidade disponível é observar as variáveis em vias metabólicas do banco de dados [KEGG](http://www.kegg.jp/), o que nos permitire conhecer mais a fundo as vias metabólicas que as variáveis estudadas estão inseridas. A aba "KEGG pathway visualization", em "" 
 ![Image of BioNetStatresVert2](/inst/shiny/www/images/bionetstat_resultsVert3_image.png)
 
-é preciso inserir uma tabela que contem duas colunas, onde na primeira deveram estar os nomes das variáveis que você está estudando e na segunda o respectivo código KEGG dessas variáveis. Esses códigos podem ser encontrados no próprio site do [KEGG](http://www.kegg.jp/). Além da tabela com os códigos das variáveis deverá ser informado a cor usada na construção do gráfico, se as variáveis estudadas são genes/proteínas ou metabólitos. As variáveis que irão aparecer na figura são as mesmas analizadas na tabela de análise diferencial do vértice e elas podem ser filtradas ou de acordo com o valor do teste ou o pvalor ou o qvalor associado a ele. É necessário que se escolha qual [via metabólica](http://www.kegg.jp/kegg/pathway.html) será usada para produzir a visualização e em qual [especie](http://www.kegg.jp/kegg/catalog/org_list.html). 
+é preciso inserir uma tabela que contem duas colunas, onde na primeira deve estar os nomes das variáveis que você está estudando e na segunda o respectivo código KEGG dessas variáveis. Esses códigos podem ser encontrados no próprio site do [KEGG](http://www.kegg.jp/). Além da tabela com os códigos das variáveis deverá ser informado a cor usada na construção do gráfico, se as variáveis estudadas são genes/proteínas ou metabólitos. As variáveis que irão aparecer na figura são as mesmas analizadas na tabela de análise diferencial do vértice e elas podem ser filtradas ou de acordo com o valor do teste ou o pvalor ou o qvalor associado a ele. É necessário que se escolha qual [via metabólica](http://www.kegg.jp/kegg/pathway.html) será usada para produzir a visualização e em qual [especie](http://www.kegg.jp/kegg/catalog/org_list.html). 
 ![Image of BioNetStatresVert5](/inst/shiny/www/images/bionetstat_resultsVert5_image.png).
 No mapa KEGG, você observará um que os retangulos ou os círculos estão divididos em colunas, representando os tratamentos que você escolheu comparar. A intesidade das cores é relativa aos valores de centralidades escolhidos conforme a legenda. a seguir um exemplo de um mapa construido com genes da via "pathway in cancer" (05200) do kegg, para humanos ("hsa"). 
 ![Image of BioNetStatresVert5](/inst/shiny/www/images/bionetstat_resultsVert5_image.png).
@@ -105,8 +105,31 @@ A primeira forma de visualizar as redes é em forma de heatmaps das matrizes de 
 #### Estudo o comportamento das variáveis
 
 O BioNetStat disponibiliza também um estudo do comportamento das variáveis para que o usuário possa ter uma visão completa do seu objeto de estudo.
-Inicialmente 
+1. Inicialmente as variáveis podem ser exploradas por meio da construção de um heatmap onde os parametros da figura são selecionados.
+![Image of BioNetStatplotSettings](/inst/shiny/www/images/bionetstat_parameters_heatmap.png)
 
+e o heatmap é produzido. Nas colunas estão as amostras com as cores indicando à qual estado cada amostra pertence. É possível agrupar tanto as colunas (amostras) quanto as linhas (variáveis) do heatmap na seção "heatmap cluster options" na figura acima.
+![Image of BioNetStatplotSettings](/inst/shiny/www/images/bionetstat_heatmap.png)
 
+2. Nos mapas do banco de dados KEGG, podemos observar também as expressões do genes, concentrações da proteínas e dos metabólitos. Em "KEGG pathway visualization" o usuário deve inserir o código das variáveis, uma tabela que contem duas colunas, onde na primeira deve estar os nomes das variáveis que você está estudando e na segunda o respectivo código KEGG dessas variáveis. Esses códigos podem ser encontrados no próprio site do [KEGG](http://www.kegg.jp/). As variáveis que irão aparecer na figura são as mesmas analizadas na tabela de análise diferencial do vértice e elas podem ser filtradas ou de acordo com o valor do teste ou o pvalor ou o qvalor associado a ele. Na figura será mostrado um valor que representará todas as amostras de cada estado, que pode ser a média, a mediana, o mínimo ou o máximo. É necessário que se escolha qual [via metabólica](http://www.kegg.jp/kegg/pathway.html) será usada para produzir a visualização e em qual [especie](http://www.kegg.jp/kegg/catalog/org_list.html).
 
+![Image of BioNetStatresVert5](/inst/shiny/www/images/bionetstat_keeg_parameters_exp.png).
+![Image of BioNetStatresVert5](/inst/shiny/www/images/bionetstat_keeg_parameters_exp_codes.png).
 
+No mapa KEGG, você observará um que os retangulos ou os círculos estão divididos em colunas, representando os tratamentos que você escolheu comparar. A intesidade das cores é relativa aos valores de centralidades escolhidos conforme a legenda. a seguir um exemplo de um mapa construido com genes da via "pathway in cancer" (05200) do kegg, para humanos ("hsa"). 
+![Image of BioNetStatresVert5](/inst/shiny/www/images/bionetstat_keeg_parameters_exp2.png).
+![Image of BioNetStatresVert6](/inst/shiny/www/images/bionetstat_resultsVert6_image.png)
+Ao clicar no botão para salver é necessário esperar para que o programa faça o donwload do mapa, salve-o no diretório "Downloads" em um arquivo compactado. A visualização se encontra dentro do arquivo compactado.
+![Image of BioNetStatresVert7](/inst/shiny/www/images/bionetstat_resultsVert7_image.png).
+
+3. O BioNetStat disponibiliza a realização de um teste estatístico para verificar a mudança no comportamento das variáveis entre os estados (teste t, para dois estados, e ANOVA, para mais de dois, com os respectivos testes não paramétricos). Os resultados so apresentados na tabela como a seguir:
+
+![Image of BioNetStatresVert7](/inst/shiny/www/images/bionetstat_anova.png).
+
+4. Por fim, a última análise disponível no BioNetStat é a visualização dos valores de uma determinada variável em um grafico boxplot. Onde inicialmente o usuário deve escolher os parametros da figura formada
+
+![Image of BioNetStatresVert7](/inst/shiny/www/images/bionetstat_boxplot_parameters.png).
+
+e posteriormente a variável que será visualizada.
+
+![Image of BioNetStatresVert7](/inst/shiny/www/images/bionetstat_boxplot.png).
