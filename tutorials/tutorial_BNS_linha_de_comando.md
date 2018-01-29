@@ -6,7 +6,7 @@ library(devtools)
 library(shiny)
 library(BioNetStat)
 ```
-Um guia de como usar a interface gráfica está nas aba 'Help' da própria interface ou em [Tutorial BioNetStat para a interface](tutorials/tutorial_BNS_interface.md)
+Um guia de como usar a interface gráfica está nas aba 'Help' da própria interface ou em [Tutorial BioNetStat para a interface](tutorials/tutorial_BNS_interface.md )
 
 ## Dados de teste
 Para realizar esse tutorial faça o download da tabela de [valores das variáveis](data/bnsDataTest.csv) e dos [grupos de variáveis](data/c2.cp.v5.2.symbols.gmt).
