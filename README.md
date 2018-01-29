@@ -19,7 +19,7 @@ biocLite("preprocessCore")
 biocLite("GO.db")
 biocLite("AnnotationDbi")
 biocLite("pathview")
-biocelite ("Biostrings") install.packages(Matrix,mgcv)
+biocelite ("Biostrings")
 install.packages(c("shiny","WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools","matrix","mgcv")) 
 ```
 
