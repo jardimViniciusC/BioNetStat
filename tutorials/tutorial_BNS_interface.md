@@ -53,10 +53,21 @@ Após carregar os arquivos e selecionar os parâmetros de análise, clique em 'S
 ![Image of BioNetStatres2](/inst/shiny/www/images/bionetstat_results2_image.png)
 
 #### Análise diferencial de vértices
-4. É possível também realizar a comparação da importância do vértices. Na aba 'Further analysis' é possível selecionar os grupos de variáveis de acordo com seu critério de corte. O grupo de variáveis é escolhido e a o programa irá gerar a comparação de vértices pela centralidade de grau.
+4. É possível também realizar a comparação da importância do vértices. Na aba 'Further analysis' é possível selecionar os grupos de variáveis de acordo com seu critério de corte. O grupo de variáveis é escolhido e o programa irá gerar a comparação de vértices pela centralidade de grau.
 
 ![Image of BioNetStatresVert1](/inst/shiny/www/images/bionetstat_resultsVert1_image.png)
 
-5. Quando a tabela aparece é possível selecionar outros propriedades estruturais para comparar os vértices do grafos. A tabela resultante da análise diferencial de vértices é mostrada como na figura a seguir.
+5. Quando a tabela aparece, é possível selecionar outras propriedades estruturais para comparar os vértices do grafos. A tabela resultante da análise diferencial de vértices é mostrada como na figura a seguir.
 
 ![Image of BioNetStatresVert2](/inst/shiny/www/images/bionetstat_resultsVert2_image.png)
+
+6. Outra funcionalidade disponível é observar as variáveis em vias metabólicas do banco de dados [KEGG](http://www.kegg.jp/), o que nos permitire conhecer mais a fundo as vias metabólicas que as variáveis estudadas estão inseridas. A aba "KEGG pathway visualization", em "" 
+![Image of BioNetStatresVert2](/inst/shiny/www/images/bionetstat_resultsVert3_image.png)
+
+é preciso inserir uma tabela que contem duas colunas, onde na primeira deveram estar os nomes das variáveis que você está estudando e na segunda o respectivo código KEGG dessas variáveis. Esses códigos podem ser encontrados no próprio site do [KEGG](http://www.kegg.jp/). Além da tabela com os códigos das variáveis deverá ser informado a cor usada na construção do gráfico, se as variáveis estudadas são genes/proteínas ou metabólitos. As variáveis que irão aparecer na figura são as mesmas analizadas na tabela de análise diferencial do vértice e elas podem ser filtradas ou de acordo com o valor do teste ou o pvalor ou o qvalor associado a ele. É necessário que se escolha qual [via metabólica](http://www.kegg.jp/kegg/pathway.html) será usada para produzir a visualização e em qual [especie](http://www.kegg.jp/kegg/catalog/org_list.html). 
+![Image of BioNetStatresVert5](/inst/shiny/www/images/bionetstat_resultsVert5_image.png).
+No mapa KEGG, você observará um que os retangulos ou os círculos estão divididos em colunas, representando os tratamentos que você escolheu comparar. A intesidade das cores é relativa aos valores de centralidades escolhidos conforme a legenda. a seguir um exemplo de um mapa construido com genes da via "pathway in cancer" (05200) do kegg, para humanos ("hsa"). 
+![Image of BioNetStatresVert5](/inst/shiny/www/images/bionetstat_resultsVert5_image.png).
+![Image of BioNetStatresVert6](/inst/shiny/www/images/bionetstat_resultsVert6_image.png)
+Ao clicar no botão para salver é necessário esperar para que o programa faça o donwload do mapa, salve-o no diretório "Downloads" em um arquivo compactado. A visualização se encontra dentro do arquivo compactado.
+![Image of BioNetStatresVert7](/inst/shiny/www/images/bionetstat_resultsVert7_image.png).
