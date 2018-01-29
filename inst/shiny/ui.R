@@ -344,13 +344,13 @@ shinyUI(fluidPage(theme = "bootstrap.css",
                 c("p-value"="pvalue",
                   "q-value"="qvalue","Test statistics"="statistic")
               ),
+              uiOutput("thrValue2"),
               selectInput(
                 "funSelected",
                 h4(strong("Select an aggregation function")),
                 c("Mean"="mean",
                   "Median"="median","Maximum"="max","Minimum"="min")
               ),
-              uiOutput("thrValue2"),
               h4(strong("Specie code")),
               textInput("speciesID2", label = h5("Write the code of the species that you want to analyze. The species codes can be find in ", a("KEGG website.", href="http://www.kegg.jp/kegg/pathway.html",target="_blank")), value = "code"),
               h4(strong("Path code")),
