@@ -251,7 +251,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
             )
           ),
           bsCollapsePanel(
-            "Differences between the variable networks",
+            "Differences between networks",
             uiOutput("heatmapDiffOptions"),
             br(),
             bsCollapsePanel(
