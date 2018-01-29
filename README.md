@@ -19,7 +19,8 @@ biocLite("preprocessCore")
 biocLite("GO.db")
 biocLite("AnnotationDbi")
 biocLite("pathview")
-install.packages(c("shiny","WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools")) 
+biocelite ("Biostrings") install.packages(Matrix,mgcv)
+install.packages(c("shiny","WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools","matrix","mgcv")) 
 ```
 
 2. a. If 'pathview' package don't install, try to install this libraries in linux shell terminal.
