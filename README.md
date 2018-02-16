@@ -3,6 +3,8 @@
 ##BioNetStat
 
 Package to perform network analysis. BioNetStat is able to compare two or more correlation networks.
+Authors: Jardim, V., Santos, S., Fujita, A., Buckeridge, S. (2018). BioNetStat: A tool for biological network analysis.
+Maintainer: Laboratório de fisiologia ecologica de plantas [LAFIECO](http://www.lafieco.com.br/)
 
 ## Installation
 ### Dependencies
@@ -58,3 +60,4 @@ Wait for the browser page to open, and enjoy BioNetStat!
 
 ## How to use BioNetStat?
 The tutorials with examples data sets are in [Tutorial para uso do BioNetStat em linhas de comando](tutorials/tutorial_BNS_linha_de_comando.md) or in [Tutorial BioNetStat para a interface](tutorials/tutorial_BNS_interface.md ).
+
