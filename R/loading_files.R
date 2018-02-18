@@ -50,51 +50,6 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL){#readSampleTable
     }
 }
 ################################################################################################################
-# chooseClass <- function(fileName) {
-#   table <- read.csv(fileName,header=T,dec=",",sep=";") # atentar para o decimal como virgula e separador ponto e virgula
-#   class <- names(which(!sapply(table,is.numeric)))
-#   return(class)
-# }
-# readClass <- function(fileName, factorName) {
-#   table <- read.csv(fileName,header=T,dec=",",sep=";") # atentar para o decimal como virgula
-#   class <- as.factor(table[,which(names(table)==factorName)])
-#   # labels <- combn(levels(class),2)
-#   labels <- levels(class)
-#   return(labels)
-# }
-#
-# labelsAux <- function(labels, class1, class2) {
-#   l <- array(NA, length(labels))
-#   names <- levels(labels)
-#   i <- which(names == class1)
-#   j <- which(names == class2)
-#   symbols <- unique(labels)
-#   i1 <- which(labels == symbols[i])
-#   i2 <- which(labels == symbols[j])
-#   l[i1] <- 0
-#   l[i2] <- 1
-#   l[-(union(i1, i2))] <- -1
-#   return(l)
-# }
-#
-# labelsAux <- function(labels, classes) {
-#   l <- array(NA, length(labels))
-#   names <- levels(labels)
-#   i<-vector(len=length(classes))
-#   for(p in 1:length(i)) i[p] <- which(names == classes[p])
-#
-#   symbols <- unique(labels)
-#   j<-list()
-#   v<-0
-#   for(p in 1:length(i)){
-#     j[[p]] <- which(labels == symbols[i[p]])
-#     l[j[[p]]] <- v
-#     v <- v+1
-#   }
-#   l[is.na(l)] <- -1
-#   return(l)
-# }
-################################################################################################################
 
 #' Class vector of data table
 #'
