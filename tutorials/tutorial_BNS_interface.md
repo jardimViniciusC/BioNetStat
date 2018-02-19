@@ -1,14 +1,14 @@
-# Tutorial para inteface do BioNetStat
+# BioNetStat user interface tutorial
 
-Após a instalação do BioNetStat explicada em [README](/README.md), é necessário apenas abrir o R e rodar os seguintes comandos.
+Being R and BioNetStat installed, as showed in [README](/README.md), you have just open R and run the following commands.
 ```Rscript
 library(devtools)
 library(shiny)
 library(BioNetStat)
 runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
-### Tela inicial
-Ao iniciar o BioNetStat você verá essa imagem.
+### First screen
+When you start BioNetStat you will see this image.
 ![Image of BioNetStat](/inst/shiny/www/images/bionetstat_open_image.png)
 
 Caso você esteja usando o Rstudio uma janela alternativa será aberta, o BNS funcionará de maneira mais eficiente se for usado no browser do seu navegador, por isso clique em "open in browser" na esquerda superior da tela e o BNS será inicia no navegador como na primeira figura.
@@ -18,11 +18,15 @@ Caso você esteja usando o Rstudio uma janela alternativa será aberta, o BNS fu
 
 Ao clicar no icone 'Browse..' da seção 1(Load data) uma janela se abrirá para que a tabela de valores de variáveis seja selecionada. 
 ![data_selection](/inst/shiny/www/images/bns_expr_selection.png)
+
 Neste tutorial o arquivo a ser selecionado é o 
 [bnsDataTest_log2.csv](/data/bnsDataTest_log2.csv).
 O arquivo será carregado e o programa irá identificar as colunas que são classificadas como 'numeric' pelo R. Uma visão prévia da tabela inserida irá aparecer na sua tela. Além disso, uma seção 'Factors' reconhecerá quais as colunas são classificadas como 'factor' pelo R. Nessa seção é possível selecionar os fatores que serão usados para selecionar os estados (tratamentos, condições) comparados. A seleção dos estados pode ser feita em 'Choose the conditions to be compared:'
+
 ![Image of BioNetStatFactors](/inst/shiny/www/images/bns_factor_selection.png)
+
 Após a seleção da tabela de valores de variáveis, é possivel carregar o arquivo 'grupo de variáveis' (opcional) em 'Variable set database'. Em nosso tutorial o arquivo selecionado pode ser [c2.cp.v5.2.symbols.gmt](/data/c2.cp.v5.2.symbols.gmt) que define os grupos de variáveis de acordo com as vias gênicas as quais elas estão associadas. Caso o usuário não carregue nenhum arquivo, o programa irá comparar as redes com todas as variáveis carregadas no arquivo 'Variables values data'
+
 ![Image of BioNetStatFiles](/inst/shiny/www/images/bns_set_selection.png)
 
 ### Selecionando os parâmetros
@@ -68,10 +72,15 @@ Após carregar os arquivos e selecionar os parâmetros de análise, clique em 'S
 ![Image of BioNetStatresVert2](/inst/shiny/www/images/bionetstat_resultsVert3_image.png)
 
 é preciso inserir uma tabela que contem duas colunas, onde na primeira deve estar os nomes das variáveis que você está estudando e na segunda o respectivo código KEGG dessas variáveis. Esses códigos podem ser encontrados no próprio site do [KEGG](http://www.kegg.jp/). Além da tabela com os códigos das variáveis deverá ser informado a cor usada na construção do gráfico, se as variáveis estudadas são genes/proteínas ou metabólitos. As variáveis que irão aparecer na figura são as mesmas analizadas na tabela de análise diferencial do vértice e elas podem ser filtradas ou de acordo com o valor do teste ou o pvalor ou o qvalor associado a ele. É necessário que se escolha qual [via metabólica](http://www.kegg.jp/kegg/pathway.html) será usada para produzir a visualização e em qual [especie](http://www.kegg.jp/kegg/catalog/org_list.html). 
+
 ![Image of BioNetStatresVert5](/inst/shiny/www/images/bionetstat_resultsVert5_image.png).
+
 No mapa KEGG, você observará um que os retangulos ou os círculos estão divididos em colunas, representando os tratamentos que você escolheu comparar. A intesidade das cores é relativa aos valores de centralidades escolhidos conforme a legenda. a seguir um exemplo de um mapa construido com genes da via "pathway in cancer" (05200) do kegg, para humanos ("hsa"). 
+
 ![Image of BioNetStatresVert5](/inst/shiny/www/images/bionetstat_resultsVert5_image.png).
+
 ![Image of BioNetStatresVert6](/inst/shiny/www/images/bionetstat_resultsVert6_image.png)
+
 Ao clicar no botão para salver é necessário esperar para que o programa faça o donwload do mapa, salve-o no diretório "Downloads" em um arquivo compactado. A visualização se encontra dentro do arquivo compactado.
 ![Image of BioNetStatresVert7](/inst/shiny/www/images/bionetstat_resultsVert7_image.png).
 
