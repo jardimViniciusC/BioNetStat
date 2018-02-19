@@ -1,6 +1,8 @@
 library(pathview)
 
 ####################################################################
+# Helper functions
+####################################################################
 selecting.list <- function(var.diff.list,threshold,thr.value){
   if(dim(var.diff.list)[1]==0) stop("The differential table have 0 rows")
   if(is.null(threshold)) tab<-var.diff.list[,c(1,5:(dim(var.diff.list)[2]))]

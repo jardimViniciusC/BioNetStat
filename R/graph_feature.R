@@ -41,10 +41,6 @@ degreeDensities <- function(G1, G2, npoints=1024, options=list(bandwidth="Sturge
   n2 <- vcount(G2)
   e1 <- graph.strength(G1)
   e2 <- graph.strength(G2)
-  #b1 <- kernelBandwidth(e1)
-  #b2 <- kernelBandwidth(e2)
-  #from <- min(min(e1) - 3*b1, min(e2) - 3*b2)
-  #to <- max(max(e1) + 3*b1, max(e2) + 3*b2)
   from <- min(e1, e2)
   to <- max(e1, e2)
   f1 <- gaussianDensity(e1, from=from, to=to, bandwidth=options$bandwidth, npoints=npoints)
@@ -54,12 +50,11 @@ degreeDensities <- function(G1, G2, npoints=1024, options=list(bandwidth="Sturge
   return(list("f1"=f1, "f2"=f2))
 }
 
-#' Density functions of the degrees of two graphs
+#' Density functions of the degrees of n graphs
 #'
-#' 'degreeDensities' estimates the density functions of the degrees for two
+#' 'degreeDensities' estimates the density functions of the degrees for n
 #' graphs at the same coordinates
-#' @param G1 an igraph graph object
-#' @param G2 an igraph graph object
+#' @param Gs a list of n igraph graphs objects
 #' @return a list containing the components, f1 (density estimate of the
 #' graph G1), and f2 (density estimate of the graph G2). Each component is
 #' a list, where the first element is the vector 'x' of 'npoints' coordinates
@@ -75,10 +70,6 @@ nDegreeDensities <- function(Gs, npoints=1024, bandwidth="Sturges",from=NULL,to=
     e[[i]] <- graph.strength(Gs[[i]])
   }
   densities <- matrix(NA, npoints, length(Gs))
-  #b1 <- kernelBandwidth(e1)
-  #b2 <- kernelBandwidth(e2)
-  #from <- min(min(e1) - 3*b1, min(e2) - 3*b2)
-  #to <- max(max(e1) + 3*b1, max(e2) + 3*b2)
   if(is.null(from) || is.null(to)){
     from <- min(unlist(e))
     to <- max(unlist(e))
@@ -139,10 +130,6 @@ spectralDensities <- function(A1, A2, bandwidth="Sturges",
   n2 <- nrow(A2)
   e1 <- (as.numeric(eigen(A1, only.values = TRUE)$values)/sqrt(n1))
   e2 <- (as.numeric(eigen(A2, only.values = TRUE)$values)/sqrt(n2))
-  #b1 <- kernelBandwidth(e1)
-  #b2 <- kernelBandwidth(e2)
-  #from <- min(min(e1) - 3*b1, min(e2) - 3*b2)
-  #to <- max(max(e1) + 3*b1, max(e2) + 3*b2)
   from <- min(e1, e2)
   to <- max(e1, e2)
   f1 <- gaussianDensity(e1, from=from, to=to, bandwidth=bandwidth, npoints=npoints)
@@ -170,8 +157,8 @@ nSpectralDensities <- function (graphs, from=NULL, to=NULL, bandwidth="Silverman
   minimum <- min(spectra)
   maximum <- max(spectra)
   if (!is.null(from) && !is.null(to)) {
-    minimum <- from #min(minimum, from)
-    maximum <- to #max(maximum, to)
+    minimum <- from
+    maximum <- to
   }
   for (i in 1:ngraphs) {
     f <- gaussianDensity(spectra[,i], bandwidth=bandwidth,
@@ -416,7 +403,6 @@ degreeCentralityTest <- function(expr, labels, adjacencyMatrix,
     }
     weighted <- NULL # Define o weighted como NULL, assim como na função original
     if(any(v)) weighted <- T
-    # if (!is.null(weighted)) A<-lapply(A,invWeigthts)
     n <- ncol(expr)
     G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
     s<-lapply(G, graph.strength)
@@ -667,7 +653,6 @@ shortestPathTest <- function(expr, labels, adjacencyMatrix,
       if (sum(!(A[[d]] %in% c(1,0))) != 0) {
         weighted <- T
         i1 <- which(A[[d]] > 0)
-        # A[[d]][i1] <- 1-A[[d]][i1]
         A[[d]][i1] <- 1/A[[d]][i1]
       }
       d=d+1
@@ -695,7 +680,6 @@ shortestPathTest <- function(expr, labels, adjacencyMatrix,
         if (sum(!(A[[d]] %in% c(1,0))) != 0) {
           weighted <- T
           i1 <- which(A[[d]] > 0)
-          # A[[d]][i1] <- 1-A[[d]][i1]
           A[[d]][i1] <- 1/A[[d]][i1]
         }
         d=d+1
@@ -817,14 +801,7 @@ spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1
     for(j in 1:length(A)){ # uma entropia para cada grafo
       entropies[j]<-entropy(list("x"=f$x, "y"=f$densities[,j]))
     }
-    ##### metodo 1 #####
-    # result<-sum(abs(entropies-mean(entropies))) # Calcula a entropia a partir da média das entrpias
-    ##### metodo 2 #####
-    # result<-sqrt(sum((entropies-mean(entropies))^2))# idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
-    ##### metodo 3 #####
     meanDensity <- list("x"=f$x, "y"=rowMeans(f$densities)) # Calcula a entropia média a partir de uma distribuicao media
-    # result<-sum(abs(entropies-entropy(meanDensity)))
-    ##### metodo 4 #####
     result<-sqrt((sum((entropies-entropy(meanDensity))^2))/length(entropies)) # idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
     partial<-sqrt(((entropies-entropy(meanDensity))^2)/length(entropies)) # idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
     results <- vector(len=numPermutations) # vetor para os resultados das permutacoes, para calculo do pvalor.
@@ -840,14 +817,7 @@ spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1
       for(j in 1:length(A)){ # uma entropia para cada grafo
         entropies[j]<-entropy(list("x"=f$x, "y"=f$densities[,j]))
       }
-      ##### metodo 1 #####
-      # results[i]<-sum(abs(entropies-mean(entropies))) # Calcula a entropia a partir da média das entrpias
-      ##### metodo 2 #####
-      # results[i]<-sqrt(sum((entropies-mean(entropies))^2))# idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
-      ##### metodo 3 #####
       meanDensity <- list("x"=f$x, "y"=rowMeans(f$densities)) # Calcula a entropia média a partir de uma distribuicao media
-      # results[i]<-sum(abs(entropies-entropy(meanDensity)))
-      ##### metodo 4 #####
       results[i]<-sqrt((sum((entropies-entropy(meanDensity))^2))/length(entropies)) # idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
       }
 
@@ -905,9 +875,7 @@ spectralDistributionTest <- function(expr, labels, adjacencyMatrix,
       d=1
       for(k in lab) {
         A[[d]] <- adjacencyMatrix(expr[l==k,])
-        # if (sum(is.infinite(as.matrix(A[[d]])))>0) stop(paste(c(A[[d]][is.infinite(as.matrix(A[[d]]))]),"valores infinitos encontrados na matrix A[[",d ,"]] nas permutações \n"))
         if (sum(is.infinite(as.matrix(A[[d]])))>0) stop(print(expr[l==k,]))
-        # if (sum(is.infinite(as.matrix(A[[d]])))>0) A[[d]][is.infinite(as.matrix(A[[d]]))]<-0
         d=d+1
       }
 
@@ -944,7 +912,6 @@ degreeCentralityVertexTest <- function(expr, labels, adjacencyMatrix,
   }
   weighted <- NULL # Define o weighted como NULL, assim como na função original
   if(any(v)) weighted <- T
-  # if (!is.null(weighted)) A<-lapply(A,invWeigthts)
   n <- ncol(expr)
   G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
   s<-lapply(G, graph.strength)
