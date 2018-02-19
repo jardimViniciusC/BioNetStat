@@ -1,14 +1,14 @@
-# Tutorial para inteface do BioNetStat
+# BioNetStat user interface tutorial
 
-Após a instalação do BioNetStat explicada em [README](/README.md), é necessário apenas abrir o R e rodar os seguintes comandos.
+Being R and BioNetStat installed, as showed in [README](/README.md), you have just open R and run the following commands.
 ```Rscript
 library(devtools)
 library(shiny)
 library(BioNetStat)
 runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
-### Tela inicial
-Ao iniciar o BioNetStat você verá essa imagem.
+### First screen
+When you start BioNetStat you will see this image.
 ![Image of BioNetStat](/inst/shiny/www/images/bionetstat_open_image.png)
 
 Caso você esteja usando o Rstudio uma janela alternativa será aberta, o BNS funcionará de maneira mais eficiente se for usado no browser do seu navegador, por isso clique em "open in browser" na esquerda superior da tela e o BNS será inicia no navegador como na primeira figura.
