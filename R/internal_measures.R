@@ -20,7 +20,7 @@ trapezoidSum <- function (x, y) {
 kernelBandwidth <- function(x) {
     n <- length(x)
     # Sturges' criterion
-    nbins <- ceiling(log2(n) + 1) 
+    nbins <- ceiling(log2(n) + 1)
     return(abs(max(x) - min(x))/nbins)
 }
 
@@ -33,19 +33,12 @@ gaussianDensity <- function(x, from=NULL, to=NULL, bandwidth="Sturges", npoints=
         bw <- bw.nrd0(x)
     if (bw == 0)
        return(NA)
-    #TODO Arrumar quando bandwidth=0
-    #if (bandwidth == 0)
-        #if <- density(x)
-    # Nadaraya-Watson estimator
-    #else
     if (is.null(from) || is.null(to))
         f <- density(x, bw=bw, n=npoints)
-        #f <- density(x, n=npoints)
 
     else
         f <- density(x, bw=bw, from=from, to=to, n=npoints)
-        #f <- density(x, from=from, to=to, n=npoints)
-        
+
     area <- trapezoidSum(f$x, f$y)
     return(list("x"=f$x, "y"=f$y/area))
 }
