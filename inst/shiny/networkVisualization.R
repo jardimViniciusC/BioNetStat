@@ -202,7 +202,7 @@ output$factorsToNetViz2 <- renderUI({
 
 output$heatmapColors  <- renderUI({
     selectInput("heatmapColors", "Select a color scheme:",
-                 c("Green-Black-Red", "Blue-White-Red",
+                 c( "Blue-White-Red","Green-Black-Red",
                     "Green-Yellow-Red", "Blue-Yellow-Red"))
 })
 
