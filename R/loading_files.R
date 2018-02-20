@@ -15,11 +15,11 @@ runBioNetStat <- function(){
 #' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is ‘white space’, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses tabulation for .txt files or ";" for .csv files.
 #' @export
 #'
-readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL){#readSampleTable
+readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=T){#readSampleTable
   if(is.null(path)) path<-fileName
   if(lapply(strsplit(as.character(path), '[.]'),rev)[[1]][1]=="txt"){ # Se o arquivo for TXT
     if(is.null(sep)) sep="\t"
-    expr <- read.table(fileName, header=TRUE,dec=dec,sep=sep,check.names = F)
+    expr <- read.table(fileName, header=TRUE,dec=dec,sep=sep,check.names = check.names)
     colnames(expr) <- toupper(colnames(expr))
     cols <- colnames(expr)
     if (cols[1] != "NAME")
@@ -40,7 +40,7 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL){#readSampleTable
   }
   if(lapply(strsplit(as.character(path), '[.]'),rev)[[1]][1]=="csv"){ # Se o arquivo for CSV
     if(is.null(sep)) sep=";"
-    table <- read.table(fileName,header=T,dec=dec,sep=sep,check.names = F) # atentar para o decimal como virgula
+    table <- read.table(fileName,header=T,dec=dec,sep=sep,check.names = check.names) # atentar para o decimal como virgula
     expr <- table[,sapply(table,is.numeric)]
     n <- nrow(expr)
     return(expr)
