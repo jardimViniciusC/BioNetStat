@@ -105,7 +105,7 @@ geneSetSizes <- reactive({
     return(NULL)
   sizes <- array(NA, length(geneSets))
   for (i in 1:length(geneSets)) {
-    sizes[i] <- length(geneSets[[i]]) - 2
+    sizes[i] <- length(geneSets[[i]]) - 1
   }
   return(sizes)
 })

@@ -78,7 +78,7 @@ plotAdjacencyMatrix <- reactive({
                                                                                                            "fdr", "pvalue")), thrEdge),
                                        threshold = thrEdge,
                                        thr.value = 1-threshold,
-                                       weighted = ifelse(networkType=="weighted", T, F))
+                                       weighted = ifelse(networkType=="weighted", T, F),abs.values = !signedCorrelation)
 })
 
 # Returns a adjacency matrix whose first half columns belongs to the class1 gene
