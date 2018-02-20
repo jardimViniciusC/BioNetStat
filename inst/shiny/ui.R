@@ -21,7 +21,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
       h4(strong("Variables values data")),
       fileInput("expr", h5(paste("Please, select the text file (*.csv) containing the variables values data"),
                           img(src="images/info.png", title="Choose a file containing the table with the variables in the colums and the samples in the rows. The conditions of measure rows have to be indicated by a factor column")),
-                accept=c("Comma-Seperated Values", "text/csv", ".csv"),placeholder = "Select a variable values file")
+                accept=c("Comma-Seperated Values", "text/csv", ".csv",".txt"),placeholder = "Select a variable values file")
     ),
     uiOutput("classes"),
     uiOutput("factors"),
@@ -30,7 +30,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
       fileInput("geneSets",
                 h5(paste("Load the Set of variables file (*.gmt)",
                       "describing the variables sets"),img(src="images/info.png", title="Choose a file containing the groups of variables. The format of the file that has to be inserted is explained in help section.")),
-                accept=c('.gmt'),placeholder = "Select a variables groups file")
+                accept=c('.gmt',".txt"),placeholder = "Select a variables groups file")
     ),
     # Parameters
     h3("2. Set parameters"),
@@ -223,7 +223,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
           bsCollapsePanel(
             "Network visualization",
             conditionalPanel(
-              "input.associationMeasure=='correlation'",
+              "input.edgeWeight=='correlation'",
               checkboxInput("signedCorrelation",
                             "Show negative correlations")
             ),
