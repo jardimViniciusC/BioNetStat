@@ -7,7 +7,7 @@ loadExprFile <- reactive({
     return(NULL)
   #n <- nchar(inFile$name)
   #ext <- substr(inFile$name, n-3, n)D
-    expr <- readVarFile(inFile$datapath,inFile$name)
+    expr <- readVarFile(inFile$datapath,inFile$name,check.names=F)
   return(expr)
 })
 
