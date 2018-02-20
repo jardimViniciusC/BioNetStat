@@ -19,7 +19,7 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL){#readSampleTable
   if(is.null(path)) path<-fileName
   if(lapply(strsplit(as.character(path), '[.]'),rev)[[1]][1]=="txt"){ # Se o arquivo for TXT
     if(is.null(sep)) sep="\t"
-    expr <- read.table(fileName, header=TRUE,dec=dec,sep=sep)
+    expr <- read.table(fileName, header=TRUE,dec=dec,sep=sep,check.names = F)
     colnames(expr) <- toupper(colnames(expr))
     cols <- colnames(expr)
     if (cols[1] != "NAME")
@@ -40,12 +40,9 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL){#readSampleTable
   }
   if(lapply(strsplit(as.character(path), '[.]'),rev)[[1]][1]=="csv"){ # Se o arquivo for CSV
     if(is.null(sep)) sep=";"
-    table <- read.table(fileName,header=T,dec=dec,sep=sep) # atentar para o decimal como virgula
+    table <- read.table(fileName,header=T,dec=dec,sep=sep,check.names = F) # atentar para o decimal como virgula
     expr <- table[,sapply(table,is.numeric)]
-    # names <- expr[1,]
     n <- nrow(expr)
-    # expr <- as.matrix(expr)
-    # colnames(expr) <- names
     return(expr)
     }
 }
