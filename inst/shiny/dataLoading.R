@@ -90,9 +90,10 @@ classesInput <- reactive({
 # Read gene set data file
 geneSetsInput <- reactive ({
   inFile <- input$geneSets
-  if (is.null(inFile))
-    return(NULL)
-  geneSets <- readGmtFile(inFile$datapath)
+  expr <- exprInput()
+  if (is.null(inFile)) geneSets<-list(c("all",colnames(expr)))
+  else geneSets <- readGmtFile(inFile$datapath)
+  print(geneSets)
   return(geneSets)
 })
 

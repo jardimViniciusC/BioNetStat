@@ -2,7 +2,7 @@
 # BioNetStat User Interface (UI) definition
 # ------------------------------------------------------------------------------
 library(shiny)
-# library(shinyBs)
+# library(shinyBS)
 # library(BioNetStat)
 # Define UI for application
 shinyUI(fluidPage(theme = "bootstrap.css",
