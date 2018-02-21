@@ -15,14 +15,14 @@ R (>= 3.0.0), shiny, WGCNA, igraph, shinyBS, RColorBrewer, Hmisc, pathway, psych
 1. If don't have the R software installed in our computer, download and install it (check out the [R home page](http://www.r-project.org/))
 2. Open the R command line interface, and install all BNS dependencies (if they have not been installed yet):
 ```Rscript
+install.packages(c("shiny","WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools","matrix","mgcv"))
 source("http://bioconductor.org/biocLite.R")
 biocLite("impute")
 biocLite("preprocessCore")
 biocLite("GO.db")
 biocLite("AnnotationDbi")
 biocLite("pathview")
-biocelite ("Biostrings")
-install.packages(c("shiny","WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools","matrix","mgcv")) 
+biocLite ("Biostrings")
 ```
 
 2. a. If 'pathview' package don't install, try to install this libraries in linux shell terminal.
