@@ -1,28 +1,30 @@
 #' Adjacency matrix
 #' @description creates a function that infers a graph from variables values matrix
-#' @param method: a function that measures the association between the variables values.
-#' @param association: a charactere string indicating wich value will be used as association value. The options are "corr" for the correlation value, "pvalue" for nominal pvalue associated to correlation or "fdr" for corrected pvalue for mutiple tests.
-#' @param threshold: a charactere string indicating wich value will be used as threshold value. The options are "corr" for the correlation value, "pvalue" for nominal pvalue associated to correlation or "fdr" for corrected pvalue for mutiple tests. If NULL, no edge is removed.
-#' @param thr.value: a numeric value. The function removes all edges weighted by a value less
+#' @param method a function that measures the association between the variables values.
+#' @param association a charactere string indicating wich value will be used as association value. The options are "corr" for the correlation value, "pvalue" for nominal pvalue associated to correlation or "fdr" for corrected pvalue for mutiple tests.
+#' @param threshold a charactere string indicating wich value will be used as threshold value. The options are "corr" for the correlation value, "pvalue" for nominal pvalue associated to correlation or "fdr" for corrected pvalue for mutiple tests. If NULL, no edge is removed.
+#' @param thr.value a numeric value. The function removes all edges weighted by a value less
 #' than or equal to 'thr.value'.
-#' @param weighted:a logical value. If TRUE, then the edges of the graph are weighted by the
+#' @param weighted a logical value. If TRUE, then the edges of the graph are weighted by the
 #' association degrees between the variables. Otherwise, the edges are are weighted by one.
+#' @param abs.values a logical value. If TRUE, then the negatives edges of the graph are changed by its absolutes values. Otherwise, the negative edges are kept with negative weights.
 #' @return a function that creates an adjacency matrix from variable values data.
+#' @importFrom Hmisc rcorr
+#' @importFrom psych corr.test
 #' @export
 
-
 adjacencyMatrix <- function(method, association=c("corr","pvalue","fdr"), threshold=c("fdr", "pvalue","corr", NULL),
-                            thr.value=0.05, weighted=T,abs.values=T) {# Lembrar que o threshold pode ser para a correlacao ou para p-valor
+                            thr.value=0.05, weighted=TRUE,abs.values=TRUE) {# Lembrar que o threshold pode ser para a correlacao ou para p-valor
   return(
     function(expr) {
       if(any(method==c("pearson","spearman","kendall"))){
         if(nrow(expr)==3 | nrow(expr)==4) A <- list(cor(as.matrix(expr), method=method))
           else{
             if(any(method==c("pearson","spearman"))){
-              A <- Hmisc::rcorr(as.matrix(expr), type=method) #tem que estar como matriz, não le data frames.
+              A <- rcorr(as.matrix(expr), type=method) #tem que estar como matriz, não le data frames.
             }
             if(method=="kendall"){
-              A <- psych::corr.test(as.matrix(expr), method="kendall", adjust="none")
+              A <- corr.test(as.matrix(expr), method="kendall", adjust="none")
               A$P <- A$p
             }
           }
@@ -40,7 +42,7 @@ adjacencyMatrix <- function(method, association=c("corr","pvalue","fdr"), thresh
           diag(A$P) <- 1
           A$P <- 1 - A$P
         }
-        if(abs.values==T) A[[1]] <- abs(A[[1]])
+        if(abs.values) A[[1]] <- abs(A[[1]])
 
         if(association == "corr") A <- A[[1]]
         else

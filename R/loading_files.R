@@ -12,10 +12,11 @@ runBioNetStat <- function(){
 #' @param fileName the name of the file which the data are to be read from. Each row of the table appears as one line of the file. If it does not contain an absolute path, the file name is relative to the current working directory, getwd().
 #' @param path the path to the directory that contains the file
 #' @param dec the character used in the file for decimal points.
-#' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is ‘white space’, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses tabulation for .txt files or ";" for .csv files.
+#' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is white space, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses tabulation for .txt files or ";" for .csv files.
+#' @param check.names a logical value. If TRUE, the names of the data table kept as they are. Otherwise, the blank space, "-","/" and ",", are replaced by dots.
 #' @export
 #'
-readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=T){#readSampleTable
+readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#readSampleTable
   if(is.null(path)) path<-fileName
   if(lapply(strsplit(as.character(path), '[.]'),rev)[[1]][1]=="txt"){ # Se o arquivo for TXT
     if(is.null(sep)) sep="\t"
@@ -40,7 +41,7 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=T){#read
   }
   if(lapply(strsplit(as.character(path), '[.]'),rev)[[1]][1]=="csv"){ # Se o arquivo for CSV
     if(is.null(sep)) sep=";"
-    table <- read.table(fileName,header=T,dec=dec,sep=sep,check.names = check.names) # atentar para o decimal como virgula
+    table <- read.table(fileName,header=TRUE,dec=dec,sep=sep,check.names = check.names) # atentar para o decimal como virgula
     expr <- table[,sapply(table,is.numeric)]
     n <- nrow(expr)
     return(expr)
@@ -54,11 +55,11 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=T){#read
 #' @param factorName string indicating the column name used to determine the labels of each row of matrix data. The NULL (default) indicates that the first column will be used.
 #' @param classes a vector of strings indicating which labels of choosed column will be compared, the minimum are two labels. The NULL (default) indicates that all classes will be compared.
 #' @param dec the character used in the file for decimal points.
-#' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is ‘white space’, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses tabulation for .txt files or ";" for .csv files.
+#' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is white space, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses tabulation for .txt files or ";" for .csv files.
 #' @export
 doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
-  options(stringsAsFactors = T)
-  table <- read.csv(fileName,header=T,dec=dec,sep=sep)
+  options(stringsAsFactors = TRUE)
+  table <- read.csv(fileName,header=TRUE,dec=dec,sep=sep)
   if(is.null(factorName)) factor <- names(which(!sapply(table,is.numeric)))[1]
   else if(!any(factorName==names(which(!sapply(table,is.numeric))))) stop(paste("The factorName",factorName," doesn't exists in Data frame"))
   else factor <- factorName
@@ -69,7 +70,7 @@ doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
   else stop(paste("Classes",paste(classes[!c(classes %in% levels(labels))],collapse = ", "),"aren't contained in",factorName))
   l <- array(NA, length(labels))
   names <- unique(labels)
-  i<-vector(len=length(classes))
+  i<-vector(length=length(classes))
   for(p in 1:length(i)) i[p] <- which(names == classes[p])
 
   symbols <- unique(labels)
@@ -119,7 +120,7 @@ readGmtFile <- function(fileName) {
 #' @param print a logical. If true, it prints execution messages on the screen. resultsFile: path to a file where the partial results of the analysis will be saved. If NULL, then no partial results are saved.
 #' @param resultsFile a ".RData" file name to be saved in tha work directory.
 #' @param seed the seed for the random number generators. If it is not null then the sample permutations are the same for all the gene sets.
-#' @param min.vert
+#' @param min.vert lower number of nodes (variables) that has to be to compare the networks.
 #' @return a data frame containing the name, size, test statistic, nominal p-value and adjusted p-value (q-value) associated with each gene set.
 #' @export
 #'
@@ -146,7 +147,7 @@ readGmtFile <- function(fileName) {
     setName <- varSets[[i]][1]
     if (print)
       cat(paste("Testing ", setName, " (", i, " of ", length(varSets),
-                ")", "\n", sep=""), append=T)
+                ")", "\n", sep=""), append=TRUE)
     genes <- varSets[[i]][varSets[[i]] %in% colnames(varFile)]
     if (!is.null(seed))
       set.seed(seed)
