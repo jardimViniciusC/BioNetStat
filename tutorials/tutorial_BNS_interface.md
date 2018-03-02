@@ -14,7 +14,7 @@ runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
 ### First screen
 When you start BioNetStat you will see this image.
-<img src="https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_open_image.png?raw=true" alt="Image of BioNetStat" width="200" height="400"/>
+<img src="https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_open_image.png?raw=true" alt="Image of BioNetStat" height="200"/>
 
 ![Image of BioNetStat](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_open_image.png?raw=true)
 
