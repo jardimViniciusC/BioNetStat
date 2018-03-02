@@ -14,25 +14,31 @@ runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
 ### First screen
 When you start BioNetStat you will see this image.
-![Image of BioNetStat](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_open_image.png?raw=true)
 
-Caso você esteja usando o Rstudio uma janela alternativa será aberta, o BNS funcionará de maneira mais eficiente se for usado no browser do seu navegador, por isso clique em "open in browser" na esquerda superior da tela e o BNS será inicia no navegador como na primeira figura.
-![Image of BioNetStat_rstudio](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_open_image_Rstudio.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_open_image.png?raw=true" alt="Image of BioNetStat" height="200"/>
 
-### Carregando os arquivos
+If you are using Rstudio an alternative window will open, therefore BNS will performs well when is used in browser. So, hit "open in browser" in the upper left of the screen and the BNS will open in browser as the first picture.
 
-Ao clicar no icone 'Browse..' da seção 1(Load data) uma janela se abrirá para que a tabela de valores de variáveis seja selecionada. 
-![data_selection](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_expr_selection.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_open_image_Rstudio.png" alt="Image of BioNetStat_rstudio" height="150"/>
 
-Neste tutorial o arquivo a ser selecionado é o 
-[bnsDataTest_log2.csv](/data/bnsDataTest_log2.csv).
-O arquivo será carregado e o programa irá identificar as colunas que são classificadas como 'numeric' pelo R. Uma visão prévia da tabela inserida irá aparecer na sua tela. Além disso, uma seção 'Factors' reconhecerá quais as colunas são classificadas como 'factor' pelo R. Nessa seção é possível selecionar os fatores que serão usados para selecionar os estados (tratamentos, condições) comparados. A seleção dos estados pode ser feita em 'Choose the conditions to be compared:'
+### Loading the files
 
-![Image of BioNetStatFactors](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_factor_selection.png)
+By clicking on the 'Browse ..' icon in section 1 (Load data) a window will open for the table of variables values to be selected.
 
-Após a seleção da tabela de valores de variáveis, é possivel carregar o arquivo 'grupo de variáveis' (opcional) em 'Variable set database'. Em nosso tutorial o arquivo selecionado pode ser [c2.cp.v5.2.symbols.gmt](/data/c2.cp.v5.2.symbols.gmt) que define os grupos de variáveis de acordo com as vias gênicas as quais elas estão associadas. Caso o usuário não carregue nenhum arquivo, o programa irá comparar as redes com todas as variáveis carregadas no arquivo 'Variables values data'
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_expr_selection.png" alt="data_selection" height="150"/>
 
-![Image of BioNetStatFiles](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_set_selection.png)
+In this tutorial the file to be selected is [bnsDataTest_log2.csv](/data/bnsDataTest_log2.csv).
+The file will load and the software will identify the colunms classified as "numeric" by R. A previous view of table is showed on the screen. In addition, a 'Factors' section will recognize which columns are rated as 'factor' by R. In this section you can select the factors that will be used to select the states (treatments, conditions) compared, each state will be a network to be compared. The selection of states can be done in 'Choose the conditions to be compared:'
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_factor_selection.png" alt="Image of BioNetStatFactors" height="150"/>
+
+The tutorial to build your table of variables values is here(INSERT A LINK).
+
+After selecting the variable values table, it is possible to load the file 'variable group' (optional) into 'Variable set database'. In our tutorial the selected file is [c2.cp.v5.2.symbols.gmt](/data/c2.cp.v5.2.symbols.gmt) that sets the groups of variables according to the metabolic pathways which they are associated. If the user does not load any files, the program will compare the networks with all variables loaded in the file 'Variables values data'
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_set_selection.png" alt="Image of BioNetStatFiles" height="150"/>
+
+The tutorial to build your table of variables groups is here(INSERT A LINK).
 
 ### Selecionando os parâmetros
 
