@@ -14,12 +14,12 @@ runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
 ```
 ### First screen
 When you start BioNetStat you will see this image.
+
 <img src="https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_open_image.png?raw=true" alt="Image of BioNetStat" height="200"/>
 
-![Image of BioNetStat](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_open_image.png?raw=true)
-
 Caso você esteja usando o Rstudio uma janela alternativa será aberta, o BNS funcionará de maneira mais eficiente se for usado no browser do seu navegador, por isso clique em "open in browser" na esquerda superior da tela e o BNS será inicia no navegador como na primeira figura.
-![Image of BioNetStat_rstudio](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_open_image_Rstudio.png)
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_open_image_Rstudio.png" alt="Image of BioNetStat_rstudio" height="150"/>
 
 ### Carregando os arquivos
 
