@@ -27,33 +27,35 @@ By clicking on the 'Browse ..' icon in section 1 (Load data) a window will open 
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_expr_selection.png" alt="data_selection" height="150"/>
 
-In this tutorial the file to be selected is [bnsDataTest_log2.csv](/data/bnsDataTest_log2.csv).
+In this tutorial the file to be selected is ![bnsDataTest_log2.csv](/data/bnsDataTest_log2.csv).
 The file will load and the software will identify the colunms classified as "numeric" by R. A previous view of table is showed on the screen. In addition, a 'Factors' section will recognize which columns are rated as 'factor' by R. In this section you can select the factors that will be used to select the states (treatments, conditions) compared, each state will be a network to be compared. The selection of states can be done in 'Choose the conditions to be compared:'
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_factor_selection.png" alt="Image of BioNetStatFactors" height="150"/>
 
-The tutorial to build your table of variables values is [here](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/help/helpData.html).
+The tutorial to build your table of variables values is ![here](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/help/helpData.html).
 
-After selecting the variable values table, it is possible to load the file 'variable group' (optional) into 'Variable set database'. In our tutorial the selected file is [c2.cp.v5.2.symbols.gmt](/data/c2.cp.v5.2.symbols.gmt) that sets the groups of variables according to the metabolic pathways which they are associated. If the user does not load any files, the program will compare the networks with all variables loaded in the file 'Variables values data'
+After selecting the variable values table, it is possible to load the file 'variable group' (optional) into 'Variable set database'. In our tutorial the selected file is ![c2.cp.v5.2.symbols.gmt](/data/c2.cp.v5.2.symbols.gmt) that sets the groups of variables according to the metabolic pathways which they are associated. If the user does not load any files, the program will compare the networks with all variables loaded in the file 'Variables values data'
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_set_selection.png" alt="Image of BioNetStatFiles" height="150"/><img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_set_selection2.png" alt="Image of BioNetStatFiles" height="150"/>
 
-The tutorial to build your table of variables groups is [here](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/help/helpData.html).
+The tutorial to build your table of variables groups is ![here](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/help/helpData.html).
 
-### Selecionando os parâmetros
+### Parameters setting
 
+After load input files, you migth set the parameters to network construction:
+1. 
 Com todos os arquivos de entrada já carregados é necessário escolher os parâmetros utilizados para comparar as redes:
-1. Número mínimo e máximo de variáveis (nós) que estarão nas redes comparadas em 'Variable sets size range'. O programa retorna a quantidade de conjuntos de variáveis que estão entre esses valores (figura acima).
-2. Medida de dependência usada para inferir a rede de correlação.
-3. Força de associação que será usada como limiar para a formação de uma aresta entre dois nós e qual o valor de limiar usado.
-4. Tipo de rede que será construída, com ou sem peso nas arestas. No caso de redes com peso, qual a medida de associação será usada como peso das arestas.
+1. Lower and higher numbers of variables (nodes) that will be in the networks compared in 'Variable sets size range'. The program returns the number of sets of variables that are between these values (figure above).
+2. Dependency measure used to infer the correlation network.
+3. Association strength that will be used as the threshold for the formation of an edge between two nodes and which threshold value is used.
+4. Type of network to be built, with or without weight on the edges. In the case of nets with weight, which measure of association will be used as edge weight.
 
-![Image of BioNetStatNetParameters](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net_image.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net_image.png" alt="Image of BioNetStatNetParameters" height="150"/>
 
-5. Método de comparação das redes. Se o usuário escolher comparar as redes pelas distribuições do espectro ou de grau ele deve selecionar qual medidad de largura de banda será usada em 'Bandwidth', podendo ser 'Silverman' ou 'Sturges'.
-6. Numero de permutações e se será usada uma semente para os testes de permutação aleatória.
+5. Networks comparison method. If the spectral or degree distribution were used to compare the networks it is necessary to set the method to set the bandwith ("Silveram" or "Sturges" are aviable).
+6. Number of permutations and if a seed will be used on the resampling method also could be used.
 
-![Image of BioNetStatNet2Parameters](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net2_image.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net2_image.png" alt="Image of BioNetStatNet2Parameters" height="150"/>
 
 ### Rodando a análise diferencial de múltiplas redes
 Após carregar os arquivos e selecionar os parâmetros de análise, clique em 'Start analysis' para realizar a comparação das redes.
