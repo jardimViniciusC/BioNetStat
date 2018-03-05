@@ -111,7 +111,7 @@ Visualizing networks helps us understand the changing patterns more easily. This
 
 The first way to visualize the networks is in the form of heatmaps of the adjacency matrices (matrix representing the network). initially the user can choose the parameters (color, shape and size) for the construction of the figure.
 
-<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_plot_settings.png" alt="Image of BioNetStatplotSettings" height="150"/>
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_plot_settings2.png" alt="Image of BioNetStatplotSettings" height="150"/><img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_plot_settings2.png" alt="Image of BioNetStatplotSettings" height="150"/>
 
 7. And then you can view the networks of the selected states.
 
