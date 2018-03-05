@@ -5,7 +5,7 @@ output:
 ---
 # BioNetStat user interface tutorial
 
-Being R and BioNetStat installed, as showed in [README](/README.md), you have just open R and run the following commands.
+Being R and BioNetStat installed, as showed in [README](https://github.com/jardimViniciusC/BioNetStat/blob/master/README.md), you have just open R and run the following commands.
 ```Rscript
 library(devtools)
 library(shiny)
@@ -34,7 +34,7 @@ The file will load and the software will identify the colunms classified as "num
 
 The tutorial to build your table of variables values is ![here](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/help/helpData.html).
 
-After selecting the variable values table, it is possible to load the file 'variable group' (optional) into 'Variable set database'. In our tutorial the selected file is ![c2.cp.v5.2.symbols.gmt](/data/c2.cp.v5.2.symbols.gmt) that sets the groups of variables according to the metabolic pathways which they are associated. If the user does not load any files, the program will compare the networks with all variables loaded in the file 'Variables values data'
+After selecting the variable values table, it is possible to load the file 'variable group' (optional) into 'Variable set database'. In our tutorial the selected file is ![c2.cp.v5.2.symbols.gmt](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/extdata/c2.cp.v5.2.symbols.gmt) that sets the groups of variables according to the metabolic pathways which they are associated. If the user does not load any files, the program will compare the networks with all variables loaded in the file 'Variables values data'
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_set_selection.png" alt="Image of BioNetStatFiles" height="150"/><img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_set_selection2.png" alt="Image of BioNetStatFiles" height="150"/>
 
