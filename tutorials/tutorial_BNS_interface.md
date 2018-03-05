@@ -78,85 +78,99 @@ After loading the files and selecting the analysis parameters, click on 'Start a
 #### Node differential analysis
 4. It is also possible to compare the importance of nodes. In the 'Further analysis' tab you migth select the groups of variables according to a threshold criteria. The group of variables is chosen and the program will generate the nodes comparison by degree centrality.
 
-<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert1_image.png" alt="Image of BioNetStatresVert1" height="150"/>
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert1_image.png" alt="Image of BioNetStatresVert1" height="200"/>
 
 5. When the table appear, it is possible to select other structural properties to compare the nodes importance. The diferential node analysis table is shown as in the following figure:
 
-<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert2_image.png" alt="Image of BioNetStatresVert2" height="150"/>
+##### Node analysis
 
-6. Another available functionality is to observe the variables in the metabolic pathways of the database [KEGG] (http://www.kegg.jp/), which allow you to know more in depth the metabolic pathways that the studied variables are realted. The "KEGG pathway visualization" tab, under " ". 
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert2_image.png" alt="Image of BioNetStatresVert2" height="200"/>
+
+#### KEGG pathway visualization
+6. Another available functionality is to observe the variables in the metabolic pathways of the database ![KEGG](http://www.kegg.jp/), which allow you to know more in depth the metabolic pathways that the studied variables are related.
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert3_image.png" alt="Image of BioNetStatresVert3" height="150"/>
 
-you need to insert a table that contains two columns, where the first must be the names of the variables you are studying and the second the respective KEGG code of these variables. These codes can be found on the website itself ![KEGG](http://www.kegg.jp/). In addition to the table with the codes of the variables should be informed the color used in the construction of the graph, if the variables studied are genes / proteins or metabolites. The variables that will appear in the figure are the same ones analyzed in the differential analysis table of the vertex and they can be filtered or according to the value of the test or the pvalor or the value associated with it. It is necessary to choose which ![metabolic pathway](http://www.kegg.jp/kegg/pathway.html) will be used to produce the visualization and in which ![Species](http://www.kegg.jp/kegg/catalog/org_list.html).
-
-<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert4_image.png" alt="Image of BioNetStatresVert4" height="150"/>
-
-No mapa KEGG, você observará um que os retangulos ou os círculos estão divididos em colunas, representando os tratamentos que você escolheu comparar. A intesidade das cores é relativa aos valores de centralidades escolhidos conforme a legenda. a seguir um exemplo de um mapa construido com genes da via "pathway in cancer" (05200) do kegg, para humanos ("hsa"). 
+you need to insert a table that contains two columns, where the first one must be the names of the variables you are studying and the second one is the respective KEGG code of these variables. The KEGG codes can be found on ![KEGG's](http://www.kegg.jp/) website. In addition to the table with the codes of the variables should be chosen the color used in the draw, if the variables studied are genes/proteins or metabolites. The variables that will appear in the figure are the same ones analyzed in the differential analysis table of the node and they can be filtered or according to the value of the test or the pvalor or the qvalue associated with it. It is necessary to choose which ![metabolic pathway](http://www.kegg.jp/kegg/pathway.html) will be used to produce the visualization and in which ![Species](http://www.kegg.jp/kegg/catalog/org_list.html).
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert5_image.png" alt="Image of BioNetStatresVert5" height="150"/>
 
+On the map KEGG, you will notice one that the rectangles or the circles are divided into columns, representing the treatments you chose to compare. The intensity of the colors is relative to the values ​​of centralities chosen according to the legend. here is an example of a map constructed with genes from the pathway in cancer (05200) of kegg, for humans ("hsa").
+
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert6_image.png" alt="Image of BioNetStatresVert6" height="150"/>
 
-Ao clicar no botão para salver é necessário esperar para que o programa faça o donwload do mapa, salve-o no diretório "Downloads" em um arquivo compactado. A visualização se encontra dentro do arquivo compactado.
+When clicking the button to save it is necessary to wait for the program to download the map, save it in the "Downloads" directory in a compressed file. The view is inside the compressed file.
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert7_image.png" alt="Image of BioNetStatresVert7" height="150"/>
 
-#### Visualização das redes
+#### Network visualization
 
-A visualização das redes nos ajuda a compreender as mudanças dos padrões de maneira mais facil. Essa visualização pode ser feita de diversas maneiras e algumas delas estão disponíveis no BioNetStat na aba "Network visualization plots". Como diversos estados podem ser comparados pelo BNS nesta seção é necessário escolher apenas dois deles para serem visualizados e comparados por vez.
+Visualizing networks helps us understand the changing patterns more easily. This visualization can be done in several ways and some of them are available in BioNetStat in the "Network visualization plots" tab. As several states can be compared by the BNS in this section you need to choose only two of them to be viewed and compared at a time.
 
-![Image of BioNetStatclassSelection](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_class_selection.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_class_selection.png" alt="Image of BioNetStatclassSelection" height="150"/>
 
-A primeira forma de visualizar as redes é em forma de heatmaps das matrizes de adjacência (matriz que representa a rede). inicialmente o usuário pode escolher os parametros (cor,formato e tamanho) para a construção da figura.
-![Image of BioNetStatplotSettings](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_plot_settings.png)
+The first way to visualize the networks is in the form of heatmaps of the adjacency matrices (matrix representing the network). initially the user can choose the parameters (color, shape and size) for the construction of the figure.
 
-7. E então pode visualizar as redes dos estados selecionados.
-![Image of BioNetStatplotSettings](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_network_vis.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_plot_settings.png" alt="Image of BioNetStatplotSettings" height="150"/>
 
-8. É possível o usuário comparar a associação entre pares de variáveis escolhidas nos tratamentos analisados:
-![Image of BioNetStatplotSettings](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_assoc.png)
+7. And then you can view the networks of the selected states.
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_network_vis.png" alt="Image of BioNetStatplotSettings2" height="150"/>
+
+8. It is possible for the user to compare the association between pairs of variables chosen in the analyzed treatments:
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_network_vis.png" alt="Image of BioNetStatplotSettings3" height="150"/>
 
 9. As redes produzidas podem ser comparadas através de propriedades estruturais globais como entropia espectral da rede ou centralidade de grau média:
-![Image of BioNetStatplotSettings](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_top_properties.png)
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_top_properties.png" alt="Image of top_properties" height="150"/>
 
 10. A matriz de diferenças permite analizar para todos os pares de variáveis como sua relação muda entre os estados.
-![Image of BioNetStatplotSettings](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_comparison_net.png)
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_comparison_net.png" alt="Image of comparison_net" height="150"/>
 
 11. A lista de associação entre as variáveis no permite ter uma ideia mais precisa das diferenças entre as forças de associação nos dois estados.
-![Image of BioNetStatplotSettings](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_association_list.png)
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_association_list.png" alt="Image of association_list" height="150"/>
 
 12. Por fim, a rede pode ser exportada para o programa de integração de níveis biológicos S.I.T. (System Integration Tool) onde a rede pode ser visualizadas e manipulada.
-![Image of BioNetStatplotSettings](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_sit_list.png)
 
-#### Estudo o comportamento das variáveis
+<img src="https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_sit_list.png" alt="Image of BioNetStat sit_list" height="150"/>
 
-O BioNetStat disponibiliza também um estudo do comportamento das variáveis para que o usuário possa ter uma visão completa do seu objeto de estudo.
-1. Inicialmente as variáveis podem ser exploradas por meio da construção de um heatmap onde os parametros da figura são selecionados.
-![Image of BioNetStatplotSettings](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_parameters_heatmap.png)
+#### Study the behavior of variables
 
-e o heatmap é produzido. Nas colunas estão as amostras com as cores indicando à qual estado cada amostra pertence. É possível agrupar tanto as colunas (amostras) quanto as linhas (variáveis) do heatmap na seção "heatmap cluster options" na figura acima.
-![Image of BioNetStatplotSettings](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_heatmap.png)
+BioNetStat also provides a study of the behavior of the variables so that the user can have a complete view of their object of study.
+1. Initially the variables can be explored through the construction of a heatmap where the parameters of the figure are selected.
 
-2. Nos mapas do banco de dados KEGG, podemos observar também as expressões do genes, concentrações da proteínas e dos metabólitos. Em "KEGG pathway visualization" o usuário deve inserir o código das variáveis, uma tabela que contem duas colunas, onde na primeira deve estar os nomes das variáveis que você está estudando e na segunda o respectivo código KEGG dessas variáveis. Esses códigos podem ser encontrados no próprio site do [KEGG](http://www.kegg.jp/). As variáveis que irão aparecer na figura são as mesmas analizadas na tabela de análise diferencial do vértice e elas podem ser filtradas ou de acordo com o valor do teste ou o pvalor ou o qvalor associado a ele. Na figura será mostrado um valor que representará todas as amostras de cada estado, que pode ser a média, a mediana, o mínimo ou o máximo. É necessário que se escolha qual [via metabólica](http://www.kegg.jp/kegg/pathway.html) será usada para produzir a visualização e em qual [especie](http://www.kegg.jp/kegg/catalog/org_list.html).
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_parameters_heatmap.png" alt="Image of BioNetStat parameters_heatmap" height="150"/>
 
-![Image of BioNetStatresVert5](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_keeg_parameters_exp.png).
-![Image of BioNetStatresVert5](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_keeg_parameters_exp_codes.png).
+and the heatmap is produced. In the columns are the samples with the colors indicating to which state each sample belongs. It is possible to group both the columns (samples) and the lines (variables) of the heatmap in the section "heatmap cluster options" in the figure above.
 
-No mapa KEGG, você observará um que os retangulos ou os círculos estão divididos em colunas, representando os tratamentos que você escolheu comparar. A intesidade das cores é relativa aos valores de centralidades escolhidos conforme a legenda. a seguir um exemplo de um mapa construido com genes da via "pathway in cancer" (05200) do kegg, para humanos ("hsa"). 
-![Image of BioNetStatresVert5](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_keeg_parameters_exp2.png)
-![Image of BioNetStatresVert6](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert6_image.png)
-Ao clicar no botão para salver é necessário esperar para que o programa faça o donwload do mapa, salve-o no diretório "Downloads" em um arquivo compactado. A visualização se encontra dentro do arquivo compactado.
-![Image of BioNetStatresVert7](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert7_image.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_heatmap.png" alt="Image of BioNetStat heatmap" height="150"/>
 
-3. O BioNetStat disponibiliza a realização de um teste estatístico para verificar a mudança no comportamento das variáveis entre os estados (teste t, para dois estados, e ANOVA, para mais de dois, com os respectivos testes não paramétricos). Os resultados so apresentados na tabela como a seguir:
+2. In the KEGG database maps, we can also observe gene expressions, protein concentrations and metabolites. In "KEGG pathway visualization" the user must enter the variables code, a table that contains two columns, where in the first should be the names of the variables that you are studying and in the second the respective KEGG code of these variables. These codes can be found on the ![KEGG](http://www.kegg.jp/) website itself. The variables that will appear in the figure are the same ones analyzed in the differential analysis table of the vertex and they can be filtered or according to the value of the test or the pvalor or the value associated with it. In the figure will be shown a value that will represent all the samples of each state, which can be the average, the median, the minimum or the maximum. It is necessary to choose which ![metabolic pathway](http://www.kegg.jp/kegg/pathway.html) will be used to produce the visualization and in which ![Species](http://www.kegg.jp/kegg/catalog/org_list.html).
 
-![Image of BioNetStatresVert7](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_anova.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_keeg_parameters_exp.png" alt="Image of BioNetStatresVert5" height="150"/>
+<img src="https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_keeg_parameters_exp_codes.png" alt="Image of BioNetStat_keeg_parameters_exp_codes" height="150"/>
 
-4. Por fim, a última análise disponível no BioNetStat é a visualização dos valores de uma determinada variável em um grafico boxplot. Onde inicialmente o usuário deve escolher os parametros da figura formada
+On the map KEGG, you will notice one that the rectangles or the circles are divided into columns, representing the treatments you chose to compare. The intensity of the colors is relative to the values of centralities chosen according to the legend. here is an example of a map constructed with genes from the pathway in cancer (05200) of kegg, for humans ("hsa").
 
-![Image of BioNetStatresVert7](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_boxplot_parameters.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_keeg_parameters_exp2.png" alt="Image of BioNetStat_keeg_parameters_exp2" height="150"/>
 
-e posteriormente a variável que será visualizada.
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert6_image.png" alt="Image of BioNetStat_resultsVert6_image" height="150"/>
 
-![Image of BioNetStatresVert7](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_boxplot.png)
+When clicking the button to save it is necessary to wait for the program to download the map, save it in the "Downloads" directory in a compressed file. The view is inside the compressed file.
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert7_image.png" alt="Image of BioNetStat_resultsVert7_image" height="150"/>
+
+3. BioNetStat provides a statistical test to verify the change in the behavior of the variables between the states (test t, for two states, and ANOVA, for more than two, with the respective non-parametric tests). The results are presented in the table as follows:
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_anova.png" alt="Image of BioNetStat_anova" height="150"/>
+
+4. Finally, the last analysis available in BioNetStat is the visualization of the values ​​of a given variable in a boxplot graph. Where initially the user must choose the parameters of the formed figure
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_boxplot_parameters.png" alt="Image of BioNetStat_boxplot_parameters" height="150"/>
+
+and then the variable that will be displayed.
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_boxplot.png" alt="Image of BioNetStat_boxplot" height="150"/>
