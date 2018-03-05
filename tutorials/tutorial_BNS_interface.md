@@ -105,35 +105,27 @@ When clicking the button to save it is necessary to wait for the program to down
 
 #### Network visualization
 
-Visualizing networks helps us understand the changing patterns more easily. This visualization can be done in several ways and some of them are available in BioNetStat in the "Network visualization plots" tab. As several states can be compared by the BNS in this section you need to choose only two of them to be viewed and compared at a time.
+Visualizing networks helps us understand the changing patterns more easily. This visualization can be done in several ways and some of them are available in BioNetStat in the "Network visualization plots" tab. As several states can be compared by the BNS in this section you need to choose only two of them to be viewed and compared each time.
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_class_selection.png" alt="Image of BioNetStatclassSelection" height="150"/>
 
-The first way to visualize the networks is in the form of heatmaps of the adjacency matrices (matrix representing the network). initially the user can choose the parameters (color, shape and size) for the construction of the figure.
-
-<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_plot_settings.png" alt="Image of BioNetStatplotSettings" height="150"/><img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_plot_settings2.png" alt="Image of BioNetStatplotSettings" height="150"/>
-
-7. And then you can view the networks of the selected states.
+7. The first way to visualize the networks is in the form of heatmaps of the adjacency matrices (matrix representing the network). initially the user can choose the parameters (color, shape and size) for the construction of the figure and then you can view the networks of the selected states.
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_network_vis.png" alt="Image of BioNetStatplotSettings2" height="150"/>
 
-8. It is possible for the user to compare the association between pairs of variables chosen in the analyzed treatments:
-
-<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_network_vis.png" alt="Image of BioNetStatplotSettings3" height="150"/>
-
-9. As redes produzidas podem ser comparadas através de propriedades estruturais globais como entropia espectral da rede ou centralidade de grau média:
+8. The networks produced can be compared through global structural properties such as network spectral entropy or middle degree centrality:
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_top_properties.png" alt="Image of top_properties" height="150"/>
 
-10. A matriz de diferenças permite analizar para todos os pares de variáveis como sua relação muda entre os estados.
+9. The difference matrix allows to analyze for all pairs of variables how their relation changes between states.
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_comparison_net.png" alt="Image of comparison_net" height="150"/>
 
-11. A lista de associação entre as variáveis no permite ter uma ideia mais precisa das diferenças entre as forças de associação nos dois estados.
+10. The list of associations between the variables does not allow us to have a more precise idea of the differences between the forces of association in the two states.
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_association_list.png" alt="Image of association_list" height="150"/>
 
-12. Por fim, a rede pode ser exportada para o programa de integração de níveis biológicos S.I.T. (System Integration Tool) onde a rede pode ser visualizadas e manipulada.
+11. Finally, the network can be exported to the biological integration program S.I.T. (System Integration Tool) where the network can be viewed and manipulated.
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_sit_list.png" alt="Image of BioNetStat sit_list" height="150"/>
 
