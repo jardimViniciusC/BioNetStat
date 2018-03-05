@@ -138,13 +138,12 @@ BioNetStat also provides a study of the behavior of the variables so that the us
 
 2. In the KEGG database maps, we can also observe gene expressions, protein concentrations and metabolites. In "KEGG pathway visualization" the user must enter the variables code, a table that contains two columns, where in the first should be the names of the variables that you are studying and in the second the respective KEGG code of these variables. These codes can be found on the ![KEGG](http://www.kegg.jp/) website itself. The variables that will appear in the figure are the same ones analyzed in the differential analysis table of the vertex and they can be filtered or according to the value of the test or the pvalor or the value associated with it. In the figure will be shown a value that will represent all the samples of each state, which can be the average, the median, the minimum or the maximum. It is necessary to choose which ![metabolic pathway](http://www.kegg.jp/kegg/pathway.html) will be used to produce the visualization and in which ![Species](http://www.kegg.jp/kegg/catalog/org_list.html).
 
-<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_keeg_parameters_exp.png" alt="Image of BioNetStatresVert5" height="300"/>
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_keeg_parameters_exp.png" alt="Image of BioNetStatresVert5" height="300"/><img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_keeg_parameters_exp1.png" alt="Image of BioNetStatresVert5" height="300"/>
+
 
 On the map KEGG, you will notice one that the rectangles or the circles are divided into columns, representing the treatments you chose to compare. The intensity of the colors is relative to the values of centralities chosen according to the legend. here is an example of a map constructed with genes from the pathway in cancer (05200) of kegg, for humans ("hsa").
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_keeg_parameters_exp2.png" alt="Image of BioNetStat_keeg_parameters_exp2" height="100"/>
-
-<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert6_image.png" alt="Image of BioNetStat_resultsVert6_image" height="150"/>
 
 When clicking the button to save it is necessary to wait for the program to download the map, save it in the "Downloads" directory in a compressed file. The view is inside the compressed file.
 
