@@ -27,7 +27,7 @@ By clicking on the 'Browse ..' icon in section 1 (Load data) a window will open 
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_expr_selection.png" alt="data_selection" height="150"/>
 
-In this tutorial the file to be selected is <a href="https://github.com/jardimViniciusC/BioNetStat/blob/master/data/bnsDataTest.csv" download="bnsDataTest_log2"><img src="https://github.com/jardimViniciusC/BioNetStat/blob/master/data/bnsDataTest.csv" /></a>.
+In this tutorial the file to be selected is <a href="https://raw.githubusercontent.com/jardimViniciusC/BioNetStat/master/data/bnsDataTest.csv" download="bnsDataTest_log2"><img src="https://raw.githubusercontent.com/jardimViniciusC/BioNetStat/master/data/bnsDataTest.csv" /></a>.
 The file will load and the software will identify the colunms classified as "numeric" by R. A previous view of table is showed on the screen. In addition, a 'Factors' section will recognize which columns are rated as 'factor' by R. In this section you can select the factors that will be used to select the states (treatments, conditions) compared, each state will be a network to be compared. The selection of states can be done in 'Choose the conditions to be compared:'
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_factor_selection.png" alt="Image of BioNetStatFactors" height="150"/>
