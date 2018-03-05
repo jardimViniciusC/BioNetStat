@@ -43,43 +43,46 @@ The tutorial to build your table of variables groups is ![here](https://github.c
 ### Parameters setting
 
 After load input files, you migth set the parameters to network construction:
-1. 
-Com todos os arquivos de entrada já carregados é necessário escolher os parâmetros utilizados para comparar as redes:
 1. Lower and higher numbers of variables (nodes) that will be in the networks compared in 'Variable sets size range'. The program returns the number of sets of variables that are between these values (figure above).
 2. Dependency measure used to infer the correlation network.
 3. Association strength that will be used as the threshold for the formation of an edge between two nodes and which threshold value is used.
 4. Type of network to be built, with or without weight on the edges. In the case of nets with weight, which measure of association will be used as edge weight.
 
-<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net_image.png" alt="Image of BioNetStatNetParameters" height="150"/>
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net_image.png" alt="Image of BioNetStatNetParameters" height="150"/><img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net_image2.png" alt="Image of BioNetStatNetParameters" height="150"/>
+
 
 5. Networks comparison method. If the spectral or degree distribution were used to compare the networks it is necessary to set the method to set the bandwith ("Silveram" or "Sturges" are aviable).
 6. Number of permutations and if a seed will be used on the resampling method also could be used.
 
-<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net2_image.png" alt="Image of BioNetStatNet2Parameters" height="150"/>
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net2_image.png" alt="Image of BioNetStatNet2Parameters" height="150"/><img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net2_image2.png" alt="Image of BioNetStatNet2Parameters" height="150"/>
 
-### Rodando a análise diferencial de múltiplas redes
-Após carregar os arquivos e selecionar os parâmetros de análise, clique em 'Start analysis' para realizar a comparação das redes.
 
-![Image of BioNetStatrunning](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_runningMethod_image.png)
+### Runnig the differential network analysis
+After loading the files and selecting the analysis parameters, click on 'Start analysis' to compare the networks.
 
-### Resultados
-1. Enquanto a análise é realizada, o programa mostrará essa imagem:
-![Image of BioNetStatwaiting](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_execution_image.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_runningMethod_image.png" alt="Image of BioNetStatrunning" height="150"/>
 
-2. Quando a análise tiver terminado o programa mostrará os parâmetros usados para realizar a análise.
-![Image of BioNetStatres1](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_results1_image.png)
+### Results
+1. While the analysis is performed, this warning is shown:
 
-3. A tabela final é apresentada como na figura a seguir:
-![Image of BioNetStatres2](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_results2_image.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_execution_image.png" alt="Image of BioNetStatwaiting" height="150"/>
 
-#### Análise diferencial de vértices
-4. É possível também realizar a comparação da importância do vértices. Na aba 'Further analysis' é possível selecionar os grupos de variáveis de acordo com seu critério de corte. O grupo de variáveis é escolhido e o programa irá gerar a comparação de vértices pela centralidade de grau.
+2. When the analysis is finished the program will show the parameters used to perform the analysis.
 
-![Image of BioNetStatresVert1](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert1_image.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_results1_image.png" alt="Image of BioNetStatres1" height="150"/>
 
-5. Quando a tabela aparece, é possível selecionar outras propriedades estruturais para comparar os vértices do grafos. A tabela resultante da análise diferencial de vértices é mostrada como na figura a seguir.
+3. The final table is shown as in the following figure:
 
-![Image of BioNetStatresVert2](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert2_image.png)
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_results2_image.png" alt="Image of BioNetStatres2" height="150"/>
+
+#### Node differential analysis
+4. It is also possible to compare the importance of nodes. In the 'Further analysis' tab you migth select the groups of variables according to a threshold criteria. The group of variables is chosen and the program will generate the nodes comparison by degree centrality.
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert1_image.png" alt="Image of BioNetStatresVert1" height="150"/>
+
+5. When the table appear, it is possible to select other structural properties to compare the nodes importance. The diferential node analysis table is shown as in the following figure:
+
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert2_image.png" alt="Image of BioNetStatresVert2" height="150"/>
 
 6. Outra funcionalidade disponível é observar as variáveis em vias metabólicas do banco de dados [KEGG](http://www.kegg.jp/), o que nos permitire conhecer mais a fundo as vias metabólicas que as variáveis estudadas estão inseridas. A aba "KEGG pathway visualization", em "" 
 ![Image of BioNetStatresVert2](https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert3_image.png)
