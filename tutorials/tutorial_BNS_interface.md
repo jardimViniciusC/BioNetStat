@@ -5,7 +5,7 @@ output:
 ---
 # BioNetStat user interface tutorial
 
-Being R and BioNetStat installed, as showed in [README](/README.md), you have just open R and run the following commands.
+Being R and BioNetStat installed, as showed in [README](https://github.com/jardimViniciusC/BioNetStat/blob/master/README.md), you have just open R and run the following commands.
 ```Rscript
 library(devtools)
 library(shiny)
@@ -27,14 +27,14 @@ By clicking on the 'Browse ..' icon in section 1 (Load data) a window will open 
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_expr_selection.png" alt="data_selection" height="150"/>
 
-In this tutorial the file to be selected is ![bnsDataTest_log2.csv](/data/bnsDataTest_log2.csv).
+In this tutorial the file to be selected is ![bnsDataTest_log2.csv](https://github.com/jardimViniciusC/BioNetStat/blob/master/data/bnsDataTest.csv).
 The file will load and the software will identify the colunms classified as "numeric" by R. A previous view of table is showed on the screen. In addition, a 'Factors' section will recognize which columns are rated as 'factor' by R. In this section you can select the factors that will be used to select the states (treatments, conditions) compared, each state will be a network to be compared. The selection of states can be done in 'Choose the conditions to be compared:'
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_factor_selection.png" alt="Image of BioNetStatFactors" height="150"/>
 
 The tutorial to build your table of variables values is ![here](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/help/helpData.html).
 
-After selecting the variable values table, it is possible to load the file 'variable group' (optional) into 'Variable set database'. In our tutorial the selected file is ![c2.cp.v5.2.symbols.gmt](/data/c2.cp.v5.2.symbols.gmt) that sets the groups of variables according to the metabolic pathways which they are associated. If the user does not load any files, the program will compare the networks with all variables loaded in the file 'Variables values data'
+After selecting the variable values table, it is possible to load the file 'variable group' (optional) into 'Variable set database'. In our tutorial the selected file is ![c2.cp.v5.2.symbols.gmt](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/extdata/c2.cp.v5.2.symbols.gmt) that sets the groups of variables according to the metabolic pathways which they are associated. If the user does not load any files, the program will compare the networks with all variables loaded in the file 'Variables values data'
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_set_selection.png" alt="Image of BioNetStatFiles" height="150"/><img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bns_set_selection2.png" alt="Image of BioNetStatFiles" height="150"/>
 
