@@ -2,6 +2,7 @@
 #' Run BNS
 #'
 #' Run BNS on the browser user interface.
+#' @return open BioNetStat user interface
 #' @export
 runBioNetStat <- function(){
   shiny::runApp(system.file('shiny', package='BioNetStat'))
@@ -14,6 +15,10 @@ runBioNetStat <- function(){
 #' @param dec the character used in the file for decimal points.
 #' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is white space, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses tabulation for .txt files or ";" for .csv files.
 #' @param check.names a logical value. If TRUE, the names of the data table kept as they are. Otherwise, the blank space, "-","/" and ",", are replaced by dots.
+#' @return a dataframe containing only the numeric columns of selected file. Each column is considered as a variable and each row as a sample.
+#' @examples test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
+#' write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
+#' a<-readVarFile("~/tf.csv")
 #' @export
 #'
 readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#readSampleTable
@@ -56,6 +61,10 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#r
 #' @param classes a vector of strings indicating which labels of choosed column will be compared, the minimum are two labels. The NULL (default) indicates that all classes will be compared.
 #' @param dec the character used in the file for decimal points.
 #' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is white space, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses tabulation for .txt files or ";" for .csv files.
+#' @return a vector that identify each row of the readVarFile object as a sample belonging to a state (network). 
+#' @examples test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
+#' write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
+#' a<-doLabels("~/tf.csv")
 #' @export
 doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
   options(stringsAsFactors = TRUE)
@@ -122,6 +131,14 @@ readGmtFile <- function(fileName) {
 #' @param seed the seed for the random number generators. If it is not null then the sample permutations are the same for all the gene sets.
 #' @param min.vert lower number of nodes (variables) that has to be to compare the networks.
 #' @return a data frame containing the name, size, test statistic, nominal p-value and adjusted p-value (q-value) associated with each gene set.
+#' @examples set.seed(1)
+#' varFile <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
+#'  thr.value=0.05, weighted=FALSE)
+#' diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=10, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 #'
  diffNetAnalysis <- function(method, options, varFile, labels, varSets=NULL,
@@ -143,7 +160,7 @@ readGmtFile <- function(fileName) {
   if(any(labels=="-1"))colnames(results) <- c("N of Networks","Set size", "Test statistic", "Nominal p-value", "Q-value",paste("Factor",unique(labels[-which(labels=="-1")])))
   else colnames(results) <- c("N of Networks","Set size", "Test statistic", "Nominal p-value", "Q-value",paste("Factor",unique(labels)))
   #temp <- tempfile("CoGA_results", fileext=".txt")
-  for (i in 1:length(varSets)) {
+  for (i in seq_len(length(varSets))) {
     setName <- varSets[[i]][1]
     if (print)
       cat(paste("Testing ", setName, " (", i, " of ", length(varSets),

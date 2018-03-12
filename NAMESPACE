@@ -43,3 +43,5 @@ importFrom("stats", "aggregate", "bw.nrd0", "cor", "density", "dist",
 importFrom("utils", "read.csv", "read.table")
 importFrom("Hmisc","rcorr")
 importFrom("psych","corr.test")
+importFrom(BiocParallel, bplapply)
+

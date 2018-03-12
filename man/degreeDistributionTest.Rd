@@ -8,7 +8,7 @@ degreeDistributionTest(expr, labels, adjacencyMatrix, numPermutations = 1000,
   options = list(bandwidth = "Sturges"))
 }
 \arguments{
-\item{expr}{Matrix of genes (rows) vs microarrays (columns)}
+\item{expr}{Matrix of variables (columns) vs samples (rows)}
 
 \item{labels}{a vector in which a position indicates the phenotype of the corresponding sample or state}
 
@@ -19,6 +19,20 @@ degreeDistributionTest(expr, labels, adjacencyMatrix, numPermutations = 1000,
 \item{options}{a list containing parameters. It can be set to either
 \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.}
 }
+\value{
+A list containing:
+"measure" - difference among the degree distribution of two or more networks associated with each phenotype
+"p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
+"Partial" - a vector with the weigths of each network in a measure value
+}
 \description{
 Degree distribution test
+}
+\examples{
+set.seed(1)
+expr <- as.data.frame(matrix(rnorm(120),40,30))
+labels<-rep(0:3,10)
+adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+ threshold="fdr", thr.value=0.05, weighted=FALSE)
+degreeDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 }

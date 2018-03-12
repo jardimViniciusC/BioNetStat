@@ -6,7 +6,7 @@
 \usage{
 adjacencyMatrix(method, association = c("corr", "pvalue", "fdr"),
   threshold = c("fdr", "pvalue", "corr", NULL), thr.value = 0.05,
-  weighted = T, abs.values = T)
+  weighted = TRUE, abs.values = TRUE)
 }
 \arguments{
 \item{method}{a function that measures the association between the variables values.}
@@ -28,4 +28,11 @@ a function that creates an adjacency matrix from variable values data.
 }
 \description{
 creates a function that infers a graph from variables values matrix
+}
+\examples{
+set.seed(3)
+expr <- as.data.frame(matrix(rnorm(120),40,30))
+labels<-rep(0:3,10)
+functionAdjacencyMatrix <- adjacencyMatrix(method="spearman", association="pvalue",
+ threshold="fdr", thr.value=0.05, weighted=FALSE)
 }

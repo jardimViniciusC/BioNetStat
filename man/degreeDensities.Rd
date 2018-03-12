@@ -28,6 +28,16 @@ a vector 'y' of the estimated density values.
 'degreeDensities' estimates the density functions of the degrees for two
 graphs at the same coordinates
 }
+\examples{
+G1<-erdos.renyi.game(30,0.6)
+G2<-barabasi.game(30,power = 1)
+d<-degreeDensities(G1, G2, npoints=1024, options=list(bandwidth="Sturges"))
+par(mfrow=c(1,2))
+plot(d$f1$x,d$f1$y,main="Erdos-Renyi\\n Degree distribution",
+xlab="Degree",ylab="Frequency")
+plot(d$f2$x,d$f2$y,main="Barabasi\\n Degree distribution",
+xlab="Degree",ylab="Frequency")
+}
 \seealso{
 \code{graph.strength}
 

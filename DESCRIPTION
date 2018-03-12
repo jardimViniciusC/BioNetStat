@@ -4,11 +4,12 @@ Title: Biological Network Analysis
 Version: 0.99.0
 Date: 2018-02-28
 Author: Vinicius Jardim Carvalho and Suzana de Siqueira Santos
-Maintainer: Vinicius Jardim <viniciusjcarvalho@hotmail.com>
+Maintainer: Vinicius Jardim <viniciusjc@gmail.com>
 Description: A package to perform differential network analysis, differential node analysis (differential coexpression analysis), network and metabolic pathways view.
 License: GPL (>= 3)
-Depends: R (>= 3.4), shiny (>= 0.8.0), igraph, shinyBS,RColorBrewer
-Imports: Hmisc, psych, RJSONIO, whisker, yaml, pheatmap, ggplot2, pathview, plyr, utils, stats
+Depends: R (>= 3.4), shiny (>= 0.8.0), igraph, shinyBS, pathview
+Imports: BiocParallel, RJSONIO, whisker, yaml, pheatmap, ggplot2, plyr, utils, stats, RColorBrewer, Hmisc, psych
+biocViews: Network, NetworkInference, Pathways, GraphAndNetwork
 RoxygenNote: 6.0.1.9000
 URL: http://github.com/jardimViniciusC/BioNetStat
 BugReports: http://github.com/jardimViniciusC/BioNetStat/issues

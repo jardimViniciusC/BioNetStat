@@ -394,45 +394,45 @@ shinyUI(fluidPage(theme = "bootstrap.css",
         value = "Further analyses"
 
 
-      ),
+      )#,
       # Help tab
-      tabPanel(
-        h5("Help"),
-        bsCollapse(
-          multiple=TRUE,
-          id="help",
-          bsCollapsePanel(
-            "1. Loading the dataset",
-            includeHTML("help/helpData.html"),
-            id="helpData"
-          ),
-          bsCollapsePanel(
-            "2. Setting parameters and running the analysis",
-            includeHTML("help/helpParameters.html"),
-            id="helpParameters"
-          ),
-          bsCollapsePanel(
-            "3. Interpreting the results",
-            includeHTML("help/helpResults.html"),
-            id="helpResults"
-          ),
-          bsCollapsePanel(
-            "4. Further Analyses",
-            includeHTML("help/helpFurtherAnalyses.html"),
-            id="helpFurtherAnalyses"
-          ),
-          bsCollapsePanel(
-            "5. Running BNS from the command-line interface",
-            includeHTML("help/helpCommandLine.html"),
-            id="helpCommandLine"
-          ),
-          bsCollapsePanel(
-            "6. References",
-            includeHTML("help/helpReferences.html"),
-            id="helpReferences"
-          )
-        ),
-        value = "Help"
-      )
+      # tabPanel(
+      #   h5("Help"),
+      #   bsCollapse(
+      #     multiple=TRUE,
+      #     id="help",
+      #     bsCollapsePanel(
+      #       "1. Loading the dataset",
+      #       includeHTML("help/helpData.html"),
+      #       id="helpData"
+      #     ),
+      #     bsCollapsePanel(
+      #       "2. Setting parameters and running the analysis",
+      #       includeHTML("help/helpParameters.html"),
+      #       id="helpParameters"
+      #     ),
+      #     bsCollapsePanel(
+      #       "3. Interpreting the results",
+      #       includeHTML("help/helpResults.html"),
+      #       id="helpResults"
+      #     ),
+      #     bsCollapsePanel(
+      #       "4. Further Analyses",
+      #       includeHTML("help/helpFurtherAnalyses.html"),
+      #       id="helpFurtherAnalyses"
+      #     ),
+      #     bsCollapsePanel(
+      #       "5. Running BNS from the command-line interface",
+      #       includeHTML("help/helpCommandLine.html"),
+      #       id="helpCommandLine"
+      #     ),
+      #     bsCollapsePanel(
+      #       "6. References",
+      #       includeHTML("help/helpReferences.html"),
+      #       id="helpReferences"
+      #     )
+      #   ),
+      #   value = "Help"
+      # )
       ))
 ))

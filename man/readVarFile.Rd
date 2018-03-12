@@ -5,7 +5,7 @@
 \title{Read variable values matrix}
 \usage{
 readVarFile(fileName, path = NULL, dec = ".", sep = NULL,
-  check.names = T)
+  check.names = TRUE)
 }
 \arguments{
 \item{fileName}{the name of the file which the data are to be read from. Each row of the table appears as one line of the file. If it does not contain an absolute path, the file name is relative to the current working directory, getwd().}
@@ -18,6 +18,14 @@ readVarFile(fileName, path = NULL, dec = ".", sep = NULL,
 
 \item{check.names}{a logical value. If TRUE, the names of the data table kept as they are. Otherwise, the blank space, "-","/" and ",", are replaced by dots.}
 }
+\value{
+a dataframe containing only the numeric columns of selected file. Each column is considered as a variable and each row as a sample.
+}
 \description{
 Read variable values matrix
+}
+\examples{
+test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
+write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
+a<-readVarFile("~/tf.csv")
 }
