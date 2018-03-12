@@ -5,17 +5,34 @@
 \title{Closeness centrality test for vectors}
 \usage{
 closenessCentralityVertexTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000)
+  numPermutations = 1000, options = NULL)
 }
 \arguments{
-\item{expr}{Matrix of genes (rows) vs microarrays (columns)}
+\item{expr}{Matrix of variables (columns) vs samples (rows)}
 
 \item{labels}{a vector in which a position indicates the phenotype of the corresponding sample or state}
 
 \item{adjacencyMatrix}{a function that returns the adjacency matrix for a given variables values matrix}
 
 \item{numPermutations}{number of permutations that will be carried out in the permutation test}
+
+\item{options}{argument non used in this function}
+}
+\value{
+A table, containing on the columns, the following informations for each variable (rows):
+"Test Statistic" - difference among the closeness centrality of a node in two or more networks associated with each phenotype
+"Nominal p-value" - the Nominal p-value of the test
+"Q-value" - the q-value of the test, correction of p-value by FDR to many tests
+"Factor n" - the node closeness centrality in each network compared
 }
 \description{
 Closeness centrality test for vectors
+}
+\examples{
+set.seed(1)
+expr <- as.data.frame(matrix(rnorm(120),40,30))
+labels<-rep(0:3,10)
+adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+ threshold="fdr", thr.value=0.05, weighted=FALSE)
+closenessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 }
