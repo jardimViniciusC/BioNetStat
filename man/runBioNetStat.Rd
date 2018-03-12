@@ -6,6 +6,9 @@
 \usage{
 runBioNetStat()
 }
+\value{
+open BioNetStat user interface
+}
 \description{
 Run BNS on the browser user interface.
 }

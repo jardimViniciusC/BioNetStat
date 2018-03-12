@@ -29,6 +29,20 @@ a vector 'y' of the estimated density values.
 'degreeDensities' estimates the density functions of the degrees for n
 graphs at the same coordinates
 }
+\examples{
+G<-list()                                   
+G[[1]]<-erdos.renyi.game(30,0.6)
+G[[2]]<-barabasi.game(30,power = 1)
+G[[3]]<-watts.strogatz.game(2,30,2,0.3)
+d<-nDegreeDensities(G, npoints=1024, bandwidth="Sturges")
+par(mfrow=c(1,3))
+plot(d$x,d$densities[,1],main="Erdos-Renyi\\n Degree distribution",
+xlab="Degree",ylab="Frequency")
+plot(d$x,d$densities[,2],main="Barabasi\\n Degree distribution",
+xlab="Degree",ylab="Frequency")
+plot(d$x,d$densities[,3],main="Watts-Strogatz\\n Degree distribution",
+xlab="Degree",ylab="Frequency")
+}
 \seealso{
 \code{graph.strength}
 
