@@ -18,6 +18,14 @@ doLabels(fileName, factorName = NULL, classes = NULL, dec = ".",
 
 \item{sep}{the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is white space, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses tabulation for .txt files or ";" for .csv files.}
 }
+\value{
+a vector that identify each row of the readVarFile object as a sample belonging to a state (network).
+}
 \description{
 Class vector of data table
+}
+\examples{
+test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
+write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
+a<-doLabels("~/tf.csv")
 }

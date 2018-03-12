@@ -9,6 +9,11 @@
 #' association degrees between the variables. Otherwise, the edges are are weighted by one.
 #' @param abs.values a logical value. If TRUE, then the negatives edges of the graph are changed by its absolutes values. Otherwise, the negative edges are kept with negative weights.
 #' @return a function that creates an adjacency matrix from variable values data.
+#' @examples set.seed(3)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' functionAdjacencyMatrix <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
 #' @importFrom Hmisc rcorr
 #' @importFrom psych corr.test
 #' @export

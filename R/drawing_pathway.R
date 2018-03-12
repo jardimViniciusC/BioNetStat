@@ -6,11 +6,11 @@
 selecting.list <- function(var.diff.list,threshold,thr.value){
   if(dim(var.diff.list)[1]==0) stop("The differential table have 0 rows")
   if(is.null(threshold)) tab<-var.diff.list[,c(1,5:(dim(var.diff.list)[2]))]
-    else{
-      if(threshold=="pvalue")tab<-var.diff.list[as.numeric(var.diff.list[,3])<=thr.value,c(1,5:(dim(var.diff.list)[2]))]
-      if(threshold=="qvalue")tab<-var.diff.list[as.numeric(var.diff.list[,4])<=thr.value,c(1,5:(dim(var.diff.list)[2]))]
-      if(dim(tab)[1]==0) stop("Threshold is too low, the differential table remains with 0 rows")
-    }
+  else{
+    if(threshold=="pvalue")tab<-var.diff.list[as.numeric(var.diff.list[,3])<=thr.value,c(1,5:(dim(var.diff.list)[2]))]
+    if(threshold=="qvalue")tab<-var.diff.list[as.numeric(var.diff.list[,4])<=thr.value,c(1,5:(dim(var.diff.list)[2]))]
+    if(dim(tab)[1]==0) stop("Threshold is too low, the differential table remains with 0 rows")
+  }
   rownames(tab)<-tab[,1]
   return(tab[,-1])
 }
@@ -28,12 +28,12 @@ var.list<-function(expr,labels,FUN){
 ####################################################################
 plot.names<-function(var.diff.list,threshold,thr.value){
   if(dim(var.diff.list)[1]==0) stop("The differential table have 0 rows")
-    if(is.null(threshold)) names<-var.diff.list[,1]
-    else{
-      if(threshold=="pvalue")names<-var.diff.list[as.numeric(var.diff.list[,3])<=thr.value,1]
-      if(threshold=="qvalue")names<-var.diff.list[as.numeric(var.diff.list[,4])<=thr.value,1]
-      if(length(names)==0) stop("Threshold is too restrict, the differential table remains with 0 rows")
-    }
+  if(is.null(threshold)) names<-var.diff.list[,1]
+  else{
+    if(threshold=="pvalue")names<-var.diff.list[as.numeric(var.diff.list[,3])<=thr.value,1]
+    if(threshold=="qvalue")names<-var.diff.list[as.numeric(var.diff.list[,4])<=thr.value,1]
+    if(length(names)==0) stop("Threshold is too restrict, the differential table remains with 0 rows")
+  }
   return(names)
 }
 
@@ -77,9 +77,23 @@ plot.names<-function(var.diff.list,threshold,thr.value){
 #' columns of the mapped gene/compound data and corresponding pseudo-color codes for individual vertex measures
 #' The results returned by keggview.native and codekeggview.graph are both a list of graph plotting parameters. These are not intended to be used externally.
 #' @references This function is an adaptation of Luo, W. and Brouwer, C., Pathview: an R/Bioconductor package for pathway based data integration and visualization. Bioinformatics, 2013, 29(14): 1830-1831, doi: 10.1093/bioinformatics/btt285
+#' @examples set.seed(5)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels <- rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
+#'  thr.value=0.05, weighted=FALSE)
+#' vertexCentrality <- degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' vertexCentrality2<-cbind(c(4790, 4791, 4792, 4793, 84807, 4794, 4795, 64332, 595, 898, 23552,
+#'  1017, 8099, 10263, 4609, 23077, 26292, 84073, 4610, 4613, 10408,  80177, 114897, 114898, 114899,
+#'   114900, 114904, 114905, 390664, 338872),vertexCentrality)
+#' centralityPathPlot(gene.data=vertexCentrality2, cpd.data=NULL, threshold="pvalue", thr.value=1,
+#'  species="hsa" , pathway.id="05200", kegg.native=TRUE, file.name="path_example",
+#' limit = list(gene = NULL, cdp = NULL), bins = list(gene = 15,cpd = 15), 
+#' both.dirs= list(gene = FALSE,cpd = FALSE), mid =list(gene = "white", cpd = "white"),
+#' high = list(gene = "red",cpd = "red"))
 #' @export
 centralityPathPlot<- function(gene.data=NULL, cpd.data=NULL, threshold=NULL, thr.value=0.05, species , pathway.id, kegg.native=TRUE, file.name="path",
-                              limit = list(gene = max.gene, cdp = max.cpd), bins = list(gene = 15,cpd = 15), both.dirs= list(gene = FALSE,cpd = FALSE),
+                              limit = list(gene = NULL, cdp = NULL), bins = list(gene = 15,cpd = 15), both.dirs= list(gene = FALSE,cpd = FALSE),
                               mid =list(gene = "white", cpd = "white"),high = list(gene = "red",cpd = "red")){
 
   if(!is.null(gene.data)) {
@@ -99,7 +113,7 @@ centralityPathPlot<- function(gene.data=NULL, cpd.data=NULL, threshold=NULL, thr
       max.cpd<-1
     }
   if(is.null(cpd.data) & is.null(gene.data)) stop("You have to insert data in gene.data or cpd.data")
-  if(is.null(limit)) limit = list(gene = max.gene, cdp = max.cpd)
+  if(is.null(limit$gene) | is.null(limit$cpd)) limit = list(gene = max.gene, cdp = max.cpd)
   pv.out <- pathview(gene.data=tab.gene,cpd.data = tab.cpd, pathway.id = pathway.id,
                      species = species, out.suffix = file.name, kegg.native = kegg.native,
                      limit = limit, bins = bins, both.dirs= both.dirs, mid =mid,high = high)
@@ -109,7 +123,7 @@ centralityPathPlot<- function(gene.data=NULL, cpd.data=NULL, threshold=NULL, thr
 ####################################################################
 #' Variable values view in metabolic pathways
 #' @description Variable values view in KEGG metabolic pathways
-#' @param gene.data either vector (single sample) or a matrix-like data (multiple sample). Vector should be numeric with gene IDs as names or it may also be character of gene IDs. Character vector is treated as discrete or count data. Matrix-like data structure has genes as rows and samples as columns. Row names should be gene IDs. Here gene ID is a generic concepts, including multiple types of gene, transcript and protein uniquely mappable to KEGG gene IDs. KEGG ortholog IDs are also treated as gene IDs as to handle metagenomic data. Check details for mappable ID types. Default gene.data=NULL.
+#' @param gene.data either vector (single sample) or a matrix-like data (multiple sample). Vector should be numeric with gene IDs as names or it may also be character of gene IDs. Character vector is treated as discrete or count data. Matrix-like data structure has genes as rows and samples as columns. Row names should be gene IDs. Here, gene ID is a generic concepts, including multiple types of gene, transcript and protein uniquely mappable to KEGG gene IDs. KEGG ortholog IDs are also treated as gene IDs as to handle metagenomic data. Check details for mappable ID types. Default gene.data=NULL.
 #' numeric, character, continuous
 #' @param cpd.data the same as gene.data, excpet named with IDs mappable to KEGG compound IDs. Over 20 types of IDs included in CHEMBL database can be used here. Check details for mappable ID types. Default cpd.data=NULL. Note that gene.data and cpd.data can't be NULL simultaneously.
 #' @param labels a vector of -1s, 0s, and 1s associating each sample with a phenotype. The value 0 corresponds to the first phenotype class of interest, 1 to the second phenotype class of interest, and -1 to the other classes, if there are more than two classes in the gene expression data.
@@ -143,9 +157,23 @@ centralityPathPlot<- function(gene.data=NULL, cpd.data=NULL, threshold=NULL, thr
 #' columns of the mapped gene/compound data and corresponding pseudo-color codes for individual samples
 #' The results returned by keggview.native and codekeggview.graph are both a list of graph plotting parameters. These are not intended to be used externally.
 #' @references Luo, W. and Brouwer, C., Pathview: an R/Bioconductor package for pathway based data integration and visualization. Bioinformatics, 2013, 29(14): 1830-1831, doi: 10.1093/bioinformatics/btt285
+#' @examples set.seed(5)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' names(expr)<-c(4790, 4791, 4792, 4793, 84807, 4794, 4795, 64332, 595, 898, 23552, 1017, 8099,
+#'  10263, 4609, 23077, 26292, 84073, 4610, 4613, 10408,  80177, 114897, 114898, 114899, 114900,
+#'   114904, 114905, 390664, 338872)
+#' labels <- rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
+#'  thr.value=0.05, weighted=FALSE)
+#' vertexCentrality <- degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' vertexCentrality2<-cbind(c(4790, 4791, 4792, 4793, 84807, 4794, 4795, 64332, 595, 898, 23552,
+#'  1017, 8099, 10263, 4609, 23077, 26292, 84073, 4610, 4613, 10408,  80177, 114897, 114898, 114899,
+#'   114900, 114904, 114905, 390664, 338872),vertexCentrality)
+#' pathPlot(gene.data=t(expr), cpd.data=NULL, labels=labels, varr.diff.list=vertexCentrality2,
+#'  threshold=NULL, thr.value=1, FUN=median,species="hsa" , pathway.id="05200", kegg.native=TRUE,
+#'   file.name="path")
 #' @export
 pathPlot<- function(gene.data=NULL, cpd.data=NULL, labels, varr.diff.list=NULL, threshold=NULL, thr.value=0.05, FUN=median,species , pathway.id, kegg.native=TRUE, file.name="path"){
-
     if(!is.null(gene.data)) {
       tab.gene<-var.list(gene.data,labels=labels,FUN=FUN)
       names.gene<-plot.names(varr.diff.list,threshold=threshold,thr.value=thr.value)

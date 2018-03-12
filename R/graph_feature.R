@@ -35,6 +35,14 @@ invWeigthts<-function(A){
 #' a list, where the first element is the vector 'x' of 'npoints' coordinates
 #' of the points where the density function is estimated, and the second is
 #' a vector 'y' of the estimated density values.
+#' @examples G1<-erdos.renyi.game(30,0.6)
+#' G2<-barabasi.game(30,power = 1)
+#' d<-degreeDensities(G1, G2, npoints=1024, options=list(bandwidth="Sturges"))
+#' par(mfrow=c(1,2))
+#' plot(d$f1$x,d$f1$y,main="Erdos-Renyi\n Degree distribution",
+#' xlab="Degree",ylab="Frequency")
+#' plot(d$f2$x,d$f2$y,main="Barabasi\n Degree distribution",
+#' xlab="Degree",ylab="Frequency")
 #' @seealso \code{graph.strength}
 #' @seealso \code{density}
 #' @import igraph
@@ -67,15 +75,24 @@ degreeDensities <- function(G1, G2, npoints=1024, options=list(bandwidth="Sturge
 #' a list, where the first element is the vector 'x' of 'npoints' coordinates
 #' of the points where the density function is estimated, and the second is
 #' a vector 'y' of the estimated density values.
+#' @examples G<-list()                                   
+#' G[[1]]<-erdos.renyi.game(30,0.6)
+#' G[[2]]<-barabasi.game(30,power = 1)
+#' G[[3]]<-watts.strogatz.game(2,30,2,0.3)
+#' d<-nDegreeDensities(G, npoints=1024, bandwidth="Sturges")
+#' par(mfrow=c(1,3))
+#' plot(d$x,d$densities[,1],main="Erdos-Renyi\n Degree distribution",
+#' xlab="Degree",ylab="Frequency")
+#' plot(d$x,d$densities[,2],main="Barabasi\n Degree distribution",
+#' xlab="Degree",ylab="Frequency")
+#' plot(d$x,d$densities[,3],main="Watts-Strogatz\n Degree distribution",
+#' xlab="Degree",ylab="Frequency")
 #' @seealso \code{graph.strength}
 #' @seealso \code{density}
 #' @import igraph
 #' @export
 nDegreeDensities <- function(Gs, npoints=1024, bandwidth="Sturges",from=NULL,to=NULL) {
-  e<-list()
-  for(i in 1:length(Gs)){
-    e[[i]] <- graph.strength(Gs[[i]])
-  }
+  e<-lapply(Gs,graph.strength)
   densities <- matrix(NA, npoints, length(Gs))
   if(is.null(from) || is.null(to)){
     from <- min(unlist(e))
@@ -225,10 +242,16 @@ absDiffSpectralEntropy <- function(A1, A2, bandwidth="Sturges") {
 # ------------------------------------------------------------------------------
 
 #' Degree centrality
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @return a list of vector containing the degree centrality of node of each network
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' degreeCentrality(expr, labels, adjacencyMatrix1)
 #' @export
 degreeCentrality <- function(expr, labels, adjacencyMatrix) {
   A<-list()
@@ -245,10 +268,16 @@ degreeCentrality <- function(expr, labels, adjacencyMatrix) {
 }
 
 #' Betweenness centrality
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @return a list of vector containing the betweenness centrality of node of each network
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' betweennessCentrality(expr, labels, adjacencyMatrix1)
 #' @export
 betweennessCentrality <- function(expr, labels, adjacencyMatrix) {
   A<-list()
@@ -266,10 +295,16 @@ betweennessCentrality <- function(expr, labels, adjacencyMatrix) {
 }
 
 #' Closeness centrality
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @return a list of vector containing the closeness centrality of node of each network
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' closenessCentrality(expr, labels, adjacencyMatrix1)
 #' @export
 closenessCentrality <- function(expr, labels, adjacencyMatrix) {
   A<-list()
@@ -287,10 +322,16 @@ closenessCentrality <- function(expr, labels, adjacencyMatrix) {
 }
 
 #' Eigenvector centrality
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @return a list of vector containing the eigenvector centrality of node of each network
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' eigenvectorCentrality(expr, labels, adjacencyMatrix1)
 #' @export
 eigenvectorCentrality <- function(expr, labels, adjacencyMatrix) {
   A<-list()
@@ -307,10 +348,16 @@ eigenvectorCentrality <- function(expr, labels, adjacencyMatrix) {
 }
 
 #' Clustering coefficient
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @return a list of vector containing the clustering coefficient of node of each network
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' clusteringCoefficient(expr, labels, adjacencyMatrix1)
 #' @export
 clusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
   A<-list()
@@ -321,8 +368,7 @@ clusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
   }
   weighted <- NULL
   if(any(v)) weighted <- TRUE
-  if (weighted)
-    result <- lapply(A, clusterCoef)
+  if (!is.null(weighted)) result <- lapply(A, clusterCoef)
   else {
     G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
     result <- lapply(G, transitivity, type="local", isolates="zero")
@@ -335,10 +381,16 @@ clusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
 # ------------------------------------------------------------------------------
 
 #' Average degree centrality
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @return a list of values containing the average degree centrality of each network.
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' averageDegreeCentrality(expr, labels, adjacencyMatrix1)
 #' @export
 averageDegreeCentrality <- function(expr, labels, adjacencyMatrix) {
   result <- degreeCentrality(expr, labels, adjacencyMatrix)
@@ -346,10 +398,16 @@ averageDegreeCentrality <- function(expr, labels, adjacencyMatrix) {
 }
 
 #' Average betweenness centrality
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @return a list of values containing the average betweenness centrality of each network.
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' averageBetweennessCentrality(expr, labels, adjacencyMatrix1)
 #' @export
 averageBetweennessCentrality <- function(expr, labels, adjacencyMatrix) {
   result <- betweennessCentrality(expr, labels, adjacencyMatrix)
@@ -357,10 +415,16 @@ averageBetweennessCentrality <- function(expr, labels, adjacencyMatrix) {
 }
 
 #' Average closeness centrality
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @return a list of values containing the average closeness centrality of each network.
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' averageClosenessCentrality(expr, labels, adjacencyMatrix1)
 #' @export
 averageClosenessCentrality <- function(expr, labels, adjacencyMatrix) {
   result <- closenessCentrality(expr, labels, adjacencyMatrix)
@@ -368,10 +432,16 @@ averageClosenessCentrality <- function(expr, labels, adjacencyMatrix) {
 }
 
 #' Average eigenvector centrality
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @return a list of values containing the average eigenvector centrality of each network.
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' averageEigenvectorCentrality(expr, labels, adjacencyMatrix1)
 #' @export
 averageEigenvectorCentrality <- function(expr, labels, adjacencyMatrix) {
   result <- eigenvectorCentrality(expr, labels, adjacencyMatrix)
@@ -379,10 +449,16 @@ averageEigenvectorCentrality <- function(expr, labels, adjacencyMatrix) {
 }
 
 #' Average clustering coefficient
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @return a list of values containing the average clustering coefficient of each network.
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' averageClusteringCoefficient(expr, labels, adjacencyMatrix1)
 #' @export
 averageClusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
   result <- clusteringCoefficient(expr, labels, adjacencyMatrix)
@@ -390,10 +466,16 @@ averageClusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
 }
 
 #' Average shortest path
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @return a list of values containing the average shortest path of each network.
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' averageShortestPath(expr, labels, adjacencyMatrix1)
 #' @export
 averageShortestPath <- function(expr, labels, adjacencyMatrix) {
   A<-list()
@@ -423,12 +505,18 @@ spectralEntropy <- function(A, bandwidth="Sturges") {
 }
 
 #' Spectral entropies
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param options a list containing parameters. It can be set to either
 #' \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.
 #' @return a list of values containing the spectral entropy of each network.
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' spectralEntropies(expr, labels, adjacencyMatrix1, options=list(bandwidth="Sturges"))
 #' @export
 spectralEntropies <- function(expr, labels, adjacencyMatrix, options=list(bandwidth="Sturges")) {
   A<-list()
@@ -450,372 +538,291 @@ spectralEntropies <- function(expr, labels, adjacencyMatrix, options=list(bandwi
 # Test of equality between network properties
 # ------------------------------------------------------------------------------
 
+resInt <- function(A,expr,weighted,fun){
+  n <- ncol(expr)# numero de genes
+  G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
+  s<-lapply(G, fun)# guarda o betweenness
+  s<-do.call(rbind,s) # "s" é uma matrix onde serão guardados os vetores dos betweenness e um vetor de média deles
+  s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
+  partial<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n))# calcula a distancia euclidiana entre cada vetor de betweenness e o vetor medio
+  return(c(sum(partial),partial)) # A estatítica é a soma das distancias
+}
+
 #' Degree centrality test
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @return A list containing:
+#' "measure" - difference among the degree centrality of two or more networks associated with each phenotype
+#' "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
+#' "Partial" - a vector with the weigths of each network in a measure value
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' degreeCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 #' @export
-degreeCentralityTest <- function(expr, labels, adjacencyMatrix,
-                                 numPermutations=1000) {
-    A<-list()
-    lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
-    if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-    d=1
-    v<-vector(length=length(lab))
-    for(k in lab) {
-      A[[d]] <- adjacencyMatrix(expr[labels==k,])
-      v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-      d=d+1
-    }
-    weighted <- NULL # Define o weighted como NULL, assim como na função original
-    if(any(v)) weighted <- TRUE
-    n <- ncol(expr)
-    G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-    s<-lapply(G, graph.strength)
-    s<-do.call(rbind,s)
-    s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-    partial<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n))
-    result<-mean(partial)
-    results <- vector(length=numPermutations)
-    for (i in 1:numPermutations) {
-      l <- sample(labels, replace = FALSE)
-      A<-list()
-      d=1
-      for(k in lab) {
-        A[[d]] <- adjacencyMatrix(expr[l==k,])
-        v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-        d=d+1
-      }
-      weighted <- NULL # Define o weighted como NULL, assim como na função original
-      if(any(v)) weighted <- TRUE
-      n <- ncol(expr)
-      G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-      s<-lapply(G, graph.strength)
-      s<-do.call(rbind,s)
-      s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-      res<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n))
-      results[i]<-mean(res)
-    }
-  pvalue <- (1 + sum(results >= result))/(numPermutations + 1)
-  return(list("measure"=result, "p.value"=pvalue,"Partial"=partial))
+degreeCentralityTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL) {
+  lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
+  if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
+  A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
+  weighted <- NULL # Define o weighted como NULL, assim como na função original
+  v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
+  if(any(v)) weighted <- TRUE
+  output<-resInt(A,expr,weighted,graph.strength)
+  results <- vector(length=numPermutations)
+  for (i in seq_len(numPermutations)) {
+    l <- sample(labels, replace = FALSE)
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
+    results[i]<-resInt(A,expr,weighted,graph.strength)[1]
+  }
+  pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
+  return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
 }
 
 #' Betweenness centrality test
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @return A list containing:
+#' "measure" - difference among the betweenness centrality of two or more networks associated with each phenotype
+#' "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
+#' "Partial" - a vector with the weigths of each network in a measure value
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' betweennessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 #' @export
-betweennessCentralityTest <- function(expr, labels, adjacencyMatrix,
-                                      numPermutations=1000) {
+betweennessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutations=1000, options=NULL) {
   # Betweenness centrality test for many graphs
 
-    A<-list() # Lista onde serão colocadas as matrizes de adjacência
     lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
     if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-    d=1 # inicia o contador do indice da matriz dentro de "A"
-    v<-vector(length=length(lab))
-    for(k in lab) { # Looping para criar uma matrix de adjacência para cada rede
-      A[[d]] <- adjacencyMatrix(expr[labels==k,]) # formação da matriz de adjacência
-      v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-      d=d+1
-    }
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
     weighted <- NULL # Define o weighted como NULL, assim como na função original
+    v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
     if(any(v)) weighted <- TRUE
     if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-    n <- ncol(expr) # numero de genes
-
-    G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
-    s<-lapply(G, betweenness)# guarda o betweenness
-    s<-do.call(rbind,s)
-    s<-rbind(s,apply(s,MARGIN=2,FUN=mean)) # "s" é uma matrix onde serão guardados os vetores dos betweenness e um vetor de média deles
-    partial<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n)) # calcula a distancia euclidiana entre cada vetor de betweenness e o vetor medio
-    result<-mean(partial) # A estatítica é a média das distancias
+    output<-resInt(A,expr,weighted,betweenness)
     results <- vector(length=numPermutations) # Vetor onde serão guardados todos os resultados das N permutações
-
-    for (i in 1:numPermutations) {
+    for (i in seq_len(numPermutations)) {
       l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
-      A<-list() # DAQUI EM DIANTE OS PASSOS SÃO REPETIDOS PARA AS MATRZES PERMUTADAS
-      d=1 # inicia o contador do indice da matriz dentro de "A"
-      v<-vector(length=length(lab))
-      for(k in lab) { # Looping para criar uma matrix de adjacência para cada rede
-        A[[d]] <- adjacencyMatrix(expr[l==k,]) # formação da matriz de adjacência
-        v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-        d=d+1
-      }
-      weighted <- NULL # Define o weighted como NULL, assim como na função original
-      if(any(v)) weighted <- TRUE
+      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
       if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-      n <- ncol(expr) # numero de genes
-      G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
-      s<-lapply(G, betweenness)# guarda o betweenness
-      s<-do.call(rbind,s)
-      s<-rbind(s,apply(s,MARGIN=2,FUN=mean)) # "s" é uma matrix onde serão guardados os vetores dos betweenness e um vetor de média deles
-      res<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n)) # calcula a distancia euclidiana entre cada vetor de betweenness e o vetor medio
-      results[i]<-mean(res) # A estatítica é a média das distancias
+      results[i]<-resInt(A,expr,weighted,betweenness)[1]
     }
-
-  pvalue <- (1 + sum(results >= result))/(numPermutations + 1)
-  return(list("measure"=result, "p.value"=pvalue,"Partial"=partial))
+    
+    pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
+    return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
 }
 
 #' Closeness centrality test
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @return A list containing:
+#' "measure" - difference among the closeness centrality of two or more networks associated with each phenotype
+#' "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
+#' "Partial" - a vector with the weigths of each network in a measure value
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' closenessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 #' @export
-closenessCentralityTest <- function(expr, labels, adjacencyMatrix,
-                                    numPermutations=1000) {
+closenessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutations=1000, options=NULL) {
   # Closeness centrality test for many graphs
-    A<-list() # Lista onde serão colocadas as matrizes de adjacência
     lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
     if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-    d=1 # inicia o contador do indice da matriz dentro de "A"
-    v<-vector(length=length(lab))
-    for(k in lab) { # Looping para criar uma matrix de adjacência para cada rede
-      A[[d]] <- adjacencyMatrix(expr[labels==k,]) # formação da matriz de adjacência
-      v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-      d=d+1
-    }
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
     weighted <- NULL # Define o weighted como NULL, assim como na função original
+    v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
     if(any(v)) weighted <- TRUE
     if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-    n <- ncol(expr) # numero de genes
-    G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
-    s<-lapply(G, closeness)# guarda o closeness
-    s<-do.call(rbind,s)
-    s<-rbind(s,apply(s,MARGIN=2,FUN=mean)) # "s" é uma matrix onde serão guardados os vetores dos betweenness e um vetor de média deles
-    partial<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n)) # calcula a distancia euclidiana entre cada vetor de betweenness e o vetor medio
-    result<-mean(partial) # A estatítica é a média das distancias
+    output<-resInt(A,expr,weighted,closeness)
     results <- vector(length=numPermutations) # Vetor onde serão guardados todos os resultados das N permutações
-
-    for (i in 1:numPermutations) {
-
+    for (i in seq_len(numPermutations)) {
       l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
-      A<-list() # DAQUI EM DIANTE OS PASSOS SÃO REPETIDOS PARA AS MATRZES PERMUTADAS
-      d=1 # inicia o contador do indice da matriz dentro de "A"
-      v<-vector(length=length(lab))
-      for(k in lab) { # Looping para criar uma matrix de adjacência para cada rede
-        A[[d]] <- adjacencyMatrix(expr[l==k,]) # formação da matriz de adjacência
-        v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-        d=d+1
-      }
-      weighted <- NULL # Define o weighted como NULL, assim como na função original
-      if(any(v)) weighted <- TRUE
+      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
       if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-      n <- ncol(expr) # numero de genes
-      G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
-      s<-lapply(G, closeness)# guarda o closeness
-      s<-do.call(rbind,s)
-      s<-rbind(s,apply(s,MARGIN=2,FUN=mean)) # "s" é uma matrix onde serão guardados os vetores dos betweenness e um vetor de média deles
-      res<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n)) # calcula a distancia euclidiana entre cada vetor de betweenness e o vetor medio
-      results[i]<-mean(res) # A estatítica é a média das distancias
+      results[i]<-resInt(A,expr,weighted,closeness)[1]
     }
-  pvalue <- (1 + sum(results >= result))/(numPermutations + 1)
-  return(list("measure"=result, "p.value"=pvalue,"Partial"=partial))
+    pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
+    return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
 }
 
 #' Eigenvector centrality test
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @return A list containing:
+#' "measure" - difference among the eigenvector centrality of two or more networks associated with each phenotype
+#' "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
+#' "Partial" - a vector with the weigths of each network in a measure value
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' eigenvectorCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 #' @export
-eigenvectorCentralityTest <- function(expr, labels, adjacencyMatrix,
-                                      numPermutations=1000) {
+eigenvectorCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutations=1000, options=NULL) {
   # Eigenvector centrality test for many graphs
-    A<-list()
-    lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
-    if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-    d=1
-    v<-vector(length=length(lab))
-    for(k in lab) {
-      A[[d]] <- adjacencyMatrix(expr[labels==k,])
-      v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-      d=d+1
-    }
-    weighted <- NULL # Define o weighted como NULL, assim como na função original
-    if(any(v)) weighted <- TRUE
-    # if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-    n <- ncol(expr)
-    G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-    s<-lapply(G, function(x) evcent(x)$vector)
-    s<-do.call(rbind,s)
-    s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-    partial<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n))
-    result<-mean(partial)
+  lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
+  if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
+  A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
+  weighted <- NULL # Define o weighted como NULL, assim como na função original
+  v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
+  if(any(v)) weighted <- TRUE
+  output<-resInt(A,expr,weighted,function(x) evcent(x)$vector)
     results <- vector(length=numPermutations)
-    for (i in 1:numPermutations) {
-      l <- sample(labels, replace = FALSE)
-      A<-list()
-      d=1
-      for(k in lab) {
-        A[[d]] <- adjacencyMatrix(expr[l==k,])
-        d=d+1
-      }
-      G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-      s<-lapply(G, function(x) evcent(x)$vector)
-      s<-do.call(rbind,s)
-      s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-      res<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n))
-      results[i]<-mean(res) # A estatítica é a média das distancias
+    for (i in seq_len(numPermutations)) {
+      l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
+      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
+      results[i]<-resInt(A,expr,weighted,function(x) evcent(x)$vector)[1]
     }
-  pvalue <- (1 + sum(results >= result))/(numPermutations + 1)
-  return(list("measure"=result, "p.value"=pvalue,"Partial"=partial))
+    pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
+    return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
 }
 
 #' Clustering coefficient test
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @return A list containing:
+#' "measure" - difference among the clustering coeficients of two or more networks associated with each phenotype
+#' "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
+#' "Partial" - a vector with the weigths of each network in a measure value
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' clusteringCoefficientTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 #' @export
-clusteringCoefficientTest <- function(expr, labels, adjacencyMatrix,
-                                      numPermutations=1000) {
-    A<-list()
+clusteringCoefficientTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL) {
     lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
     if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-    d=1
-    v<-vector(length=length(lab))
-    for(k in lab) {
-      A[[d]] <- adjacencyMatrix(expr[labels==k,])
-      v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-      d=d+1
-    }
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
     weighted <- NULL # Define o weighted como NULL, assim como na função original
+    v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
     if(any(v)) weighted <- TRUE
-    n <- ncol(expr)
-    if (!is.null(weighted)) s<-lapply(A, clusterCoef)
-    else{
-      G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-      s<-lapply(G, transitivity, type="local", isolates="zero")
-    }
-    s<-do.call(rbind,s)
-    s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-    partial<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n))
-    result<-mean(partial)
-    results <- vector(length=numPermutations)
-    for (i in 1:numPermutations) {
-      l <- sample(labels, replace = FALSE)
-      A<-list()
-      d=1
-      for(k in lab) {
-        A[[d]] <- adjacencyMatrix(expr[l==k,])
-        d=d+1
-      }
-      G<-list()
-      s<-matrix(NA,length(A)+1,n)
-      if (!is.null(weighted)) s<-lapply(A, clusterCoef)
-      else{
-        G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-        s<-lapply(G, transitivity, type="local", isolates="zero")
-      }
+    if (!is.null(weighted)) { 
+      n <- ncol(expr)
+      s<-lapply(A, clusterCoef)
       s<-do.call(rbind,s)
       s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-      res<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n))
-      results[i]<-mean(res)
+      partial<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n))
+      output<-c(sum(partial),partial)
     }
-  pvalue <- (1 + sum(results >= result))/(numPermutations + 1)
-  return(list("measure"=result, "p.value"=pvalue,"Partial"=partial))
+    else{
+      output<-resInt(A,expr,weighted,function(x){transitivity(x,type="local", isolates="zero")})
+    }
+    results <- vector(length=numPermutations)
+    for (i in seq_len(numPermutations)) {
+      l <- sample(labels, replace = FALSE)
+      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
+      if (!is.null(weighted)){ 
+        s<-lapply(A, clusterCoef)
+        s<-do.call(rbind,s)
+        s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
+        res<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n))
+        results[i]<-sum(res)
+      }
+      else results[i]<-resInt(A,expr,weighted,function(x){transitivity(x,type="local", isolates="zero")})
+    }
+    pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
+    return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
 }
 
 #' Shortest path test
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @return A list containing:
+#' "measure" - difference among the shortests paths of two or more networks associated with each phenotype
+#' "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
+#' "Partial" - a vector with the weigths of each network in a measure value
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' shortestPathTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 #' @export
-shortestPathTest <- function(expr, labels, adjacencyMatrix,
-                             numPermutations=1000) {
+shortestPathTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL) {
   # Shortest path test for many graphs
-    A<-list()
-    weighted <- NULL
-    lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
-    if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-    d=1
-    for(k in lab) {
-      A[[d]] <- adjacencyMatrix(expr[labels==k,])
-      if (sum(!(A[[d]] %in% c(1,0))) != 0) {
-        weighted <- TRUE
-        i1 <- which(A[[d]] > 0)
-        A[[d]][i1] <- 1/A[[d]][i1]
-      }
-      d=d+1
-    }
-    G<-list()
-    s<-vector(length=length(A))
-    for(g in 1:length(A)){
-      G[[g]] <- graph.adjacency(A[[g]], mode="undirected", weighted=weighted)
-      if(is.null(weighted)) s[g]<-average.path.length(G[[g]], directed=FALSE)
-      else {
-        dist<-distances(G[[g]])
-        s[g]<-mean(apply(dist, 1, function(x){ min(x[x!=0])}))
-      }
-    }
-    s<-abs(s-mean(s))
-    partial <- s
-    result<-sum(s)
+  lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
+  if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
+  A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
+  weighted <- NULL # Define o weighted como NULL, assim como na função original
+  v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
+  if(any(v)) weighted <- TRUE
+  if (!is.null(weighted)) A<-lapply(A,invWeigthts)
+  if(is.null(weighted)) output<-resInt(A,expr,weighted,function(x){average.path.length(x,directed=FALSE)})
+  else output<-resInt(A,expr,weighted,function(y){apply(distances(y), 1, function(x){ min(x[x!=0])})})
     results <- vector(length=numPermutations)
-    for (i in 1:numPermutations) {
+    for (i in seq_len(numPermutations)) {
       l <- sample(labels, replace = FALSE)
-      A<-list()
-      d=1
-      for(k in lab) {
-        A[[d]] <- adjacencyMatrix(expr[l==k,])
-        if (sum(!(A[[d]] %in% c(1,0))) != 0) {
-          weighted <- TRUE
-          i1 <- which(A[[d]] > 0)
-          A[[d]][i1] <- 1/A[[d]][i1]
-        }
-        d=d+1
+      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
+      if(is.null(weighted)){ 
+        A<-lapply(A,invWeigthts)
+        results[i]<-resInt(A,expr,weighted,function(x){average.path.length(x,directed=FALSE)})[1]
       }
-      G<-list()
-      s<-vector(length=length(A))
-      for(g in 1:length(A)){
-        G[[g]] <- graph.adjacency(A[[g]], mode="undirected", weighted=weighted)
-        if(is.null(weighted)) s[g]<-average.path.length(G[[g]], directed=FALSE)
-        else {
-          dist<-distances(G[[g]])
-          s[g]<-mean(apply(dist, 1, function(x){ min(x[x!=0])}))
-        }
-      }
-      s<-abs(s-mean(s))
-      results[i]<-sum(s)
+      else results[i]<-resInt(A,expr,weighted,function(y){apply(distances(y), 1, function(x){ min(x[x!=0])})})[1]
     }
 
-  pvalue <- (1 + sum(results >= result))/(numPermutations + 1)
-  return(list("measure"=result, "p.value"=pvalue,"Partial"=partial))
+    pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
+    return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
 }
 
 #' Degree distribution test
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
 #' @param options a list containing parameters. It can be set to either
 #' \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.
+#' @return A list containing:
+#' "measure" - difference among the degree distribution of two or more networks associated with each phenotype
+#' "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
+#' "Partial" - a vector with the weigths of each network in a measure value
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' degreeDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 #' @export
-degreeDistributionTest <- function(expr, labels, adjacencyMatrix,
-                                   numPermutations=1000, options=list(bandwidth="Sturges")) {
+degreeDistributionTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=list(bandwidth="Sturges")) {
 
-    A<-list()
-    weighted <- NULL
     lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
     if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-    d=1
-    for(k in lab) {
-      A[[d]] <- adjacencyMatrix(expr[labels==k,])
-      if (sum(!(A[[d]] %in% c(1,0))) != 0) weighted <- TRUE
-      d=d+1
-    }
-    G<-list()
-    for(g in 1:length(A)) G[[g]]<-graph.adjacency(A[[g]], mode="undirected", weighted=weighted)
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
+    weighted <- NULL # Define o weighted como NULL, assim como na função original
+    v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
+    if(any(v)) weighted <- TRUE
+    G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
     f<-nDegreeDensities(Gs=G, bandwidth=options$bandwidth)
     if(any(is.na(f))){
       cat('Empty graph')
-      return(list("measure"=NA, "p.value"=NA))
+      return(list("measure"=NA, "p.value"=NA,"Partial"=rep(NA,length(G))))
     }
     meanDensity <- list("x"=f$x, "y"=rowMeans(f$densities))
     partial <- vector(length=length(G))
@@ -825,16 +832,10 @@ degreeDistributionTest <- function(expr, labels, adjacencyMatrix,
     }
     result <- sum(partial)
     results <- vector(length=numPermutations)
-    for (i in 1:numPermutations) {
+    for (i in seq_len(numPermutations)) {
       l <- sample(labels, replace = FALSE)
-      A<-list()
-      d=1
-      for(k in lab) {
-        A[[d]] <- adjacencyMatrix(expr[l==k,])
-        d=d+1
-      }
-      G<-list()
-      for(g in 1:length(A)) G[[g]]<-graph.adjacency(A[[g]], mode="undirected", weighted=weighted)
+      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
+      G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
       f<-nDegreeDensities(Gs=G, bandwidth=options$bandwidth)
       if(any(is.na(f))){
         res<-NA
@@ -845,7 +846,7 @@ degreeDistributionTest <- function(expr, labels, adjacencyMatrix,
         for (j in 1:length(G)) {
           f1 <- list("x"=f$x, "y"=f$densities[,j])
           res <- res + KL(f1, meanDensity)/length(G)
-      }
+        }
       }
       results[i]<-res
     }
@@ -861,44 +862,30 @@ degreeDistributionTest <- function(expr, labels, adjacencyMatrix,
 # H0: |H(A1) - H(A2)| = 0
 # H1: |H(A1) - H(A2)| > 0
 # where A1 and A2 are the adjacency matrices of the graphs
-#
-# -- Input: --
-# "expr" - Matrix of genes (rows) vs microarrays (columns)
-# "labels" - binary vector in which a position indicates the phenotype (0 or 1)
-# of the corresponding microarray
-# "adjacencyMatrix" - a function that returns the adjacency matrix for a given
-# variables values matrix
-# "numPermutations" - number of permutations that will be carried out in the
-# permutation test
-#
-# -- Output: --
-# A list containing:
-# "abs.diff" - the absolute difference between the entropies of the two gene
-# networks associated with each phenotype (0 or 1)
-# "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
 
 #' Spectral entropy test
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
 #' @param options a list containing parameters. It can be set to either
 #' \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.
 #' @return A list containing:
-# "abs.diff" - the absolute difference between the entropies of the two gene
-# networks associated with each phenotype (0 or 1)
-# "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
+#' "measure" - difference among the entropies of two or more networks associated with each phenotype
+#' "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
+#' "Partial" - a vector with the weigths of each network in a measure value
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' spectralEntropyTest(expr, labels, adjacencyMatrix1,numPermutations=10,
+#'  options=list(bandwidth="Sturges"))
 #' @export
-spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000,
-                                options=list(bandwidth="Sturges")) {
-    A<-list()
+spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=list(bandwidth="Sturges")) {
     lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
     if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-    d=1 # inicia contador da lista de matrizes "A"
-    for(k in lab) {
-      A[[d]] <- adjacencyMatrix(expr[labels==k,]) #constrói a matrix de adjacencia selecionando determinado fator de labels
-      d=d+1
-    }
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
     f<-nSpectralDensities(A, bandwidth=options$bandwidth) # Lista com as coordenadas (x,y) da dist. espectral dos grafos de "A"
     entropies<-vector(length=length(A)) # vetor para guardar entropias
     for(j in 1:length(A)){ # uma entropia para cada grafo
@@ -908,13 +895,9 @@ spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1
     result<-sqrt((sum((entropies-entropy(meanDensity))^2))/length(entropies)) # idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
     partial<-sqrt(((entropies-entropy(meanDensity))^2)/length(entropies)) # idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
     results <- vector(length=numPermutations) # vetor para os resultados das permutacoes, para calculo do pvalor.
-    for (i in 1:numPermutations) {
-      d=1 # inicia contador da lista de matrizes "A"
+    for (i in seq_len(numPermutations)) {
       l <- sample(labels, replace = FALSE) # Reamostra os labels sem reposicao
-      for(k in lab) {
-        A[[d]] <- adjacencyMatrix(expr[l==k,]) # Monta as novas matrizes
-        d=d+1
-      }
+      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
       f<-nSpectralDensities(A, bandwidth=options$bandwidth) # Lista com as coordenadas (x,y) da dist. espectral dos grafos de "A"
       entropies<-vector(length=length(A)) # vetor para guardar entropias
       for(j in 1:length(A)){ # uma entropia para cada grafo
@@ -922,10 +905,10 @@ spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1
       }
       meanDensity <- list("x"=f$x, "y"=rowMeans(f$densities)) # Calcula a entropia média a partir de uma distribuicao media
       results[i]<-sqrt((sum((entropies-entropy(meanDensity))^2))/length(entropies)) # idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
-      }
+    }
 
   pvalue <- (1 + sum(results >= result))/(numPermutations + 1) # calculo do pvalor
-  return(list("abs.diff"=result, "p.value"=pvalue,"Partial"=partial))
+  return(list("measure"=result, "p.value"=pvalue,"Partial"=partial))
 }
 
 # Test for the Jensen-Shannon divergence between two graphs (genes networks),
@@ -933,46 +916,30 @@ spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1
 # H0: JS(A1, A2) = 0
 # H1: JS(A1, A2) > 0
 # where A1 and A2 are the adjacency matrices of the graphs
-#
-# -- Input: --
-# "expr" - Matrix of genes (rows) vs microarrays (columns)
-# "labels" - binary vector in which a position indicates the phenotype (0 or 1)
-# of the corresponding microarray
-# "adjacencyMatrix" - a function that returns the adjacency matrix for a given
-# variables values matrix (the "expr" matrix)
-# "numPermutations" - number of permutations that will be carried out in the
-# permutation test
-#
-# -- Output: --
-# A list containing:
-# "JS" - The Jensen-Shannon divergence between the gene networks associated with
-# each phenotype (0 or 1)
-# "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
 
 #' Spectral distribution test
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
 #' @param options a list containing parameters. It can be set to either
 #' \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.
 #' @return A list containing:
-#' "JS" - The Jensen-Shannon divergence between the gene networks associated with
-#' each phenotype (0 or 1)
-#' "p.value" - the Nominal p-value of the test for the Jensen-Shannon divergence
+#' "measure" - difference among Spectral distribution of two or more networks associated with each phenotype
+#' "p.value" - the Nominal p-value of the test for the Kullback-Libler divergence
+#' "Partial" - a vector with the weigths of each network in a measure value
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", 
+#' threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' spectralDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=10,
+#'  options=list(bandwidth="Sturges"))
 #' @export
-spectralDistributionTest <- function(expr, labels, adjacencyMatrix,
-                                     numPermutations=1000,
-                                     options=list(bandwidth="Sturges")) {
-    A<-list()
+spectralDistributionTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=list(bandwidth="Sturges")) {
     lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
     if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-    d=1
-    for(k in lab) {
-      A[[d]] <- adjacencyMatrix(expr[labels==k,])
-      if (sum(is.na(A[[d]]))>0 | sum(is.infinite(as.matrix(A[[d]])))>0) stop(paste(sum(is.na(A[[d]]))+sum(is.infinite(as.matrix(A[[d]]))),"encontrados na matrix A[[",d ,"]] na medida da estatistica "))
-      d=d+1
-    }
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
     f<-nSpectralDensities(A, bandwidth=options$bandwidth) # Lista com as coordenadas (x,y) da dist. espectral dos grafos de "A"
     meanDensity <- list("x"=f$x, "y"=rowMeans(f$densities))
     partial <- vector(length = length(A))
@@ -982,16 +949,9 @@ spectralDistributionTest <- function(expr, labels, adjacencyMatrix,
     }
     result<-sum(partial)
     results <- vector(length=numPermutations)
-    for (i in 1:numPermutations) {
+    for (i in seq_len(numPermutations)) {
       l <- sample(labels, replace = FALSE)
-      A<-list()
-      d=1
-      for(k in lab) {
-        A[[d]] <- adjacencyMatrix(expr[l==k,])
-        if (sum(is.infinite(as.matrix(A[[d]])))>0) stop(print(expr[l==k,]))
-        d=d+1
-      }
-
+      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
       f<-nSpectralDensities(A, bandwidth=options$bandwidth) # Lista com as coordenadas (x,y) da dist. espectral dos grafos de "A"
       meanDensity <- list("x"=f$x, "y"=rowMeans(f$densities))
       res <- 0
@@ -1002,301 +962,230 @@ spectralDistributionTest <- function(expr, labels, adjacencyMatrix,
       results[i]<-res
     }
   pvalue <- (1 + sum(results >= result))/(numPermutations + 1)
-  return(list("KL"=result, "p.value"=pvalue,"Partial"=partial))
+  return(list("measure"=result, "p.value"=pvalue,"Partial"=partial))
 }
 
 # ------------------------------------------------------------------------------
 # Test of equality of vertices between network properties
 # ------------------------------------------------------------------------------
 
-#' Degree centrality test for Vector
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
-#' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
-#' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
-#' @param numPermutations number of permutations that will be carried out in the permutation test
-#' @export
-degreeCentralityVertexTest <- function(expr, labels, adjacencyMatrix,
-                                       numPermutations=1000) {
-  A<-list()
-  lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
-  if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-  d=1
-  v<-vector(length=length(lab))
-  for(k in lab) {
-    A[[d]] <- adjacencyMatrix(expr[labels==k,])
-    v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-    d=d+1
-  }
-  weighted <- NULL # Define o weighted como NULL, assim como na função original
-  if(any(v)) weighted <- TRUE
-  n <- ncol(expr)
-  G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-  s<-lapply(G, graph.strength)
-  s<-do.call(rbind,s)
+resVertexInt <- function(A,expr,weighted,fun){
+  n <- ncol(expr)# numero de genes
+  G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
+  s<-lapply(G, fun)# guarda o betweenness
+  s<-do.call(rbind,s) # "s" é uma matrix onde serão guardados os vetores dos betweenness e um vetor de média deles
   s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-  sp<-s
-  result<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
-  result<-apply(result,1,mean)
-  results <- list()
-  for (i in 1:numPermutations) {
-    l <- sample(labels, replace = FALSE)
-    A<-list()
-    d=1
-    for(k in lab) {
-      A[[d]] <- adjacencyMatrix(expr[l==k,])
-      d=d+1
-    }
-    n <- ncol(expr)
-    G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-    s<-do.call(rbind,lapply(G, graph.strength))
-    s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-    res<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
-    results[[i]]<-apply(res,1,mean)
-  }
+  sp<-s[-(nrow(s)),]
+  result<-apply(s[-(nrow(s)),],1,function(x) abs(x-s[dim(s)[1],]))
+  result<-apply(result,1,sum)
+  return(cbind(result,t(sp))) # A estatítica é a soma das distancias
+}
+
+retTable <- function(results,output,expr,numPermutations,lab){
   results<-do.call(rbind,results)
-  pvalue <- (1 + apply(t(t(results) >= result),2,sum))/(numPermutations + 1)
-  saida<-cbind(stat=round(result,3),pvalue=round(pvalue,4),qvalue=round(p.adjust(pvalue,method="fdr"),4),round(t(sp[1:length(G),]),3))
+  pvalue <- (1 + apply(t(t(results) >= output[,1]),2,sum))/(numPermutations + 1)
+  saida<-cbind(stat=round(output[,1],3),pvalue=round(pvalue,4),qvalue=round(p.adjust(pvalue,method="fdr"),4),round(output[,-1],3))
   rownames(saida)<-colnames(expr)
   saida<-saida[order(saida[,"pvalue"]),]
   colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(as.numeric(lab))))
   return(saida)
+}
+
+#' Degree centrality test for Vector
+#' @param expr Matrix of variables (columns) vs samples (rows)
+#' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
+#' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
+#' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @return A table, containing on the columns, the following informations for each variable (rows):
+#' "Test Statistic" - difference among the degree centrality of a node in two or more networks associated with each phenotype
+#' "Nominal p-value" - the Nominal p-value of the test
+#' "Q-value" - the q-value of the test, correction of p-value by FDR to many tests
+#' "Factor n" - the node degree centrality in each network compared
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' @export
+degreeCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL) {
+  lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
+  if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
+  A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
+  weighted <- NULL # Define o weighted como NULL, assim como na função original
+  v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
+  if(any(v)) weighted <- TRUE
+  output<-resVertexInt(A,expr,weighted,graph.strength)
+  results <- list()
+  for (i in seq_len(numPermutations)) {
+    l <- sample(labels, replace = FALSE)
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
+    results[[i]]<-resVertexInt(A,expr,weighted,graph.strength)[,1]
+  }
+  return(retTable(results,output,expr,numPermutations,lab))
 }
 
 #' Betweenness centrality test
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @return A table, containing on the columns, the following informations for each variable (rows):
+#' "Test Statistic" - difference among the betweenness centrality of a node in two or more networks associated with each phenotype
+#' "Nominal p-value" - the Nominal p-value of the test
+#' "Q-value" - the q-value of the test, correction of p-value by FDR to many tests
+#' "Factor n" - the node betweenness centrality in each network compared
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' betweennessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 #' @export
-betweennessCentralityVertexTest <- function(expr, labels, adjacencyMatrix,
-                                      numPermutations=1000) {
+betweennessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL) {
   # Betweenness centrality test for many graphs
-
-  A<-list() # Lista onde serão colocadas as matrizes de adjacência
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
   if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-  d=1 # inicia o contador do indice da matriz dentro de "A"
-  v<-vector(length=length(lab))
-  for(k in lab) { # Looping para criar uma matrix de adjacência para cada rede
-    A[[d]] <- adjacencyMatrix(expr[labels==k,]) # formação da matriz de adjacência
-    v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-    d=d+1
-  }
+  A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
   weighted <- NULL # Define o weighted como NULL, assim como na função original
+  v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
   if(any(v)) weighted <- TRUE
   if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-  n <- ncol(expr) # numero de genes
-
-  G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
-  s<-lapply(G, betweenness)# guarda o betweenness
-  s<-do.call(rbind,s)
-  s<-rbind(s,apply(s,MARGIN=2,FUN=mean)) # "s" é uma matrix onde serão guardados os vetores dos betweenness e um vetor de média deles
-  sp<-s
-  result<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
-  result<-apply(result,1,mean)
+  output<-resVertexInt(A,expr,weighted,betweenness)
   results <- list() # Lista onde serão guardados todos os resultados das N permutações
-  for (i in 1:numPermutations) {
+  for (i in seq_len(numPermutations)) {
     l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
-    A<-list() # DAQUI EM DIANTE OS PASSOS SÃO REPETIDOS PARA AS MATRZES PERMUTADAS
-    d=1 # inicia o contador do indice da matriz dentro de "A"
-    v<-vector(length=length(lab))
-    for(k in lab) { # Looping para criar uma matrix de adjacência para cada rede
-      A[[d]] <- adjacencyMatrix(expr[l==k,]) # formação da matriz de adjacência
-      v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-      d=d+1
-    }
-    weighted <- NULL # Define o weighted como NULL, assim como na função original
-    if(any(v)) weighted <- TRUE
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
     if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-    n <- ncol(expr) # numero de genes
-    G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
-    s<-lapply(G, betweenness)# guarda o betweenness
-    s<-do.call(rbind,s)
-    s<-rbind(s,apply(s,MARGIN=2,FUN=mean)) # "s" é uma matrix onde serão guardados os vetores dos betweenness e um vetor de média deles
-    res<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
-    results[[i]]<-apply(res,1,mean)
+    results[[i]]<-resVertexInt(A,expr,weighted,betweenness)[,1]
   }
 
-  results<-do.call(rbind,results)
-  pvalue <- (1 + apply(t(t(results) >= result),2,sum))/(numPermutations + 1)
-  saida<-cbind(stat=round(result,3),pvalue=round(pvalue,4),qvalue=round(p.adjust(pvalue,method="fdr"),4),round(t(sp[1:length(G),]),3))
-  rownames(saida)<-colnames(expr)
-  saida<-saida[order(saida[,"pvalue"]),]
-  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(as.numeric(lab))))
-  return(saida)
+  return(retTable(results,output,expr,numPermutations,lab))
 }
 
 #' Closeness centrality test for vectors
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @return A table, containing on the columns, the following informations for each variable (rows):
+#' "Test Statistic" - difference among the closeness centrality of a node in two or more networks associated with each phenotype
+#' "Nominal p-value" - the Nominal p-value of the test
+#' "Q-value" - the q-value of the test, correction of p-value by FDR to many tests
+#' "Factor n" - the node closeness centrality in each network compared
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' closenessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 #' @export
-closenessCentralityVertexTest <- function(expr, labels, adjacencyMatrix,
-                                    numPermutations=1000) {
-  A<-list() # Lista onde serão colocadas as matrizes de adjacência
+closenessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
   if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-  d=1 # inicia o contador do indice da matriz dentro de "A"
-  v<-vector(length=length(lab))
-  for(k in lab) { # Looping para criar uma matrix de adjacência para cada rede
-    A[[d]] <- adjacencyMatrix(expr[labels==k,]) # formação da matriz de adjacência
-    v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-    d=d+1
-  }
+  A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
   weighted <- NULL # Define o weighted como NULL, assim como na função original
+  v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
   if(any(v)) weighted <- TRUE
   if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-  n <- ncol(expr) # numero de genes
-  G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
-  s<-lapply(G, closeness)# guarda o closeness
-  s<-do.call(rbind,s)
-  s<-rbind(s,apply(s,MARGIN=2,FUN=mean)) # "s" é uma matrix onde serão guardados os vetores dos betweenness e um vetor de média deles
-  sp<-s
-  result<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
-  result<-apply(result,1,mean)
+  output<-resVertexInt(A,expr,weighted,closeness)
   results <- list()
-  for (i in 1:numPermutations) {
-
+  for (i in seq_len(numPermutations)) {
     l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
-    A<-list() # DAQUI EM DIANTE OS PASSOS SÃO REPETIDOS PARA AS MATRZES PERMUTADAS
-    d=1 # inicia o contador do indice da matriz dentro de "A"
-    v<-vector(length=length(lab))
-    for(k in lab) { # Looping para criar uma matrix de adjacência para cada rede
-      A[[d]] <- adjacencyMatrix(expr[l==k,]) # formação da matriz de adjacência
-      v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-      d=d+1
-    }
-    weighted <- NULL # Define o weighted como NULL, assim como na função original
-    if(any(v)) weighted <- TRUE
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
     if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-    n <- ncol(expr) # numero de genes
-    G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
-    s<-lapply(G, closeness)# guarda o closeness
-    s<-do.call(rbind,s)
-    s<-rbind(s,apply(s,MARGIN=2,FUN=mean)) # "s" é uma matrix onde serão guardados os vetores dos betweenness e um vetor de média deles
-    res<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
-    results[[i]]<-apply(res,1,mean)
+    results[[i]]<-resVertexInt(A,expr,weighted,closeness)[,1]
   }
-  results<-do.call(rbind,results)
-  pvalue <- (1 + apply(t(t(results) >= result),2,sum))/(numPermutations + 1)
-  saida<-cbind(stat=round(result,3),pvalue=round(pvalue,4),qvalue=round(p.adjust(pvalue,method="fdr"),4),round(t(sp[1:length(G),]),3))
-  rownames(saida)<-colnames(expr)
-  saida<-saida[order(saida[,"pvalue"]),]
-  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(as.numeric(lab))))
-  return(saida)
+  return(retTable(results,output,expr,numPermutations,lab))
 }
 
 #' Eigenvector centrality test for vectors
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @return A table, containing on the columns, the following informations for each variable (rows):
+#' "Test Statistic" - difference among the eigenvector centrality of a node in two or more networks associated with each phenotype
+#' "Nominal p-value" - the Nominal p-value of the test
+#' "Q-value" - the q-value of the test, correction of p-value by FDR to many tests
+#' "Factor n" - the node eigenvector centrality in each network compared
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' eigenvectorCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 #' @export
-eigenvectorCentralityVertexTest <- function(expr, labels, adjacencyMatrix,
-                                      numPermutations=1000) {
-  A<-list()
+eigenvectorCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
   if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-  d=1
-  v<-vector(length=length(lab))
-  for(k in lab) {
-    A[[d]] <- adjacencyMatrix(expr[labels==k,])
-    v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-    d=d+1
-  }
+  A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
   weighted <- NULL # Define o weighted como NULL, assim como na função original
+  v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
   if(any(v)) weighted <- TRUE
-  # if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-  n <- ncol(expr)
-  G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-  s<-lapply(G, function(x) evcent(x)$vector)
-  s<-do.call(rbind,s)
-  s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-  sp<-s
-  result<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
-  result<-apply(result,1,mean)
+  output<-resVertexInt(A,expr,weighted,function(x) evcent(x)$vector)
   results <- list()
-  for (i in 1:numPermutations) {
+  for (i in seq_len(numPermutations)) {
     l <- sample(labels, replace = FALSE)
-    A<-list()
-    d=1
-    for(k in lab) {
-      A[[d]] <- adjacencyMatrix(expr[l==k,])
-      d=d+1
-    }
-    G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-    s<-lapply(G, function(x) evcent(x)$vector)
-    s<-do.call(rbind,s)
-    s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-    res<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
-    results[[i]]<-apply(res,1,mean)
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
+    results[[i]]<-resVertexInt(A,expr,weighted,function(x) evcent(x)$vector)[,1]
   }
-  results<-do.call(rbind,results)
-  pvalue <- (1 + apply(t(t(results) >= result),2,sum))/(numPermutations + 1)
-  saida<-cbind(stat=round(result,3),pvalue=round(pvalue,4),qvalue=round(p.adjust(pvalue,method="fdr"),4),round(t(sp[1:length(G),]),3))
-  rownames(saida)<-colnames(expr)
-  saida<-saida[order(saida[,"pvalue"]),]
-  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(as.numeric(lab))))
-  return(saida)
+  return(retTable(results,output,expr,numPermutations,lab))
 }
 
 #' Clustering coefficient test for vectors
-#' @param expr Matrix of genes (rows) vs microarrays (columns)
+#' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
 #' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @return A table, containing on the columns, the following informations for each variable (rows):
+#' "Test Statistic" - difference among the clustering coefficient of a node in two or more networks associated with each phenotype
+#' "Nominal p-value" - the Nominal p-value of the test
+#' "Q-value" - the q-value of the test, correction of p-value by FDR to many tests
+#' "Factor n" - the node clustering coefficient in each network compared
+#' @examples set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-rep(0:3,10)
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' clusteringCoefficientVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
 #' @export
-clusteringCoefficientVertexTest <- function(expr, labels, adjacencyMatrix,
-                                      numPermutations=1000) {
-
-  A<-list()
+clusteringCoefficientVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
   if(any(lab=="-1")) lab<-lab[-which(lab=="-1")] # se houver o fator "-1" ele é retirado dos fatores.
-  d=1
-  v<-vector(length=length(lab))
-  for(k in lab) {
-    A[[d]] <- adjacencyMatrix(expr[labels==k,])
-    v[d]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
-    d=d+1
-  }
+  A<-lapply(lab, function(x) adjacencyMatrix(expr[labels==x,]))
   weighted <- NULL # Define o weighted como NULL, assim como na função original
+  v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
   if(any(v)) weighted <- TRUE
-  n <- ncol(expr)
-  if (!is.null(weighted)) s<-lapply(A, clusterCoef)
-  else{
-    G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-    s<-lapply(G, transitivity, type="local", isolates="zero")
-  }
-  s<-do.call(rbind,s)
-  s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-  sp<-s
-  result<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
-  result<-apply(result,1,mean)
-  results <- list()
-  for (i in 1:numPermutations) {
-    l <- sample(labels, replace = FALSE)
-    A<-list()
-    d=1
-    for(k in lab) {
-      A[[d]] <- adjacencyMatrix(expr[l==k,])
-      d=d+1
-    }
-    if (!is.null(weighted)) s<-lapply(A, clusterCoef)
-    else{
-      G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
-      s<-lapply(G, transitivity, type="local", isolates="zero")
-    }
+  if (!is.null(weighted)) { 
+    n <- ncol(expr)
+    s<-lapply(A, clusterCoef)
     s<-do.call(rbind,s)
     s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-    res<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
-    results[[i]]<-apply(res,1,mean)
+    sp<-s[-(nrow(s)),]
+    result<-apply(s[-(nrow(s)),],1,function(x) abs(x-s[dim(s)[1],]))
+    result<-apply(result,1,sum)
+    output<-cbind(result,t(sp))
   }
-  results<-do.call(rbind,results)
-  pvalue <- (1 + apply(t(t(results) >= result),2,sum))/(numPermutations + 1)
-  saida<-cbind(stat=round(result,3),pvalue=round(pvalue,4),qvalue=round(p.adjust(pvalue,method="fdr"),4),round(t(sp[1:length(G),]),3))
-  rownames(saida)<-colnames(expr)
-  saida<-saida[order(saida[,"pvalue"]),]
-  colnames(saida)<-c("Test Statistic","Nominal p-value","Q-value",paste("Factor",0:max(as.numeric(lab))))
-  return(saida)
+  else output<-resVertexInt(A,expr,weighted,function(x){transitivity(x,type="local", isolates="zero")})
+  results <- list()
+  for (i in seq_len(numPermutations)) {
+    l <- sample(labels, replace = FALSE)
+    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
+    if (!is.null(weighted)) { 
+      n <- ncol(expr)
+      s<-lapply(A, clusterCoef)
+      s<-do.call(rbind,s)
+      s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
+      res<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
+      results[[i]]<-apply(res,1,sum)
+    }
+    else results[[i]]<-resVertexInt(A,expr,weighted,function(x){transitivity(x,type="local", isolates="zero")})[,1]
+  }
+  return(retTable(results,output,expr,numPermutations,lab))
 }

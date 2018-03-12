@@ -6,10 +6,10 @@
 \usage{
 pathPlot(gene.data = NULL, cpd.data = NULL, labels, varr.diff.list = NULL,
   threshold = NULL, thr.value = 0.05, FUN = median, species, pathway.id,
-  kegg.native = T, file.name = "path")
+  kegg.native = TRUE, file.name = "path")
 }
 \arguments{
-\item{gene.data}{either vector (single sample) or a matrix-like data (multiple sample). Vector should be numeric with gene IDs as names or it may also be character of gene IDs. Character vector is treated as discrete or count data. Matrix-like data structure has genes as rows and samples as columns. Row names should be gene IDs. Here gene ID is a generic concepts, including multiple types of gene, transcript and protein uniquely mappable to KEGG gene IDs. KEGG ortholog IDs are also treated as gene IDs as to handle metagenomic data. Check details for mappable ID types. Default gene.data=NULL.
+\item{gene.data}{either vector (single sample) or a matrix-like data (multiple sample). Vector should be numeric with gene IDs as names or it may also be character of gene IDs. Character vector is treated as discrete or count data. Matrix-like data structure has genes as rows and samples as columns. Row names should be gene IDs. Here, gene ID is a generic concepts, including multiple types of gene, transcript and protein uniquely mappable to KEGG gene IDs. KEGG ortholog IDs are also treated as gene IDs as to handle metagenomic data. Check details for mappable ID types. Default gene.data=NULL.
 numeric, character, continuous}
 
 \item{cpd.data}{the same as gene.data, excpet named with IDs mappable to KEGG compound IDs. Over 20 types of IDs included in CHEMBL database can be used here. Check details for mappable ID types. Default cpd.data=NULL. Note that gene.data and cpd.data can't be NULL simultaneously.}
@@ -59,6 +59,23 @@ Variable values view in KEGG metabolic pathways
 }
 \details{
 Pathview maps and renders user data on relevant pathway graphs. Pathview is a stand alone program for pathway based data integration and visualization. It also seamlessly integrates with pathway and functional analysis tools for large-scale and fully automated analysis. Pathview provides strong support for data Integration. It works with: 1) essentially all types of biological data mappable to pathways, 2) over 10 types of gene or protein IDs, and 20 types of compound or metabolite IDs, 3) pathways for over 2000 species as well as KEGG orthology, 4) varoius data attributes and formats, i.e. continuous/discrete data, matrices/vectors, single/multiple samples etc. To see mappable external gene/protein IDs do: data(gene.idtype.list), to see mappable external compound related IDs do: data(rn.list); names(rn.list). Pathview generates both native KEGG view and Graphviz views for pathways. Currently only KEGG pathways are implemented. Hopefully, pathways from Reactome, NCI and other databases will be supported in the future.
+}
+\examples{
+set.seed(5)
+expr <- as.data.frame(matrix(rnorm(120),40,30))
+names(expr)<-c(4790, 4791, 4792, 4793, 84807, 4794, 4795, 64332, 595, 898, 23552, 1017, 8099,
+ 10263, 4609, 23077, 26292, 84073, 4610, 4613, 10408,  80177, 114897, 114898, 114899, 114900,
+  114904, 114905, 390664, 338872)
+labels <- rep(0:3,10)
+adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
+ thr.value=0.05, weighted=FALSE)
+vertexCentrality <- degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+vertexCentrality2<-cbind(c(4790, 4791, 4792, 4793, 84807, 4794, 4795, 64332, 595, 898, 23552,
+ 1017, 8099, 10263, 4609, 23077, 26292, 84073, 4610, 4613, 10408,  80177, 114897, 114898, 114899,
+  114900, 114904, 114905, 390664, 338872),vertexCentrality)
+pathPlot(gene.data=t(expr), cpd.data=NULL, labels=labels, varr.diff.list=vertexCentrality2,
+ threshold=NULL, thr.value=1, FUN=median,species="hsa" , pathway.id="05200", kegg.native=TRUE,
+  file.name="path")
 }
 \references{
 Luo, W. and Brouwer, C., Pathview: an R/Bioconductor package for pathway based data integration and visualization. Bioinformatics, 2013, 29(14): 1830-1831, doi: 10.1093/bioinformatics/btt285
