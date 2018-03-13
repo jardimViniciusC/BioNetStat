@@ -573,21 +573,12 @@ degreeCentralityTest <- function(expr, labels, adjacencyMatrix, numPermutations=
   v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
   if(any(v)) weighted <- TRUE
   output<-resInt(A,expr,weighted,graph.strength)
-<<<<<<< HEAD
   results<-bplapply(seq_len(numPermutations),function(i){
     l <- sample(labels, replace = FALSE)
     A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
     return(resInt(A,expr,weighted,graph.strength)[1])
   })
   results<-do.call(c,results)
-=======
-  results <- vector(length=numPermutations)
-  for (i in seq_len(numPermutations)) {
-    l <- sample(labels, replace = FALSE)
-    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
-    results[i]<-resInt(A,expr,weighted,graph.strength)[1]
-  }
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
   pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
   return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
 }
@@ -620,7 +611,6 @@ betweennessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutati
     if(any(v)) weighted <- TRUE
     if (!is.null(weighted)) A<-lapply(A,invWeigthts)
     output<-resInt(A,expr,weighted,betweenness)
-<<<<<<< HEAD
     results<-bplapply(seq_len(numPermutations),function(i){
       l <- sample(labels, replace = FALSE)
       A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
@@ -628,16 +618,6 @@ betweennessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutati
       return(resInt(A,expr,weighted,betweenness)[1])
     })
     results<-do.call(c,results)
-=======
-    results <- vector(length=numPermutations) # Vetor onde serão guardados todos os resultados das N permutações
-    for (i in seq_len(numPermutations)) {
-      l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
-      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
-      if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-      results[i]<-resInt(A,expr,weighted,betweenness)[1]
-    }
-    
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
     pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
     return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
 }
@@ -669,7 +649,6 @@ closenessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutation
     if(any(v)) weighted <- TRUE
     if (!is.null(weighted)) A<-lapply(A,invWeigthts)
     output<-resInt(A,expr,weighted,closeness)
-<<<<<<< HEAD
     results<-bplapply(seq_len(numPermutations),function(i){
       l <- sample(labels, replace = FALSE)
       A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
@@ -677,15 +656,6 @@ closenessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutation
       return(resInt(A,expr,weighted,closeness)[1])
     })
     results<-do.call(c,results)
-=======
-    results <- vector(length=numPermutations) # Vetor onde serão guardados todos os resultados das N permutações
-    for (i in seq_len(numPermutations)) {
-      l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
-      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
-      if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-      results[i]<-resInt(A,expr,weighted,closeness)[1]
-    }
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
     pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
     return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
 }
@@ -716,7 +686,6 @@ eigenvectorCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutati
   v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
   if(any(v)) weighted <- TRUE
   output<-resInt(A,expr,weighted,function(x) evcent(x)$vector)
-<<<<<<< HEAD
   results<-bplapply(seq_len(numPermutations),function(i){
     l <- sample(labels, replace = FALSE)
     A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
@@ -725,16 +694,6 @@ eigenvectorCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutati
   results<-do.call(c,results)
   pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
   return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
-=======
-    results <- vector(length=numPermutations)
-    for (i in seq_len(numPermutations)) {
-      l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
-      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
-      results[i]<-resInt(A,expr,weighted,function(x) evcent(x)$vector)[1]
-    }
-    pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
-    return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
 }
 
 #' Clustering coefficient test
@@ -772,12 +731,7 @@ clusteringCoefficientTest <- function(expr, labels, adjacencyMatrix, numPermutat
     else{
       output<-resInt(A,expr,weighted,function(x){transitivity(x,type="local", isolates="zero")})
     }
-<<<<<<< HEAD
     results<-bplapply(seq_len(numPermutations),function(i){
-=======
-    results <- vector(length=numPermutations)
-    for (i in seq_len(numPermutations)) {
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
       l <- sample(labels, replace = FALSE)
       A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
       if (!is.null(weighted)){ 
@@ -785,18 +739,11 @@ clusteringCoefficientTest <- function(expr, labels, adjacencyMatrix, numPermutat
         s<-do.call(rbind,s)
         s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
         res<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n))
-<<<<<<< HEAD
         return(sum(res))
       }
       else return(resInt(A,expr,weighted,function(x){transitivity(x,type="local", isolates="zero")}))
     })
     results<-do.call(c,results)
-=======
-        results[i]<-sum(res)
-      }
-      else results[i]<-resInt(A,expr,weighted,function(x){transitivity(x,type="local", isolates="zero")})
-    }
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
     pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
     return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
 }
@@ -829,7 +776,6 @@ shortestPathTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000
   if (!is.null(weighted)) A<-lapply(A,invWeigthts)
   if(is.null(weighted)) output<-resInt(A,expr,weighted,function(x){average.path.length(x,directed=FALSE)})
   else output<-resInt(A,expr,weighted,function(y){apply(distances(y), 1, function(x){ min(x[x!=0])})})
-<<<<<<< HEAD
   results<-bplapply(seq_len(numPermutations),function(i){
     l <- sample(labels, replace = FALSE)
     A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
@@ -842,21 +788,6 @@ shortestPathTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000
   results<-do.call(c,results)
   pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
   return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
-=======
-    results <- vector(length=numPermutations)
-    for (i in seq_len(numPermutations)) {
-      l <- sample(labels, replace = FALSE)
-      A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
-      if(is.null(weighted)){ 
-        A<-lapply(A,invWeigthts)
-        results[i]<-resInt(A,expr,weighted,function(x){average.path.length(x,directed=FALSE)})[1]
-      }
-      else results[i]<-resInt(A,expr,weighted,function(y){apply(distances(y), 1, function(x){ min(x[x!=0])})})[1]
-    }
-
-    pvalue <- (1 + sum(results >= output[1]))/(numPermutations + 1)
-    return(list("measure"=output[1], "p.value"=pvalue,"Partial"=output[-1]))
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
 }
 
 #' Degree distribution test
@@ -898,12 +829,7 @@ degreeDistributionTest <- function(expr, labels, adjacencyMatrix, numPermutation
       partial[j] <- KL(f1, meanDensity)/length(G)
     }
     result <- sum(partial)
-<<<<<<< HEAD
     results<-bplapply(seq_len(numPermutations),function(i){
-=======
-    results <- vector(length=numPermutations)
-    for (i in seq_len(numPermutations)) {
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
       l <- sample(labels, replace = FALSE)
       A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
       G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)# guarda a rede
@@ -919,15 +845,9 @@ degreeDistributionTest <- function(expr, labels, adjacencyMatrix, numPermutation
           res <- res + KL(f1, meanDensity)/length(G)
         }
       }
-<<<<<<< HEAD
       return(res)
     })
     results<-do.call(c,results)
-=======
-      results[i]<-res
-    }
-
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
   pvalue <- (1 + sum(results >= result))/(numPermutations + 1)
   return(list("measure"=result, "p.value"=pvalue,"Partial"=partial))
 }
@@ -971,12 +891,7 @@ spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1
     meanDensity <- list("x"=f$x, "y"=rowMeans(f$densities)) # Calcula a entropia média a partir de uma distribuicao media
     result<-sqrt((sum((entropies-entropy(meanDensity))^2))/length(entropies)) # idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
     partial<-sqrt(((entropies-entropy(meanDensity))^2)/length(entropies)) # idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
-<<<<<<< HEAD
     results<-bplapply(seq_len(numPermutations),function(i){
-=======
-    results <- vector(length=numPermutations) # vetor para os resultados das permutacoes, para calculo do pvalor.
-    for (i in seq_len(numPermutations)) {
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
       l <- sample(labels, replace = FALSE) # Reamostra os labels sem reposicao
       A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
       f<-nSpectralDensities(A, bandwidth=options$bandwidth) # Lista com as coordenadas (x,y) da dist. espectral dos grafos de "A"
@@ -985,15 +900,9 @@ spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1
         entropies[j]<-entropy(list("x"=f$x, "y"=f$densities[,j]))
       }
       meanDensity <- list("x"=f$x, "y"=rowMeans(f$densities)) # Calcula a entropia média a partir de uma distribuicao media
-<<<<<<< HEAD
       return(sqrt((sum((entropies-entropy(meanDensity))^2))/length(entropies))) # idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
     })
     results<-do.call(c,results)
-=======
-      results[i]<-sqrt((sum((entropies-entropy(meanDensity))^2))/length(entropies)) # idem e Calcula a raiz da soma dos quadrados das diferenças entre as entropias e a média
-    }
-
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
   pvalue <- (1 + sum(results >= result))/(numPermutations + 1) # calculo do pvalor
   return(list("measure"=result, "p.value"=pvalue,"Partial"=partial))
 }
@@ -1036,11 +945,7 @@ spectralDistributionTest <- function(expr, labels, adjacencyMatrix, numPermutati
     }
     result<-sum(partial)
     results <- vector(length=numPermutations)
-<<<<<<< HEAD
     results<-bplapply(seq_len(numPermutations),function(i){
-=======
-    for (i in seq_len(numPermutations)) {
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
       l <- sample(labels, replace = FALSE)
       A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
       f<-nSpectralDensities(A, bandwidth=options$bandwidth) # Lista com as coordenadas (x,y) da dist. espectral dos grafos de "A"
@@ -1109,20 +1014,11 @@ degreeCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermuta
   v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
   if(any(v)) weighted <- TRUE
   output<-resVertexInt(A,expr,weighted,graph.strength)
-<<<<<<< HEAD
   results<-bplapply(seq_len(numPermutations),function(i){
     l <- sample(labels, replace = FALSE)
     A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
     return(resVertexInt(A,expr,weighted,graph.strength)[,1])
   })
-=======
-  results <- list()
-  for (i in seq_len(numPermutations)) {
-    l <- sample(labels, replace = FALSE)
-    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
-    results[[i]]<-resVertexInt(A,expr,weighted,graph.strength)[,1]
-  }
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
   return(retTable(results,output,expr,numPermutations,lab))
 }
 
@@ -1154,23 +1050,12 @@ betweennessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPe
   if(any(v)) weighted <- TRUE
   if (!is.null(weighted)) A<-lapply(A,invWeigthts)
   output<-resVertexInt(A,expr,weighted,betweenness)
-<<<<<<< HEAD
   results<-bplapply(seq_len(numPermutations),function(i){
     l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
     A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
     if (!is.null(weighted)) A<-lapply(A,invWeigthts)
     return(resVertexInt(A,expr,weighted,betweenness)[,1])
   })
-=======
-  results <- list() # Lista onde serão guardados todos os resultados das N permutações
-  for (i in seq_len(numPermutations)) {
-    l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
-    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
-    if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-    results[[i]]<-resVertexInt(A,expr,weighted,betweenness)[,1]
-  }
-
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
   return(retTable(results,output,expr,numPermutations,lab))
 }
 
@@ -1201,22 +1086,12 @@ closenessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPerm
   if(any(v)) weighted <- TRUE
   if (!is.null(weighted)) A<-lapply(A,invWeigthts)
   output<-resVertexInt(A,expr,weighted,closeness)
-<<<<<<< HEAD
   results<-bplapply(seq_len(numPermutations),function(i){
     l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
     A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
     if (!is.null(weighted)) A<-lapply(A,invWeigthts)
     return(resVertexInt(A,expr,weighted,closeness)[,1])
   })
-=======
-  results <- list()
-  for (i in seq_len(numPermutations)) {
-    l <- sample(labels, replace = FALSE) # Faz a permutação dos labels
-    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
-    if (!is.null(weighted)) A<-lapply(A,invWeigthts)
-    results[[i]]<-resVertexInt(A,expr,weighted,closeness)[,1]
-  }
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
   return(retTable(results,output,expr,numPermutations,lab))
 }
 
@@ -1246,20 +1121,11 @@ eigenvectorCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPe
   v<-sapply(A,function(x) sum(x==0) + sum(x==1) == length(x))
   if(any(v)) weighted <- TRUE
   output<-resVertexInt(A,expr,weighted,function(x) evcent(x)$vector)
-<<<<<<< HEAD
   results<-bplapply(seq_len(numPermutations),function(i){
     l <- sample(labels, replace = FALSE)
     A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
     return(resVertexInt(A,expr,weighted,function(x) evcent(x)$vector)[,1])
   })
-=======
-  results <- list()
-  for (i in seq_len(numPermutations)) {
-    l <- sample(labels, replace = FALSE)
-    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
-    results[[i]]<-resVertexInt(A,expr,weighted,function(x) evcent(x)$vector)[,1]
-  }
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
   return(retTable(results,output,expr,numPermutations,lab))
 }
 
@@ -1297,7 +1163,6 @@ clusteringCoefficientVertexTest <- function(expr, labels, adjacencyMatrix, numPe
     result<-apply(s[-(nrow(s)),],1,function(x) abs(x-s[dim(s)[1],]))
     result<-apply(result,1,sum)
     output<-cbind(result,t(sp))
-<<<<<<< HEAD
   }
   else output<-resVertexInt(A,expr,weighted,function(x){transitivity(x,type="local", isolates="zero")})
   results<-bplapply(seq_len(numPermutations),function(i){
@@ -1313,23 +1178,5 @@ clusteringCoefficientVertexTest <- function(expr, labels, adjacencyMatrix, numPe
     }
     else return(resVertexInt(A,expr,weighted,function(x){transitivity(x,type="local", isolates="zero")})[,1])
   })
-=======
-  }
-  else output<-resVertexInt(A,expr,weighted,function(x){transitivity(x,type="local", isolates="zero")})
-  results <- list()
-  for (i in seq_len(numPermutations)) {
-    l <- sample(labels, replace = FALSE)
-    A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))
-    if (!is.null(weighted)) { 
-      n <- ncol(expr)
-      s<-lapply(A, clusterCoef)
-      s<-do.call(rbind,s)
-      s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
-      res<-apply(s[1:(dim(s)[1]-1),],1,function(x) abs(x-s[dim(s)[1],]))
-      results[[i]]<-apply(res,1,sum)
-    }
-    else results[[i]]<-resVertexInt(A,expr,weighted,function(x){transitivity(x,type="local", isolates="zero")})[,1]
-  }
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
   return(retTable(results,output,expr,numPermutations,lab))
 }
