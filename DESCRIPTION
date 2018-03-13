@@ -8,11 +8,7 @@ Maintainer: Vinicius Jardim <viniciusjc@gmail.com>
 Description: A package to perform differential network analysis, differential node analysis (differential coexpression analysis), network and metabolic pathways view.
 License: GPL (>= 3)
 Depends: R (>= 3.4), shiny (>= 0.8.0), igraph, shinyBS, pathview
-<<<<<<< HEAD
 Imports: BiocParallel, RJSONIO, whisker, yaml, pheatmap, ggplot2, plyr, utils, stats, RColorBrewer, Hmisc, psych
-=======
-Imports: RJSONIO, whisker, yaml, pheatmap, ggplot2, plyr, utils, stats, RColorBrewer, Hmisc, psych
->>>>>>> e86925597d5c56b0433d2ee085574dfe92da6fb0
 biocViews: Network, NetworkInference, Pathways, GraphAndNetwork
 RoxygenNote: 6.0.1.9000
 URL: http://github.com/jardimViniciusC/BioNetStat
