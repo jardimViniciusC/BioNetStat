@@ -37,7 +37,7 @@ export(shortestPathTest)
 export(spectralDistributionTest)
 export(spectralEntropies)
 export(spectralEntropyTest)
-import("igraph","plyr","shiny","RJSONIO","ggplot2","pathview","pheatmap","whisker","yaml","RColorBrewer","shinyBS")
+import("igraph","plyr","shiny","RJSONIO","ggplot2","pathview","pheatmap","whisker","yaml","RColorBrewer","shinyBS","knitr")
 importFrom("stats", "aggregate", "bw.nrd0", "cor", "density", "dist",
              "median", "p.adjust")
 importFrom("utils", "read.csv", "read.table")

@@ -25,6 +25,11 @@ a dataframe containing only the numeric columns of selected file. Each column is
 Read variable values matrix
 }
 \examples{
+# Glioma file
+gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+varFile<-readVarFile(gliomaData)
+
+# Random file
 test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
 write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
 a<-readVarFile("~/tf.csv")

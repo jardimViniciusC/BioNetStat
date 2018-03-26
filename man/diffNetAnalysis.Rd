@@ -38,6 +38,16 @@ a data frame containing the name, size, test statistic, nominal p-value and adju
 Class vector of data table
 }
 \examples{
+# Glioma data
+varFile<-data(varFile)
+labels<-data(labels)
+adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
+ thr.value=0.05, weighted=FALSE)
+diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1000, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
+  
+# Random data
 set.seed(1)
 varFile <- as.data.frame(matrix(rnorm(120),40,30))
 labels<-rep(0:3,10)

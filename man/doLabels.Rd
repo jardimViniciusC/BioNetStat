@@ -25,7 +25,12 @@ a vector that identify each row of the readVarFile object as a sample belonging 
 Class vector of data table
 }
 \examples{
+# Glioma file
+gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+labels<-doLabels(gliomaData)
+
+# Random file
 test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
 write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
-a<-doLabels("~/tf.csv")
+labels<-doLabels("~/tf.csv")
 }

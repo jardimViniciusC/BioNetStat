@@ -1,7 +1,8 @@
 ---
 output:
-  html_document: default
+  word_document: default
   pdf_document: default
+  html_document: default
 ---
 # BioNetStat user interface tutorial
 
@@ -127,7 +128,7 @@ Visualizing networks helps us understand the changing patterns more easily. This
 
 11. Finally, the network can be exported to the biological integration program S.I.T. (System Integration Tool) where the network can be viewed and manipulated.
 
-<img src="https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_sit_list.png" alt="Image of BioNetStat sit_list" height="150"/>
+<img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_sit_list.png" alt="Image of BioNetStat sit_list" height="150"/>
 
 #### Study the behavior of variables
 
