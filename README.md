@@ -1,6 +1,9 @@
 # BioNetStat
 
-### Package to perform network analysis. BioNetStat is able to compare two or more correlation networks.
+## Package to perform network analysis. 
+### BioNetStat is able to compare two or more correlation networks.
+
+The diversity of interactions that occurs in biological systems from the cells and organelles to the whole biosphere, can be assessed with tools of the networks theory. The dynamic in structure and in the interactions among systems elements is an inherent trait of those systems. Several tools have been proposed to compare networks, representing the many states assumed by a system. However, until the present, none of them is able to compare structural characteristics among more than two networks simultaneously. Due to the many states that can be assumed by a given biological system, we developed a statistical tool to compare two or more networks and point key variables in a system. BioNetStat is able to compare correlation networks using traits that are based on graph spectra (the group of eigenvalues in an adjacency matrix), such as the spectral distribution. This measure is associated with several structural characteristics of networks such as the number of walks, diameter, and clicks. In addition to the spectral distribution, BioNetStat can also compare networks by using spectral entropy, degree distribution, and nodes centralities. Until now the BioNetStat theoretical base is available only in the [master dissertation](http://www.teses.usp.br/autor.php?autor=37A71EBFAC13) in Portuguese. The paper is under production and will be posted here as soon as possible.
 
 Authors: Jardim, V., Santos, S., Fujita, A., Buckeridge, S. (2018). BioNetStat: A tool for biological network analysis.
 
@@ -8,7 +11,7 @@ Maintainer: Laboratório de fisiologia ecologica de plantas [LAFIECO](http://www
 
 ## Installation
 ### Dependencies
-R (>= 3.0.0), shiny, WGCNA, igraph, shinyBS, RColorBrewer, Hmisc, pathway, psych, RJSONIO, whisker, yaml, pheatmap, preprocessCore, GO.db, AnnotationDbi, impute, and ggplot2
+R (>= 3.4), shiny (>= 0.8.0), igraph, shinyBS, pathview
 
 ### Installation steps
 
