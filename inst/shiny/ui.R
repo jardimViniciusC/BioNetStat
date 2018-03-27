@@ -110,8 +110,8 @@ shinyUI(fluidPage(theme = "bootstrap.css",
       # Results tab
       tabPanel(
         h5("Analysis results"),
-        bsAlert(inputId = "resultsWarning"),
-        # bsAlert(anchorId =  "resultsWarning"),
+        # bsAlert(inputId = "resultsWarning"),
+        bsAlert(anchorId =  "resultsWarning"),
         # progressInit(),
         uiOutput("appMessages"),
         uiOutput("isCompleted"),

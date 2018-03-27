@@ -22,4 +22,4 @@
 #' @examples
 #' data(labels)
 #' # Run BNS analysis
-"varFile"
+"labels"

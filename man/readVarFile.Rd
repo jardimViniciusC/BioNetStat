@@ -32,5 +32,5 @@ varFile<-readVarFile(gliomaData)
 # Random file
 test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
 write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
-a<-readVarFile("~/tf.csv")
+a<-readVarFile(fileName="~/tf.csv")
 }

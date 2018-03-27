@@ -3,7 +3,6 @@
 \docType{data}
 \name{labels}
 \alias{labels}
-\alias{varFile}
 \title{Labels of glioma tissues in gene expression}
 \format{Vector which associates each row of data.frame (varFile) with a state (that will be an network).}
 \source{

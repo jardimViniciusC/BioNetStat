@@ -13,11 +13,13 @@ readGmtFile(fileName)
 a list of gene sets. Each element of the list is a character vector
 v, where v[1] contains the gene set name, v[2] descriptions about the set,
 v[3..length(v)] the genes that belong to the set.
-#' # Read example gmt file
-gmt_fname <- system.file("extdata", "c2.cp.v5.2.symbols.gmt", package = "BioNetStat")
-deneSets <- read_gmt(gmt_fname)
 }
 \description{
 'readGmtFile' reads a tab-delimited text file containing a collection of
 gene sets.
+}
+\examples{
+# Read example gmt file
+gmt_fname <- system.file("extdata", "c2.cp.v5.2.symbols.gmt", package = "BioNetStat")
+deneSets <- read_gmt(gmt_fname)
 }

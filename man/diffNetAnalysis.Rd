@@ -2,7 +2,7 @@
 % Please edit documentation in R/loading_files.R
 \name{diffNetAnalysis}
 \alias{diffNetAnalysis}
-\title{Class vector of data table}
+\title{Differential network analysis method}
 \usage{
 diffNetAnalysis(method, options, varFile, labels, varSets = NULL,
   adjacencyMatrix, numPermutations = 1000, print = TRUE,
@@ -35,12 +35,12 @@ diffNetAnalysis(method, options, varFile, labels, varSets = NULL,
 a data frame containing the name, size, test statistic, nominal p-value and adjusted p-value (q-value) associated with each gene set.
 }
 \description{
-Class vector of data table
+Differential network analysis method
 }
 \examples{
 # Glioma data
-varFile<-data(varFile)
-labels<-data(labels)
+data("varFile")
+data("labels")
 adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
  thr.value=0.05, weighted=FALSE)
 diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, varSets=NULL,

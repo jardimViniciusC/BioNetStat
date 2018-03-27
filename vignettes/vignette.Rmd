@@ -4,6 +4,11 @@ output:
   pdf_document: default
   html_document: default
 ---
+%\VignetteIndexEntry{2. Interface tutorial}
+%\VignetteKeywords{user interface}
+%\VignettePackage{BioNetStat}
+%\VignetteEngine{knitr::knitr}
+
 # BioNetStat user interface tutorial
 
 Being R and BioNetStat installed, as showed in [README](https://github.com/jardimViniciusC/BioNetStat/blob/master/README.md), you have just open R and run the following commands.

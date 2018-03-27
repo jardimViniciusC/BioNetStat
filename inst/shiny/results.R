@@ -7,11 +7,10 @@ results <- reactive ({
     colnames(results) <- c("Variables set name","N of Networks","Set size", "Test statistic", "Nominal p-value", "q-value",classes)#
     if (!values$canExecute || input$start==0)
         return(results)
-    createAlert(session, inputId = "resultsWarning",
-                message = paste("The analysis is running..."),
-                type = "info",
+    createAlert(session, anchorId = "resultsWarning",
+                content = paste("The analysis is running..."),
+                style = "info",
                 dismiss = TRUE,
-                block = FALSE,
                 append = FALSE)
     isolate({
         expr <- values$expr
@@ -486,37 +485,34 @@ observe({
 
 # Alerts -----------------------------------------------------------------------
 
-createAlert(session, inputId = "resultsWarning",
-            message = paste("The analysis is not running. To start, load the",
+createAlert(session, anchorId = "resultsWarning",
+            content = paste("The analysis is not running. To start, load the",
                             "data, set the execution parameters, and then",
                             "click on the \"Start analysis\" button on the",
                             "sidebar."),
-            type = "info",
+            style = "info",
             dismiss = TRUE,
-            block = FALSE,
             append = FALSE)
 
 observe({
     if (values$completed) {
         r <- results()
         if (sum(is.na(r)) > 0) {
-            createAlert(session, inputId = "resultsWarning",
-                message = paste("There are missing results in your analysis.",
+            createAlert(session, anchorId = "resultsWarning",
+                        content = paste("There are missing results in your analysis.",
                                 "Please, check out the \"Help\" section on",
                                 "\"Interpreting results\" to know",
                                 "more about missing p-values."),
-                type = "warning",
-                dismiss = TRUE,
-                block = FALSE,
-                append = FALSE
+                        style = "warning",
+                        dismiss = TRUE,
+                        append = FALSE
             )
         }
         else {
-            createAlert(session, inputId = "resultsWarning",
-                  message = paste("The analysis completed successfully."),
-                  type = "success",
+            createAlert(session,anchorId =  "resultsWarning",
+                  content = paste("The analysis completed successfully."),
+                  style =  "success",
                   dismiss = TRUE,
-                  block = FALSE,
                   append = FALSE
               )
         }

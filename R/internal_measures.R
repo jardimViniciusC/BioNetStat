@@ -63,7 +63,7 @@ entropy <- function(f) {
 KL <- function(f1, f2) {
     y <- f1$y
     n <- length(y)
-    for (i in 1:n) {
+    for (i in seq_len(n)) {
         if (y[i] != 0 && f2$y[i] == 0)
             return(Inf)
         if (y[i] != 0)

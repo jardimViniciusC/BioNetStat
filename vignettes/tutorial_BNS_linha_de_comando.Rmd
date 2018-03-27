@@ -1,3 +1,14 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document: default
+---
+%\VignetteIndexEntry{1. Line command tutorial}
+%\VignetteKeywords{Line command}
+%\VignettePackage{BioNetStat}
+%\VignetteEngine{knitr::knitr}
+
 # Tutorial para uso do BioNetStat em linhas de comando
 
 Após a instalação do BioNetStat explicada em [README](/README.md), é necessário apenas abrir o R e rodar os seguintes comandos.

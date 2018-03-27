@@ -24,7 +24,7 @@ runBioNetStat <- function(){
 #' # Random file
 #' test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
 #' write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
-#' a<-readVarFile("~/tf.csv")
+#' a<-readVarFile(fileName="~/tf.csv")
 #' @export
 #'
 readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#readSampleTable
@@ -53,7 +53,7 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#r
   if(lapply(strsplit(as.character(path), '[.]'),rev)[[1]][1]=="csv"){ # Se o arquivo for CSV
     if(is.null(sep)) sep=";"
     table <- read.table(fileName,header=TRUE,dec=dec,sep=sep,check.names = check.names) # atentar para o decimal como virgula
-    expr <- table[,sapply(table,is.numeric)]
+    expr <- table[,vapply(table,is.numeric,FUN.VALUE = vector(length = 1))]
     n <- nrow(expr)
     return(expr)
     }
@@ -81,8 +81,8 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#r
 doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
   options(stringsAsFactors = TRUE)
   table <- read.csv(fileName,header=TRUE,dec=dec,sep=sep)
-  if(is.null(factorName)) factor <- names(which(!sapply(table,is.numeric)))[1]
-  else if(!any(factorName==names(which(!sapply(table,is.numeric))))) stop(paste("The factorName",factorName," doesn't exists in Data frame"))
+  if(is.null(factorName)) factor <- names(which(!vapply(table,is.numeric,FUN.VALUE = vector(length = 1))))[1]
+  else if(!any(factorName==names(which(!vapply(table,is.numeric,FUN.VALUE = vector(length = 1)))))) stop(paste("The factorName",factorName," doesn't exists in Data frame"))
   else factor <- factorName
   labels<-table[,factor]
   if(is.null(classes)) classes<-levels(labels)
@@ -92,12 +92,12 @@ doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
   l <- array(NA, length(labels))
   names <- unique(labels)
   i<-vector(length=length(classes))
-  for(p in 1:length(i)) i[p] <- which(names == classes[p])
+  for(p in seq_len(length(i))) i[p] <- which(names == classes[p])
 
   symbols <- unique(labels)
   j<-list()
   v<-0
-  for(p in 1:length(i)){
+  for(p in seq_len(length(i))){
     j[[p]] <- which(labels == symbols[i[p]])
     l[j[[p]]] <- v
     v <- v+1
@@ -115,7 +115,8 @@ doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
 #' @return a list of gene sets. Each element of the list is a character vector
 #' v, where v[1] contains the gene set name, v[2] descriptions about the set,
 #' v[3..length(v)] the genes that belong to the set.
-#' #' # Read example gmt file
+#' @examples
+#' # Read example gmt file
 #' gmt_fname <- system.file("extdata", "c2.cp.v5.2.symbols.gmt", package = "BioNetStat")
 #' deneSets <- read_gmt(gmt_fname)
 #' @export
@@ -123,7 +124,7 @@ readGmtFile <- function(fileName) {
   lines <- readLines(fileName)
   geneSets <- strsplit(lines, "\t")
   n <- length(geneSets)
-  for (i in 1:n) {
+  for (i in seq_len(n)) {
     if (length(geneSets[[i]]) < 3)
       stop(paste("Wrong variable sets file format. All sets should",
                  "contain at least one variable"))
@@ -132,7 +133,7 @@ readGmtFile <- function(fileName) {
 }
 
 ################################################################################################################
-#' Class vector of data table
+#' Differential network analysis method
 #'
 #' @param method a function that receives two adjacency matrices and returns a list containing a statistic theta that measures the difference between them, and a p-value for the test H0: theta = 0 against H1: theta > 0.
 #' @param options a list contaning paremeters used by 'method'.
@@ -148,8 +149,8 @@ readGmtFile <- function(fileName) {
 #' @return a data frame containing the name, size, test statistic, nominal p-value and adjusted p-value (q-value) associated with each gene set.
 #' @examples 
 #' # Glioma data
-#' varFile<-data(varFile)
-#' labels<-data(labels)
+#' data("varFile")
+#' data("labels")
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
 #'  thr.value=0.05, weighted=FALSE)
 #' diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
@@ -179,7 +180,7 @@ readGmtFile <- function(fileName) {
   results <- data.frame(matrix(NA, nrow=length(varSets), ncol=5+length(unique(labels[labels!=-1]))))
   output<-list()
   names <- array(NA, length(varSets))
-  for (i in 1:length(varSets)) {
+  for (i in seq_len(length(varSets))) {
     names[i] <- varSets[[i]][1]
   }
   rownames(results) <- names
