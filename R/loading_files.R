@@ -118,7 +118,7 @@ doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
 #' @examples
 #' # Read example gmt file
 #' gmt_fname <- system.file("extdata", "c2.cp.v5.2.symbols.gmt", package = "BioNetStat")
-#' deneSets <- read_gmt(gmt_fname)
+#' deneSets <- readGmtFile(gmt_fname)
 #' @export
 readGmtFile <- function(fileName) {
   lines <- readLines(fileName)

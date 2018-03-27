@@ -1,7 +1,7 @@
 Package: BioNetStat
 Type: Package
 Title: Biological Network Analysis
-Version: 0.99.1
+Version: 0.99.2
 Date: 2018-02-28
 Author: Vinicius Jardim Carvalho and Suzana de Siqueira Santos
 Maintainer: Vinicius Jardim <viniciusjc@gmail.com>
