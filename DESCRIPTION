@@ -1,7 +1,7 @@
 Package: BioNetStat
 Type: Package
 Title: Biological Network Analysis
-Version: 0.99.4
+Version: 0.99.5
 Author: Vinicius Jardim Carvalho and Suzana de Siqueira Santos
 Maintainer: Vinicius Jardim <viniciusjc@gmail.com>
 Description: A package to perform differential network analysis, differential node analysis (differential coexpression analysis), network and metabolic pathways view.
