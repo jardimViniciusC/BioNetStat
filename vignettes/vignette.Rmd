@@ -1,13 +1,20 @@
 ---
 output:
-  word_document: default
+  html_document: 
+    toc: true
+    toc_depth: 3
+    number_sections: true
   pdf_document: default
-  html_document: default
+  word_document: default
 ---
 %\VignetteIndexEntry{2. Interface tutorial}
 %\VignetteKeywords{user interface}
 %\VignettePackage{BioNetStat}
 %\VignetteEngine{knitr::knitr}
+
+# BioNetStat background
+
+The diversity of interactions that occurs in biological systems from the cells and organelles to the whole biosphere, can be assessed with tools of the networks theory. The dynamic in structure and in the interactions among elements is an inherent trait of those systems. Several tools have been proposed to compare networks, representing the many states assumed by a system. However, until the present, none of them is able to compare structural characteristics among more than two networks simultaneously. Due to the many states that can be assumed by a given biological system, we developed a statistical tool to compare two or more networks and point key variables in a system. BioNetStat is able to compare correlation networks built from gene expression data, metabolites concentrations or any kind of variables that could be statistically correlated, considering a previous data preprocessing. The networks comparison is based on graph spectra (the group of eigenvalues in an adjacency matrix), such as the spectral distribution. This measure is associated with several structural characteristics of networks such as the number of walks, diameter, and clicks. In addition to the spectral distribution, BioNetStat can also compare networks by using spectral entropy, degree distribution, and nodes centralities. Until now the BioNetStat theoretical base is available only in the [master dissertation](http://www.teses.usp.br/autor.php?autor=37A71EBFAC13), in Portuguese. The paper is under production and will be posted here as soon as possible.
 
 # BioNetStat user interface tutorial
 
@@ -16,9 +23,9 @@ Being R and BioNetStat installed, as showed in [README](https://github.com/jardi
 library(devtools)
 library(shiny)
 library(BioNetStat)
-runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
+runBioNetStat()
 ```
-### First screen
+## First screen
 When you start BioNetStat you will see this image.
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/www/images/bionetstat_open_image.png?raw=true" alt="Image of BioNetStat" height="200"/>
@@ -27,7 +34,7 @@ If you are using Rstudio an alternative window will open, therefore BNS will per
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_open_image_Rstudio.png" alt="Image of BioNetStat_rstudio" height="150"/>
 
-### Loading the files
+## Loading the files
 
 By clicking on the 'Browse ..' icon in section 1 (Load data) a window will open for the table of variables values to be selected.
 
@@ -46,7 +53,7 @@ After selecting the variable values table, it is possible to load the file 'vari
 
 The tutorial to build your table of variables groups is [here](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/shiny/help/helpData.html).
 
-### Parameters setting
+## Parameters setting
 
 After load input files, you migth set the parameters to network construction:
 1. Lower and higher numbers of variables (nodes) that will be in the networks compared in 'Variable sets size range'. The program returns the number of sets of variables that are between these values (figure above).
@@ -63,12 +70,12 @@ After load input files, you migth set the parameters to network construction:
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net2_image.png" alt="Image of BioNetStatNet2Parameters" height="150"/><img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_setingParameters_net2_image2.png" alt="Image of BioNetStatNet2Parameters" height="150"/>
 
 
-### Runnig the differential network analysis
+## Runnig the differential network analysis
 After loading the files and selecting the analysis parameters, click on 'Start analysis' to compare the networks.
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_runningMethod_image.png" alt="Image of BioNetStatrunning" height="150"/>
 
-### Results
+## Results
 1. While the analysis is performed, this warning is shown:
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_execution_image.png" alt="Image of BioNetStatwaiting" height="150"/>
@@ -81,18 +88,18 @@ After loading the files and selecting the analysis parameters, click on 'Start a
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_results2_image.png" alt="Image of BioNetStatres2" height="150"/>
 
-#### Node differential analysis
+### Node differential analysis
 4. It is also possible to compare the importance of nodes. In the 'Further analysis' tab you migth select the groups of variables according to a threshold criteria. The group of variables is chosen and the program will generate the nodes comparison by degree centrality.
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert1_image.png" alt="Image of BioNetStatresVert1" height="200"/>
 
 5. When the table appear, it is possible to select other structural properties to compare the nodes importance. The diferential node analysis table is shown as in the following figure:
 
-##### Node analysis
+#### Node analysis
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert2_image.png" alt="Image of BioNetStatresVert2" height="200"/>
 
-#### KEGG pathway visualization
+### KEGG pathway visualization
 6. Another available functionality is to observe the variables in the metabolic pathways of the database [KEGG](http://www.kegg.jp/), which allow you to know more in depth the metabolic pathways that the studied variables are related.
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert3_image.png" alt="Image of BioNetStatresVert3" height="150"/>
@@ -109,7 +116,7 @@ When clicking the button to save it is necessary to wait for the program to down
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_resultsVert7_image.png" alt="Image of BioNetStatresVert7" height="150"/>
 
-#### Network visualization
+### Network visualization
 
 Visualizing networks helps us understand the changing patterns more easily. This visualization can be done in several ways and some of them are available in BioNetStat in the "Network visualization plots" tab. As several states can be compared by the BNS in this section you need to choose only two of them to be viewed and compared each time.
 
@@ -135,7 +142,7 @@ Visualizing networks helps us understand the changing patterns more easily. This
 
 <img src="https://github.com/jardimViniciusC/BioNetStat/raw/master/inst/shiny/www/images/bionetstat_sit_list.png" alt="Image of BioNetStat sit_list" height="150"/>
 
-#### Study the behavior of variables
+### Study the behavior of variables
 
 BioNetStat also provides a study of the behavior of the variables so that the user can have a complete view of their object of study.
 1. Initially the variables can be explored through the construction of a heatmap where the parameters of the figure are selected. In the columns are the samples with the colors indicating to which state each sample belongs. It is possible to group both the columns (samples) and the lines (variables) of the heatmap in the section "heatmap cluster options".

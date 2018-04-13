@@ -11,24 +11,18 @@ Maintainer: Laboratório de fisiologia ecologica de plantas [LAFIECO](http://www
 
 ## Installation
 ### Dependencies
-R (>= 3.4), shiny (>= 0.8.0), igraph, shinyBS, pathview
+R (>= 3.4), shiny, igraph, shinyBS, pathview
 
 ### Installation steps
 
 1. If don't have the R software installed in our computer, download and install it (check out the [R home page](http://www.r-project.org/))
 2. Open the R command line interface, and install all BNS dependencies (if they have not been installed yet):
 ```Rscript
-install.packages(c("shiny","shinyBS","WGCNA", "igraph", "RColorBrewer", "Hmisc", "psych", "RJSONIO", "whisker", "yaml", "pheatmap", "ggplot2","devtools","matrix","mgcv"))
 source("http://bioconductor.org/biocLite.R")
-biocLite("impute")
-biocLite("preprocessCore")
-biocLite("GO.db")
-biocLite("AnnotationDbi")
-biocLite("pathview")
-biocLite ("Biostrings")
+biocLite("BioNetStat")
 ```
 
-2. a. If 'pathview' package don't install, try to install this libraries in linux shell terminal.
+2. a.'Pathview' package is an important package to 'Bionetstat' visualzations. In Linux OS, if 'pathview' don't install in installation process, try to install this libraries in linux shell terminal.
 ```Rscript
 $ sudo apt-get install libxml2-dev
 $ sudo apt-get install libcurl4-openssl-dev
@@ -39,11 +33,6 @@ $ sudo apt-get install libssl-dev
 source("http://bioconductor.org/biocLite.R")
 biocLite("pathview")
 ```
-3. Install the BioNetStat (BNS) package
-```Rscript
-library(devtools)
-install_github("jardimViniciusC/BioNetStat")
-```
 ## Running BioNetStat
 
 After installed and the next time you want to use BioNetStat, to run, just type the following code:
@@ -53,10 +42,10 @@ library(shiny)
 ```
 If you want to use a Graphical interface type
 ```Rscript
-runGitHub("jardimViniciusC/BioNetStat",subdir = "inst/shiny")
+runBioNetStat()
 ```
 Wait for the browser page to open, and enjoy BioNetStat!
 
 ## How to use BioNetStat?
-The tutorials with examples data sets are in [Tutorial para uso do BioNetStat em linhas de comando](vignettes/tutorial_BNS_linha_de_comando.Rmd) or in [Tutorial BioNetStat para a interface](vignettes/vignettes.Rmd ).
+The tutorial with examples data sets are in the vignette.
 

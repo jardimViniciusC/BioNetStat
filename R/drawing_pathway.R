@@ -1,8 +1,8 @@
 # library(pathview)
 
-####################################################################
+# ------------------------------------------
 # Helper functions
-####################################################################
+# ------------------------------------------
 selecting.list <- function(var.diff.list,threshold,thr.value){
     if(dim(var.diff.list)[1]==0) 
         stop("The differential table have 0 rows")
@@ -20,7 +20,6 @@ selecting.list <- function(var.diff.list,threshold,thr.value){
     return(tab[,-1])
 }
 
-####################################################################
 var.list<-function(expr,labels,FUN){
   expr<-t(expr)
   mat<-cbind(labels,expr)
@@ -30,7 +29,7 @@ var.list<-function(expr,labels,FUN){
   return(tab)
 }
 
-####################################################################
+
 plot.names<-function(var.diff.list,threshold,thr.value){
   if(dim(var.diff.list)[1]==0) 
     stop("The differential table have 0 rows")
@@ -47,7 +46,9 @@ plot.names<-function(var.diff.list,threshold,thr.value){
   return(names)
 }
 
-####################################################################
+# ------------------------------------------
+# Drawing functions
+# ------------------------------------------
 #' Structural measures of vertices view in metabolic pathways
 #' @description Vertices centralities or clustering coefficient view in KEGG metabolic pathways.
 #' centralityPathPlot and pathplot are functions based on pathview function of Pathview package. Pathview is a tool set for pathway based data integration and visualization. It maps and renders user data on relevant pathway graphs. All users need is to supply their gene or compound data and specify the target pathway. Pathview automatically downloads the pathway graph data, parses the data file, maps user data to the pathway, and render pathway graph with the mapped data. Pathview generates both native KEGG view and Graphviz views for pathways. keggview.native and keggview.graph are the two viewer functions, and pathview is the main function providing a unified interface to downloader, parser, mapper and viewer functions.
@@ -132,7 +133,7 @@ centralityPathPlot<- function(gene.data=NULL, cpd.data=NULL, threshold=NULL, thr
   return(pv.out)
 }
 
-####################################################################
+
 #' Variable values view in metabolic pathways
 #' @description Variable values view in KEGG metabolic pathways
 #' @param gene.data either vector (single sample) or a matrix-like data (multiple sample). Vector should be numeric with gene IDs as names or it may also be character of gene IDs. Character vector is treated as discrete or count data. Matrix-like data structure has genes as rows and samples as columns. Row names should be gene IDs. Here, gene ID is a generic concepts, including multiple types of gene, transcript and protein uniquely mappable to KEGG gene IDs. KEGG ortholog IDs are also treated as gene IDs as to handle metagenomic data. Check details for mappable ID types. Default gene.data=NULL.

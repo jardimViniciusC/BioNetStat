@@ -3,6 +3,7 @@
 #'
 #' Run BNS on the browser user interface.
 #' @return open BioNetStat user interface
+#' @examples  # run  runBioNetStat() # to open user interface of BioNetStat
 #' @export
 runBioNetStat <- function(){
   shiny::runApp(system.file('shiny', package='BioNetStat'))
@@ -146,6 +147,7 @@ readGmtFile <- function(fileName) {
 #' @param resultsFile a ".RData" file name to be saved in tha work directory.
 #' @param seed the seed for the random number generators. If it is not null then the sample permutations are the same for all the gene sets.
 #' @param min.vert lower number of nodes (variables) that has to be to compare the networks.
+#' @param BPPARAM An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions.
 #' @return a data frame containing the name, size, test statistic, nominal p-value and adjusted p-value (q-value) associated with each gene set.
 #' @examples 
 #' # Glioma data
@@ -170,7 +172,7 @@ readGmtFile <- function(fileName) {
 #'
  diffNetAnalysis <- function(method, options, varFile, labels, varSets=NULL,
                             adjacencyMatrix, numPermutations=1000, print=TRUE,
-                            resultsFile=NULL, seed=NULL, min.vert=5) {
+                            resultsFile=NULL, seed=NULL, min.vert=5,BPPARAM=MulticoreParam()) {
    if(is.null(varSets)) varSets <- list(c("all",colnames(varFile)))
    # else varSets[[length(varSets)+1]] <- c("all",colnames(varFile))
    varSets<-lapply(varSets, function(x){
@@ -197,7 +199,7 @@ readGmtFile <- function(fileName) {
       set.seed(seed)
     result <- method(varFile[,genes], labels, adjacencyMatrix=
                        adjacencyMatrix,  numPermutations=
-                       numPermutations, options=options)
+                       numPermutations, options=options,BPPARAM=BPPARAM)
     if(!is.list(result)){
       output[[setName]]<-result
       results<-output

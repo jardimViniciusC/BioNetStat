@@ -6,7 +6,8 @@
 \usage{
 diffNetAnalysis(method, options, varFile, labels, varSets = NULL,
   adjacencyMatrix, numPermutations = 1000, print = TRUE,
-  resultsFile = NULL, seed = NULL, min.vert = 5)
+  resultsFile = NULL, seed = NULL, min.vert = 5,
+  BPPARAM = MulticoreParam())
 }
 \arguments{
 \item{method}{a function that receives two adjacency matrices and returns a list containing a statistic theta that measures the difference between them, and a p-value for the test H0: theta = 0 against H1: theta > 0.}
@@ -30,6 +31,8 @@ diffNetAnalysis(method, options, varFile, labels, varSets = NULL,
 \item{seed}{the seed for the random number generators. If it is not null then the sample permutations are the same for all the gene sets.}
 
 \item{min.vert}{lower number of nodes (variables) that has to be to compare the networks.}
+
+\item{BPPARAM}{An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions.}
 }
 \value{
 a data frame containing the name, size, test statistic, nominal p-value and adjusted p-value (q-value) associated with each gene set.

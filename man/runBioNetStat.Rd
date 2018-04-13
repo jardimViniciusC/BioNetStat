@@ -12,3 +12,6 @@ open BioNetStat user interface
 \description{
 Run BNS on the browser user interface.
 }
+\examples{
+ # run  runBioNetStat() # to open user interface of BioNetStat
+}

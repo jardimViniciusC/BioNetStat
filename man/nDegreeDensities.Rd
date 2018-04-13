@@ -19,14 +19,13 @@ nDegreeDensities(Gs, npoints = 1024, bandwidth = "Sturges", from = NULL,
 \item{to}{the higher value used to build the distribution}
 }
 \value{
-a list containing the components, f1 (density estimate of the
-graph G1), and f2 (density estimate of the graph G2). Each component is
-a list, where the first element is the vector 'x' of 'npoints' coordinates
-of the points where the density function is estimated, and the second is
+a list containing the components 'x' and 'densities'. 
+The first element is the vector 'x' of 'npoints' coordinates
+of the points where the density function i estimated, and the second is
 a vector 'y' of the estimated density values.
 }
 \description{
-'degreeDensities' estimates the density functions of the degrees for n
+'nDegreeDensities' estimates the density functions of the degrees for n
 graphs at the same coordinates
 }
 \examples{
