@@ -156,8 +156,9 @@ readGmtFile <- function(fileName) {
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
 #'  thr.value=0.05, weighted=FALSE)
 #' diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
-#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1000, print=TRUE, resultsFile=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
 #'   seed=NULL, min.vert=5, option=NULL)
+#' # The numPermutations number is 1 to do a faster example, but we advise to use unless 1000 permutations in real analysis
 #'   
 #' # Random data
 #' set.seed(1)

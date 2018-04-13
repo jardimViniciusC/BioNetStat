@@ -614,12 +614,13 @@ resInt <- function(A,expr,weighted,fun){
 #' labels<-rep(0:3,10)
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
 #'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' # The numPermutations number is 1 to do a faster example, but we advise to use unless 1000 permutations in real analysis
 
 #' @rdname networkTest
 #' @examples 
 #' 
 #' # Degree centrality test
-#' degreeCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' degreeCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 degreeCentralityTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=MulticoreParam()) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -643,7 +644,7 @@ degreeCentralityTest <- function(expr, labels, adjacencyMatrix, numPermutations=
 #' @examples 
 #' 
 #' # Betweenness centrality test
-#' betweennessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' betweennessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 betweennessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutations=1000, options=NULL,BPPARAM=MulticoreParam()) {
   # Betweenness centrality test for many graphs
@@ -671,7 +672,7 @@ betweennessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutati
 #' @examples 
 #' 
 #' # Closeness centrality test
-#' closenessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' closenessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 closenessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutations=1000, options=NULL, BPPARAM=MulticoreParam()) {
   # Closeness centrality test for many graphs
@@ -698,7 +699,7 @@ closenessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutation
 #' @examples 
 #' 
 #' # Eigenvector centrality test
-#' eigenvectorCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' eigenvectorCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 eigenvectorCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutations=1000, options=NULL, BPPARAM=MulticoreParam()) {
   # Eigenvector centrality test for many graphs
@@ -723,7 +724,7 @@ eigenvectorCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutati
 #' @examples 
 #' 
 #' # Clustering coefficient test
-#' clusteringCoefficientTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' clusteringCoefficientTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 clusteringCoefficientTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=MulticoreParam()) {
     lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -764,7 +765,7 @@ clusteringCoefficientTest <- function(expr, labels, adjacencyMatrix, numPermutat
 #' @examples 
 #' 
 #' # Shortest path test
-#' shortestPathTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' shortestPathTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 shortestPathTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=MulticoreParam()) {
   # Shortest path test for many graphs
@@ -795,7 +796,7 @@ shortestPathTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000
 #' @examples
 #' 
 #' # Degree distribution test
-#' degreeDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' degreeDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 degreeDistributionTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=list(bandwidth="Sturges"), BPPARAM=MulticoreParam()) {
 
@@ -825,7 +826,7 @@ degreeDistributionTest <- function(expr, labels, adjacencyMatrix, numPermutation
 #' @examples 
 #' 
 #' # Spectral entropy test
-#' spectralEntropyTest(expr, labels, adjacencyMatrix1,numPermutations=10,
+#' spectralEntropyTest(expr, labels, adjacencyMatrix1,numPermutations=1,
 #'  options=list(bandwidth="Sturges"))
 #' @export
 spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=list(bandwidth="Sturges"), BPPARAM=MulticoreParam()) {
@@ -860,7 +861,7 @@ spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1
 #' @examples 
 #' 
 #' # Spectral distribution test
-#' spectralDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=10,
+#' spectralDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=1,
 #'  options=list(bandwidth="Sturges"))
 #' @export
 spectralDistributionTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=list(bandwidth="Sturges"),BPPARAM=MulticoreParam()) {
@@ -926,12 +927,13 @@ retTable <- function(results,output,expr,numPermutations,lab){
 #' labels<-rep(0:3,10)
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
 #'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' # The numPermutations number is 1 to do a faster example, but we advise to use unless 1000 permutations in real analysis
 
 #' @rdname nodeTest
 #' @examples 
 #' 
 #' # Degree centrality test
-#' degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 degreeCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL,BPPARAM=MulticoreParam()) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -953,7 +955,7 @@ degreeCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermuta
 #' @examples 
 #' 
 #' # Betweenness centrality test
-#' betweennessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' betweennessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 betweennessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=MulticoreParam()) {
   # Betweenness centrality test for many graphs
@@ -978,7 +980,7 @@ betweennessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPe
 #' @examples 
 #' 
 #' # Closeness centrality test
-#' closenessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' closenessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 closenessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=MulticoreParam()) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -1002,7 +1004,7 @@ closenessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPerm
 #' @examples 
 #' 
 #' # Eigenvector centrality test
-#' eigenvectorCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' eigenvectorCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 eigenvectorCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=MulticoreParam()) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -1024,7 +1026,7 @@ eigenvectorCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPe
 #' @examples 
 #' 
 #' # Clustering coefficient test
-#' clusteringCoefficientVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' clusteringCoefficientVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 #' @export
 clusteringCoefficientVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=MulticoreParam()) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.

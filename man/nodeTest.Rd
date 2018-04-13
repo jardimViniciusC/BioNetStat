@@ -53,19 +53,20 @@ expr <- as.data.frame(matrix(rnorm(120),40,30))
 labels<-rep(0:3,10)
 adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
  threshold="fdr", thr.value=0.05, weighted=FALSE)
+# The numPermutations number is 1 to do a faster example, but we advise to use unless 1000 permutations in real analysis
 
 # Degree centrality test
-degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Betweenness centrality test
-betweennessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+betweennessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Closeness centrality test
-closenessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+closenessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Eigenvector centrality test
-eigenvectorCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+eigenvectorCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Clustering coefficient test
-clusteringCoefficientVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+clusteringCoefficientVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 }

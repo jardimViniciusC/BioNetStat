@@ -71,33 +71,34 @@ expr <- as.data.frame(matrix(rnorm(120),40,30))
 labels<-rep(0:3,10)
 adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
  threshold="fdr", thr.value=0.05, weighted=FALSE)
+# The numPermutations number is 1 to do a faster example, but we advise to use unless 1000 permutations in real analysis
 
 # Degree centrality test
-degreeCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+degreeCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Betweenness centrality test
-betweennessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+betweennessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Closeness centrality test
-closenessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+closenessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Eigenvector centrality test
-eigenvectorCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+eigenvectorCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Clustering coefficient test
-clusteringCoefficientTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+clusteringCoefficientTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Shortest path test
-shortestPathTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+shortestPathTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Degree distribution test
-degreeDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+degreeDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Spectral entropy test
-spectralEntropyTest(expr, labels, adjacencyMatrix1,numPermutations=10,
+spectralEntropyTest(expr, labels, adjacencyMatrix1,numPermutations=1,
  options=list(bandwidth="Sturges"))
 
 # Spectral distribution test
-spectralDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=10,
+spectralDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=1,
  options=list(bandwidth="Sturges"))
 }

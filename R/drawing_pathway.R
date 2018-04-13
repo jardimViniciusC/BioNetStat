@@ -178,7 +178,7 @@ centralityPathPlot<- function(gene.data=NULL, cpd.data=NULL, threshold=NULL, thr
 #' labels <- rep(0:3,10)
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
 #'  thr.value=0.05, weighted=FALSE)
-#' vertexCentrality <- degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=10)
+#' vertexCentrality <- degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1) #The numPermutations number is 1 to do a faster example, but we advise to use unless 1000 permutations in real analysis
 #' vertexCentrality2<-cbind(c(4790, 4791, 4792, 4793, 84807, 4794, 4795, 64332, 595, 898, 23552,
 #'  1017, 8099, 10263, 4609, 23077, 26292, 84073, 4610, 4613, 10408,  80177, 114897, 114898, 114899,
 #'   114900, 114904, 114905, 390664, 338872),vertexCentrality)
