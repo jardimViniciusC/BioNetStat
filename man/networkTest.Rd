@@ -7,7 +7,6 @@
 \alias{closenessCentralityTest}
 \alias{eigenvectorCentralityTest}
 \alias{clusteringCoefficientTest}
-\alias{shortestPathTest}
 \alias{degreeDistributionTest}
 \alias{spectralEntropyTest}
 \alias{spectralDistributionTest}
@@ -28,11 +27,8 @@ eigenvectorCentralityTest(expr, labels, adjacencyMatrix,
 clusteringCoefficientTest(expr, labels, adjacencyMatrix,
   numPermutations = 1000, options = NULL, BPPARAM = MulticoreParam())
 
-shortestPathTest(expr, labels, adjacencyMatrix, numPermutations = 1000,
-  options = NULL, BPPARAM = MulticoreParam())
-
 degreeDistributionTest(expr, labels, adjacencyMatrix, numPermutations = 1000,
-  options = list(bandwidth = "Sturges"), BPPARAM = MulticoreParam())
+  options = list(bandwidth = "Silverman"), BPPARAM = MulticoreParam())
 
 spectralEntropyTest(expr, labels, adjacencyMatrix, numPermutations = 1000,
   options = list(bandwidth = "Sturges"), BPPARAM = MulticoreParam())
@@ -87,9 +83,6 @@ eigenvectorCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Clustering coefficient test
 clusteringCoefficientTest(expr, labels, adjacencyMatrix1,numPermutations=1)
-
-# Shortest path test
-shortestPathTest(expr, labels, adjacencyMatrix1,numPermutations=1)
 
 # Degree distribution test
 degreeDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=1)

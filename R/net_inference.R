@@ -22,6 +22,8 @@ adjacencyMatrix <- function(method, association=c("corr","pvalue","fdr"), thresh
                             thr.value=0.05, weighted=TRUE,abs.values=TRUE) {# Lembrar que o threshold pode ser para a correlacao ou para p-valor
   return(
     function(expr) {
+      if(all(association!=c("corr","pvalue","fdr"))) stop("Choose association value as one of three options: corr, pvalue or fdr")
+      if(all(threshold!=c("fdr", "pvalue","corr", NULL))) stop("Choose threshold value as one of three options: corr, pvalue, fdr or NULL")
       if(any(method==c("pearson","spearman","kendall"))){
         if(nrow(expr)==3 | nrow(expr)==4) A <- list(cor(as.matrix(expr), method=method))
           else{
