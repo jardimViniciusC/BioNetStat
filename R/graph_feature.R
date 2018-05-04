@@ -329,7 +329,7 @@ absDiffSpectralEntropy <- function(A1, A2, bandwidth="Sturges") {
 # Node scores
 # ------------------------------------------------------------------------------
 
-#' Node score
+#' Node scores
 #' @description Node score (degree, betweenness, closenness, eigenvector centralities or clustering coefficient) for each network analysed.
 #' @param expr Matrix of variables (columns) vs samples (rows).
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state.
@@ -341,9 +341,9 @@ absDiffSpectralEntropy <- function(A1, A2, bandwidth="Sturges") {
 #' labels<-rep(0:3,10)
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
 #'  threshold="fdr", thr.value=0.05, weighted=FALSE)
-#' @name nodeScore
+#' @name nodeScores
 
-#' @rdname nodeScore
+#' @rdname nodeScores
 #' @examples
 #' 
 #' # Degree centrality
@@ -363,7 +363,7 @@ degreeCentrality <- function(expr, labels, adjacencyMatrix) {
   return(result)
 }
 
-#' @rdname nodeScore
+#' @rdname nodeScores
 #' @examples 
 #' 
 #' # Betweenness Centrality
@@ -384,7 +384,7 @@ betweennessCentrality <- function(expr, labels, adjacencyMatrix) {
   return(result)
 }
 
-#' @rdname nodeScore
+#' @rdname nodeScores
 #' @examples 
 #' 
 #' # Closenness Caentrality
@@ -405,7 +405,7 @@ closenessCentrality <- function(expr, labels, adjacencyMatrix) {
   return(result)
 }
 
-#' @rdname nodeScore
+#' @rdname nodeScores
 #' @examples 
 #' 
 #' # Eigenvector centrality
@@ -425,7 +425,7 @@ eigenvectorCentrality <- function(expr, labels, adjacencyMatrix) {
   return(result)
 }
 
-#' @rdname nodeScore
+#' @rdname nodeScores
 #' @examples
 #' 
 #' # Clustering coefficient
