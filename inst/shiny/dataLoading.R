@@ -93,7 +93,6 @@ geneSetsInput <- reactive ({
   expr <- exprInput()
   if (is.null(inFile)) geneSets<-list(c("all",colnames(expr)))
   else geneSets <- readGmtFile(inFile$datapath)
-  print(geneSets)
   return(geneSets)
 })
 

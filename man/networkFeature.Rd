@@ -11,17 +11,17 @@
 \alias{spectralEntropies}
 \title{Network features}
 \usage{
-averageDegreeCentrality(expr, labels, adjacencyMatrix)
+averageDegreeCentrality(expr, labels, adjacencyMatrix, options = NULL)
 
-averageBetweennessCentrality(expr, labels, adjacencyMatrix)
+averageBetweennessCentrality(expr, labels, adjacencyMatrix, options = NULL)
 
-averageClosenessCentrality(expr, labels, adjacencyMatrix)
+averageClosenessCentrality(expr, labels, adjacencyMatrix, options = NULL)
 
-averageEigenvectorCentrality(expr, labels, adjacencyMatrix)
+averageEigenvectorCentrality(expr, labels, adjacencyMatrix, options = NULL)
 
-averageClusteringCoefficient(expr, labels, adjacencyMatrix)
+averageClusteringCoefficient(expr, labels, adjacencyMatrix, options = NULL)
 
-averageShortestPath(expr, labels, adjacencyMatrix)
+averageShortestPath(expr, labels, adjacencyMatrix, options = NULL)
 
 spectralEntropies(expr, labels, adjacencyMatrix, options = list(bandwidth =
   "Sturges"))
@@ -33,8 +33,7 @@ spectralEntropies(expr, labels, adjacencyMatrix, options = list(bandwidth =
 
 \item{adjacencyMatrix}{a function that returns the adjacency matrix for a given variables values matrix}
 
-\item{options}{a list containing parameters. It can be set to either
-\code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.}
+\item{options}{a list containing parameters. Used only in spectralEntropies function. It can be set to either \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.}
 }
 \value{
 a list of values containing the spectral entropie or average node score of each network.

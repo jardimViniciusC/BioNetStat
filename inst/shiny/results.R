@@ -349,8 +349,6 @@ output$downloadResults <- downloadHandler(
         return(name)
     },
     content = function(filename) {
-      print("res")
-      print(filename)
         results <- results()
         rownames(results) <- NULL
         parameters <- matrix(NA, 18, ncol(results))

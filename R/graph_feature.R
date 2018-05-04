@@ -138,7 +138,7 @@ KLdegree<-function(f){
     f1 <- list("x"=f$x, "y"=f$densities[,j])
     partial[j] <- KL(f1, meanDensity)/ncol(f$densities)
   }
-  return(list(theta=sum(partial),Partial=partial))
+  return(list(theta=mean(partial),Partial=partial))
 }
 
 # Jensen-Shannon divergence between the density functions of the degrees of
@@ -277,7 +277,7 @@ KLspectrum<-function(f){
     f1 <- list("x"=f$x, "y"=f$densities[,j])
     partial[j] <- KL(f1, meanDensity)/ncol(f$densities)
   }
-  return(list(theta=sum(partial),Partial=partial))
+  return(list(theta=mean(partial),Partial=partial))
 }
 
 # Given two adjacency matrices, returns the Jensen-Shannon divergence between
@@ -458,6 +458,7 @@ clusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
 #' @param expr Matrix of variables (columns) vs samples (rows)
 #' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
 #' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
+#' @param options a list containing parameters. Used only in spectralEntropies function. It can be set to either \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.
 #' @return a list of values containing the spectral entropie or average node score of each network.
 #' @examples set.seed(1)
 #' expr <- as.data.frame(matrix(rnorm(120),40,30))
@@ -472,7 +473,7 @@ clusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
 #' # Average degree centrality
 #' averageDegreeCentrality(expr, labels, adjacencyMatrix1)
 #' @export
-averageDegreeCentrality <- function(expr, labels, adjacencyMatrix) {
+averageDegreeCentrality <- function(expr, labels, adjacencyMatrix, options=NULL) {
   result <- degreeCentrality(expr, labels, adjacencyMatrix)
   return(lapply(result,mean))
 }
@@ -483,7 +484,7 @@ averageDegreeCentrality <- function(expr, labels, adjacencyMatrix) {
 #' # Average betweenness centrality
 #' averageBetweennessCentrality(expr, labels, adjacencyMatrix1)
 #' @export
-averageBetweennessCentrality <- function(expr, labels, adjacencyMatrix) {
+averageBetweennessCentrality <- function(expr, labels, adjacencyMatrix, options=NULL) {
   result <- betweennessCentrality(expr, labels, adjacencyMatrix)
   return(lapply(result,mean))
 }
@@ -494,7 +495,7 @@ averageBetweennessCentrality <- function(expr, labels, adjacencyMatrix) {
 #' # Average closeness centrality
 #' averageClosenessCentrality(expr, labels, adjacencyMatrix1)
 #' @export
-averageClosenessCentrality <- function(expr, labels, adjacencyMatrix) {
+averageClosenessCentrality <- function(expr, labels, adjacencyMatrix, options=NULL) {
   result <- closenessCentrality(expr, labels, adjacencyMatrix)
   return(lapply(result,mean))
 }
@@ -505,7 +506,7 @@ averageClosenessCentrality <- function(expr, labels, adjacencyMatrix) {
 #' # Average eigenvector centrality
 #' averageEigenvectorCentrality(expr, labels, adjacencyMatrix1)
 #' @export
-averageEigenvectorCentrality <- function(expr, labels, adjacencyMatrix) {
+averageEigenvectorCentrality <- function(expr, labels, adjacencyMatrix, options=NULL) {
   result <- eigenvectorCentrality(expr, labels, adjacencyMatrix)
   return(lapply(result,mean))
 }
@@ -516,7 +517,7 @@ averageEigenvectorCentrality <- function(expr, labels, adjacencyMatrix) {
 #' # Average clustering coefficient
 #' averageClusteringCoefficient(expr, labels, adjacencyMatrix1)
 #' @export
-averageClusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
+averageClusteringCoefficient <- function(expr, labels, adjacencyMatrix, options=NULL) {
   result <- clusteringCoefficient(expr, labels, adjacencyMatrix)
   return(lapply(result,mean))
 }
@@ -527,7 +528,7 @@ averageClusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
 #' # Average shortest path
 #' averageShortestPath(expr, labels, adjacencyMatrix1)
 #' @export
-averageShortestPath <- function(expr, labels, adjacencyMatrix) {
+averageShortestPath <- function(expr, labels, adjacencyMatrix, options=NULL) {
   A<-list()
   v<-vector(length=length(unique(labels)))
   for (a in seq_len(length(unique(labels)))){
@@ -555,8 +556,6 @@ spectralEntropy <- function(A, bandwidth="Sturges") {
 }
 
 #' @rdname networkFeature
-#' @param options a list containing parameters. It can be set to either
-#' \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.
 #' @return spectralEntropies. A list of values containing the spectral entropy of each network.
 #' @examples 
 #' 
@@ -590,7 +589,7 @@ resInt <- function(A,expr,weighted,fun){
   s<-do.call(rbind,s) # "s" é uma matrix onde serão guardados os vetores dos betweenness e um vetor de média deles
   s<-rbind(s,apply(s,MARGIN=2,FUN=mean))
   partial<-apply(s[-dim(s)[1],],1, function(x) dist(rbind(x,s[dim(s)[1],]))/sqrt(n))# calcula a distancia euclidiana entre cada vetor de betweenness e o vetor medio
-  return(c(sum(partial),partial)) # A estatítica é a soma das distancias
+  return(c(mean(partial),partial)) # A estatítica é a soma das distancias
 }
 
 #' Network equality test
