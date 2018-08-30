@@ -18,8 +18,9 @@ R (>= 3.4), shiny, igraph, shinyBS, pathview
 1. If don't have the R software installed in our computer, download and install it (check out the [R home page](http://www.r-project.org/))
 2. Open the R command line interface, and install all BNS dependencies (if they have not been installed yet):
 ```Rscript
-source("http://bioconductor.org/biocLite.R")
-biocLite("BioNetStat")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("BioNetStat")
 ```
 
 2. a.'Pathview' package is an important package to 'Bionetstat' visualzations. In Linux OS, if 'pathview' don't install in installation process, try to install this libraries in linux shell terminal.
@@ -30,8 +31,9 @@ $ sudo apt-get install libssl-dev
 ```
 2. b. And, try to install 'pathview' again
 ```Rscript
-source("http://bioconductor.org/biocLite.R")
-biocLite("pathview")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("pathview")
 ```
 ## Running BioNetStat
 
