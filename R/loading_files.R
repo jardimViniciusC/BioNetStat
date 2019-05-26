@@ -38,15 +38,15 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#r
     if (cols[1] != "NAME")
       stop(paste("Wrong gene expression data format. The fist column",
                  "of the file should be \"Name\"."))
-
+    
     names <- expr[, "NAME"]
     n <- ncol(expr)
-
+    
     if (cols[2] == "DESCRIPTION")
       expr <- expr[, 3:n]
     else
       expr <- expr[, 2:n]
-
+    
     expr <- as.matrix(expr)
     rownames(expr) <- names
     return(expr) ## Lembrar que a matrix agora está com os genes na primeira coluna
@@ -57,7 +57,7 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#r
     expr <- table[,vapply(table,is.numeric,FUN.VALUE = vector(length = 1))]
     n <- nrow(expr)
     return(expr)
-    }
+  }
 }
 ################################################################################################################
 
@@ -94,7 +94,7 @@ doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
   names <- unique(labels)
   i<-vector(length=length(classes))
   for(p in seq_len(length(i))) i[p] <- which(names == classes[p])
-
+  
   symbols <- unique(labels)
   j<-list()
   v<-0
@@ -137,7 +137,7 @@ readGmtFile <- function(fileName) {
 #' Differential network analysis method
 #'
 #' @param method a function that receives two adjacency matrices and returns a list containing a statistic theta that measures the difference between them, and a p-value for the test H0: theta = 0 against H1: theta > 0.
-#' @param options a list contaning paremeters used by 'method'.
+#' @param options a list contaning parameters used by 'method'.
 #' @param varFile a numeric matrix contaning variables values data.
 #' @param labels a vector of -1s, 0s, and 1s associating each sample with a phenotype. The value 0 corresponds to the first phenotype class of interest, 1 to the second phenotype class of interest, and -1 to the other classes, if there are more than two classes in the gene expression data.
 #' @param varSets a list of gene sets. Each element of the list is a character vector v, where v[1] contains the gene set name, v[2] descriptions about the set, v[3..length(v)] the genes that belong to the set.
@@ -147,7 +147,7 @@ readGmtFile <- function(fileName) {
 #' @param resultsFile a ".RData" file name to be saved in tha work directory.
 #' @param seed the seed for the random number generators. If it is not null then the sample permutations are the same for all the gene sets.
 #' @param min.vert lower number of nodes (variables) that has to be to compare the networks.
-#' @param BPPARAM An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions.
+#' @param BPPARAM An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions. #MulticoreParam()
 #' @return a data frame containing the name, size, test statistic, nominal p-value and adjusted p-value (q-value) associated with each gene set.
 #' @examples 
 #' # Glioma data
@@ -171,15 +171,15 @@ readGmtFile <- function(fileName) {
 #'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 #'
- diffNetAnalysis <- function(method, options, varFile, labels, varSets=NULL,
+diffNetAnalysis <- function(method, options=list(bandwidth="Sturges"), varFile, labels, varSets=NULL,
                             adjacencyMatrix, numPermutations=1000, print=TRUE,
-                            resultsFile=NULL, seed=NULL, min.vert=5,BPPARAM=MulticoreParam()) {
-   if(is.null(varSets)) varSets <- list(c("all",colnames(varFile)))
-   # else varSets[[length(varSets)+1]] <- c("all",colnames(varFile))
-   varSets<-lapply(varSets, function(x){
-     if(sum(x %in% colnames(varFile))>=min.vert) x
-     else NA})#
-   varSets<-varSets[!is.na(varSets)]
+                            resultsFile=NULL, seed=NULL, min.vert=5,BPPARAM=NULL) {
+  if(is.null(varSets)) varSets <- list(c("all",colnames(varFile)))
+  # else varSets[[length(varSets)+1]] <- c("all",colnames(varFile))
+  varSets<-lapply(varSets, function(x){
+    if(sum(x %in% colnames(varFile))>=min.vert) x
+    else NA})#
+  varSets<-varSets[!is.na(varSets)]
   results <- data.frame(matrix(NA, nrow=length(varSets), ncol=5+length(unique(labels[labels!=-1]))))
   output<-list()
   names <- array(NA, length(varSets))
@@ -206,14 +206,14 @@ readGmtFile <- function(fileName) {
       results<-output
     }
     if(is.list(result)){
-    results[setName, "N of Networks"] <- sum(unique(labels)!=-1)
-    results[setName, "Test statistic"] <- result[[1]]
-    results[setName, "Nominal p-value"] <- result$p.value
-    results[setName, "Set size"] <- length(genes)
-    results[setName, 6:ncol(results)] <- result$Partial*100/sum(result$Partial)
+      results[setName, "N of Networks"] <- sum(unique(labels)!=-1)
+      results[setName, "Test statistic"] <- result[[1]]
+      results[setName, "Nominal p-value"] <- result$p.value
+      results[setName, "Set size"] <- length(genes)
+      results[setName, 6:ncol(results)] <- result$Partial*100/sum(result$Partial)
     }
     # if (!is.null(resultsFile)) save(results, file=resultsFile)
   }
   if(is.list(result)) results[, "Q-value"] <- p.adjust(results[, "Nominal p-value"], method="fdr")
   return(results)
- }
+}
