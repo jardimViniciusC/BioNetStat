@@ -40,7 +40,7 @@ output$geneSetsCount <- renderUI({
 output$minSize <- renderUI({
     min <- as.numeric(ifelse(is.null(minSize()), 16, minSize()))
     max <- as.numeric(ifelse(is.null(maxSize()), 1024, maxSize()))
-    numericInput("minSize", "Minimum variable set size", 10, min=min, max=max)
+    numericInput("minSize", "Minimum variable set size", ifelse(min<10,min,10), min=min, max=max)
 })
 # - Maximum gene set size
 output$maxSize <- renderUI({
@@ -72,17 +72,16 @@ output$predefGeneSets <- renderUI({
 })
 
 output$correlationMeasure <- renderUI({
-
     selectInput("correlationMeasure", h5("Select a dependence measure:"),
                 rownames(correlationMeasures))
 })
 
 output$linkFormation <- renderUI({
-  if(is.null(input$thrMeasure))
+  if(input$thrMeasure=="none")
     return()
-  switch(input$thrMeasure, "correlation"= sliderInput("thrValue",h5("Minimum value (threshold) for link construction"),min=0, max=1, value = 0.7),
-         "pvalue" = sliderInput("thrValue", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.95),
-         "qvalue" = sliderInput("thrValue", h5("Minimum value (threshold) for link construction"),min = 0,max = 1,value = 0.95))
+  switch(input$thrMeasure, "correlation"= sliderInput("thrValue",h5("Minimum value (threshold) for link formation"),min=0, max=1, value = 0.7),
+         "pvalue" = sliderInput("thrValue", h5("Minimum value (threshold) for link formation"),min = 0,max = 1,value = 0.95),
+         "qvalue" = sliderInput("thrValue", h5("Minimum value (threshold) for link formation"),min = 0,max = 1,value = 0.95))
 })
 
 # Select predefined gene sets

@@ -18,60 +18,52 @@
 #' @importFrom psych corr.test
 #' @export
 
-adjacencyMatrix <- function(method, association=c("corr","pvalue","fdr"), threshold=c("fdr", "pvalue","corr", NULL),
+adjacencyMatrix <- function(method, association="none", threshold="none",
                             thr.value=0.05, weighted=TRUE,abs.values=TRUE) {# Lembrar que o threshold pode ser para a correlacao ou para p-valor
   return(
     function(expr) {
-      if(all(association!=c("corr","pvalue","fdr"))) stop("Choose association value as one of three options: corr, pvalue or fdr")
-      if(all(threshold!=c("fdr", "pvalue","corr", NULL))) stop("Choose threshold value as one of three options: corr, pvalue, fdr or NULL")
+      if(all(association!=c("fdr", "pvalue","corr","none"))) stop("Choose association argument as one of these options: corr, pvalue, fdr or none")
+      if(!weighted) association<-"none"
+      if(weighted & association=="none") stop("As you choose compare weigthed networks, you have to set association argument as one of these options: corr, pvalue, fdr")
+      if(all(threshold!=c("fdr", "pvalue","corr","none"))) stop("Choose threshold argument as one of these options: corr, pvalue, fdr or none")
+      if(association=="fdr" & (threshold=="pvalue" | threshold=="corr")) stop("In weighted networks, as you choose fdr as association value, you can not choose correlation or pvalue as threshold")
       if(any(method==c("pearson","spearman","kendall"))){
         if(nrow(expr)==3 | nrow(expr)==4) A <- list(cor(as.matrix(expr), method=method))
           else{
             if(any(method==c("pearson","spearman"))){
-              A <- rcorr(as.matrix(expr), type=method) #tem que estar como matriz, não le data frames.
+              A <- rcorr(as.matrix(expr), type=method)
             }
             if(method=="kendall"){
               A <- corr.test(as.matrix(expr), method="kendall", adjust="none")
               A$P <- A$p
             }
           }
-        if (threshold=="corr"){
-          A[[1]][A[[1]]>-(thr.value) & A[[1]]<(thr.value) | A[[1]]=="NaN" | is.na(A[[1]])]<-0
-          diag(A[[1]])<-0
-          A$P[A[[1]]>-(thr.value) & A[[1]]<(thr.value) | A[[1]]=="NaN"]<-1
-          A$P <- 1 - A$P
-        }
+        if(association=="fdr" | threshold=="fdr") A$FDR<-matrix(p.adjust(A$P,method = "fdr"),ncol(A[[1]]))
+        if(association == "corr" | association=="none") AM <- A[[1]]
+          else if(nrow(expr)==3 | nrow(expr)==4) stop("The method do not calculate p-value nor fdr for less than 5 samples, please choose association=corr ")
+              else if(association=="pvalue") AM <- 1-A$P
+                      else AM<- 1-A$FDR
+        if (threshold=="corr") AM[A[[1]]>-(thr.value) & A[[1]]<(thr.value) | A[[1]]=="NaN" | is.na(A[[1]])]<-0
         if (threshold=="pvalue" | threshold=="fdr"){
           if(nrow(expr)==3 | nrow(expr)==4) stop("The method do not calculate p-value nor fdr for less than 5 samples, please choose threshold=corr ")
-          if(threshold=="fdr")  A$P<-matrix(p.adjust(A$P,method = "fdr"),ncol(A[[1]]))
-          A[[1]][A$P>=thr.value | is.na(A$P)]<-0
-          A$P[A$P>=thr.value | is.na(A$P)]<-1
-          diag(A$P) <- 1
-          A$P <- 1 - A$P
+          if(threshold=="fdr") AM[A$FDR>=thr.value | is.na(A$FDR)]<-0
+            else AM[A$P>=thr.value | is.na(A$P)]<-0
         }
-        if(abs.values) A[[1]] <- abs(A[[1]])
-
-        if(association == "corr") A <- A[[1]]
-        else
-          if(nrow(expr)==3 | nrow(expr)==4) stop("The method do not calculate p-value nor fdr for less than 5 samples, please choose association=corr ")
-            else A <- A$P
-
-        if (!weighted) {
-          A[which(A > thr.value)] <- 1
-          A[which(A <= thr.value)] <- 0
-        }
-        A[is.na(A)]<-0
+        if(abs.values) AM <- abs(AM)
+        diag(AM)<-0
+        if (!weighted) AM[which(AM !=0)] <- 1
+        AM[is.na(AM)]<-0
       }
         else{
-          A<-method(expr)
-          if(!is.matrix(A) | ncol(A)!=nrow(A) | isSymmetric(A)) stop("The method inserted have to output a quadratic and simetrical matrix ")
+          AM<-method(expr)
+          if(!is.matrix(AM) | ncol(AM)!=nrow(AM) | isSymmetric(AM)) stop("The method inserted have to output a quadratic and simetrical matrix ")
           if(!is.null(thr.value)){
-            if(!weighted) A[which(A > thr.value)] <- 1
-            A[which(A <= thr.value)] <- 0
+            if(!weighted) AM[which(AM > thr.value)] <- 1
+            AM[which(AM <= thr.value)] <- 0
           }
-          A[is.na(A)]<-0
+          AM[is.na(AM)]<-0
         }
-      return(A)
+      return(AM)
     }
   )
 }

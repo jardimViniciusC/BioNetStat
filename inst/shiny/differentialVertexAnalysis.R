@@ -14,16 +14,15 @@ vertexAnalysisTable <- reactive ({
   # block = FALSE,
   # append = FALSE)
   isolate({
-    expr <- data$expr
+    expr <- data$expr 
     labels <- data$labels
     classes <- input$factorsinput
-    # geneSets <- list(c("all",colnames(expr)))
     numPermutations <- values$numPermutations
-    correlationMeasure <- values$correlationMeasure
+    correlationMeasure <- input$correlationMeasure
     thrMeasure <- values$thrMeasure
     edgeWeight <- input$edgeWeight
     networkType <- values$networkType
-    threshold <- input$correlationValue
+    threshold <- input$thrValue
     options <- NULL
     seed <- values$seed
     printParameters <- function(){print(values$parameters)}
@@ -42,16 +41,14 @@ vertexAnalysisTable <- reactive ({
     # }
     # networkInference <-
     #              match.fun(correlationMeasures[correlationMeasure, col])
-    thrEdge<-ifelse(thrMeasure=="correlation",
-                    "corr", ifelse(thrMeasure=="qvalue",
-                                   "fdr", "pvalue"))
+    thrEdge<-ifelse(thrMeasure=="none","none",
+                    ifelse(thrMeasure=="correlation", "corr", 
+                           ifelse(thrMeasure=="qvalue", "fdr", "pvalue")))
     print <- F
-    adjacencyMatrix <- adjacencyMatrix(method = correlationMeasures[correlationMeasure, 1],
-                                       association = ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
-                                                                                            "corr", ifelse(edgeWeight=="qvalue",
-                                                                                                           "fdr", "pvalue")), thrEdge),
+    funAdjMat <- adjacencyMatrix(method = correlationMeasures[correlationMeasure, 1],
+                                       association = ifelse(edgeWeight=="correlation","corr", ifelse(edgeWeight=="qvalue","fdr", "pvalue")),
                                        threshold = thrEdge,
-                                       thr.value = 1-threshold,
+                                       thr.value = ifelse(thrEdge=="corr",threshold,1-threshold),
                                        weighted = ifelse(networkType=="weighted", T, F))
     # logFile=stdout()
     # saida<-list()
@@ -85,8 +82,9 @@ vertexAnalysisTable <- reactive ({
         #                    adjacencyMatrix,  numPermutations=
         #                    numPermutations, options=options)
         results <- method(expr, labels, adjacencyMatrix=
-                           adjacencyMatrix,  numPermutations=
+                            funAdjMat,  numPermutations=
                            numPermutations, options=options)
+        
         # if(!is.list(result)){
         #   saida[[setName]]<-result
         #   results<<-saida

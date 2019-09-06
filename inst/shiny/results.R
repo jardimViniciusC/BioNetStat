@@ -18,25 +18,19 @@ results <- reactive ({
         classes <- input$factorsinput
         geneSets <- values$filteredGeneSets
         numPermutations <- values$numPermutations
-        correlationMeasure <- values$correlationMeasure
+        correlationMeasure <- input$correlationMeasure
         thrMeasure <- values$thrMeasure
         edgeWeight <- input$edgeWeight
         networkType <- values$networkType
         threshold <- input$thrValue
-        # threshold <- ifelse(thrMeasure=="correlation",
-        #                     input$correlationValue, ifelse(thrMeasure=="qvalue",
-        #                                                    input$qvalueThreshold, input$pvalueThreshold))
         networkTest <- values$networkTest
         options <- values$networkTestOptions
         seed <- values$seed
         printParameters <- function(){print(values$parameters)}
         if (is.null(expr) || is.null(labels) ||# is.null(geneSets) ||
             is.null(numPermutations) || is.null(correlationMeasure))
-            return(NULL)
-        # if (thrMeasure=="correlation")
-        #     col <- 1
-        # else
-        #     col <- 2
+          return(NULL)
+          
         if (!is.null(options)) {
             name <- networkTestsMatrix[networkTest, "Options"]
             name <- strsplit(name, "=")[[1]][1]
@@ -44,18 +38,14 @@ results <- reactive ({
             ops[tolower(name)] <- options
             options <- ops
         }
-        # networkInference <-
-        #              match.fun(correlationMeasures[correlationMeasure, col])
-        thrEdge<-ifelse(thrMeasure=="correlation",
-                                "corr", ifelse(thrMeasure=="qvalue",
-                                               "fdr", "pvalue"))
+        thrEdge<-ifelse(thrMeasure=="none","none",
+                        ifelse(thrMeasure=="correlation", "corr", 
+                        ifelse(thrMeasure=="qvalue", "fdr", "pvalue")))
         print <- F
         adjacencyMatrix <- adjacencyMatrix(method = correlationMeasures[correlationMeasure, 1],
-                                           association = ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
-                                                                                                "corr", ifelse(edgeWeight=="qvalue",
-                                                                                                               "fdr", "pvalue")), thrEdge),
+                                           association = ifelse(edgeWeight=="correlation","corr", ifelse(edgeWeight=="qvalue","fdr", "pvalue")),
                                            threshold = thrEdge,
-                                           thr.value = 1-threshold,
+                                           thr.value = ifelse(thrEdge=="corr",threshold,1-threshold),
                                            weighted = ifelse(networkType=="weighted", T, F))
         logFile=stdout()
         method <- match.fun(networkTestsMatrix[networkTest, 2])
@@ -95,7 +85,7 @@ results <- reactive ({
                   results[setName, "Test statistic"] <<- round(result[[1]],4)
                   results[setName, "Nominal p-value"] <<- round(result$p.value,4)
                   results[setName, "Set size"] <<- length(genes)
-                results[setName, 6:ncol(results)] <<- round(result$Partial*100/sum(result$Partial),1)
+                  results[setName, 6:ncol(results)] <<- round(result$Partial,1)
                 }
             }
           if(is.list(result)) results[, "q-value"] <<- round(p.adjust(results[, "Nominal p-value"], method="fdr"),4)#
@@ -126,7 +116,8 @@ output$appMessages <- renderUI({
         thrMeasure <- input$thrMeasure
         networkTest <- input$networkTest
         networkType <- input$networkType
-        threshold <- input$edgeWeight
+        edgeWeight <- input$edgeWeight
+        threshold <- input$thrValue
         values$canExecute <- F
         seed <- input$seed
         options <- input$networkTestOptions
@@ -217,9 +208,9 @@ output$appMessages <- renderUI({
           optionsMsg <- paste("*", name, "-", options, "\n")
         }
         thresholdMsg <- ""
-        if (networkType == "unweighted")
+        if (thrMeasure != "none")
           thresholdMsg <- paste("* Association degree threshold for edge",
-                                "selection -", threshold, "\n")
+                                "selection -", thrMeasure, "(",threshold,")","\n")
 
         parameters <- paste("* Variables values and conditions data from \"", exprInputFileName, "\"",
                   " - ", ncol(expr)," variables and ", nrow(expr), " samples",
@@ -230,7 +221,7 @@ output$appMessages <- renderUI({
                   max, "\n",
                   "* Network type - ", networkType, "\n",
                   "* Association measure - ", correlationMeasure, " (",
-                  associationMsg[thrMeasure], ")", "\n",
+                  associationMsg[edgeWeight], ")", "\n",
                   thresholdMsg,
                   "* Method for networks comparison - ", networkTest, "\n",
                   optionsMsg,
@@ -271,7 +262,7 @@ output$appMessages <- renderUI({
         values$completed <- F
         values$canExecute <- T
         values$classes <- classes
-        values$correlationMeasure <- correlationMeasure
+        values$edgeWeight <- edgeWeight
         values$thrMeasure <- thrMeasure
         values$networkTest <- networkTest
         values$networkType <- networkType

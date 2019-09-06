@@ -57,7 +57,7 @@ plotAdjacencyMatrix <- reactive({
     correlationMeasure <- input$correlationMeasure
     thrMeasure <- input$thrMeasure
     networkType <- input$networkType
-    threshold <- input$correlationValue
+    threshold <- input$thrValue
     edgeWeight <- input$edgeWeight
     signedCorrelation <- input$signedCorrelation
     if(is.null(correlationMeasure) ||
@@ -65,19 +65,14 @@ plotAdjacencyMatrix <- reactive({
       return(NULL)
     if (is.null(signedCorrelation))
       signedCorrelation <- F
-    # if (thrMeasure == "correlation")
-    #   col <- 1
-    # else
-    #   col <- 2
-    thrEdge<-ifelse(thrMeasure=="correlation",
-                    "corr", ifelse(thrMeasure=="qvalue",
-                                   "fdr", "pvalue"))
+    
+    thrEdge<-ifelse(thrMeasure=="none","none",
+                    ifelse(thrMeasure=="correlation", "corr", 
+                           ifelse(thrMeasure=="qvalue", "fdr", "pvalue")))
     adjacencyMatrix <- adjacencyMatrix(method = correlationMeasures[correlationMeasure, 1],
-                                       association = ifelse(networkType=="weighted", ifelse(edgeWeight=="correlation",
-                                                                                            "corr", ifelse(edgeWeight=="qvalue",
-                                                                                                           "fdr", "pvalue")), thrEdge),
+                                       association = ifelse(edgeWeight=="correlation","corr", ifelse(edgeWeight=="qvalue","fdr", "pvalue")),
                                        threshold = thrEdge,
-                                       thr.value = 1-threshold,
+                                       thr.value = ifelse(thrEdge=="corr",threshold,1-threshold),
                                        weighted = ifelse(networkType=="weighted", T, F),abs.values = !signedCorrelation)
 })
 
@@ -96,7 +91,6 @@ adjacencyMatrices <- reactive({
         return(NULL)
     r1 <- adjMatrix(data$expr[data$labels==cla[cla[,1]==classes[1],2],])
     r2 <- adjMatrix(data$expr[data$labels==cla[cla[,1]==classes[2],2],])
-    #diag(r1) <- diag(r2) <- 1
     genes <- colnames(data$expr)
     colnames(r1) <- colnames(r2) <- rownames(r1) <- rownames(r2) <- genes
     r <- cbind(r1, r2)

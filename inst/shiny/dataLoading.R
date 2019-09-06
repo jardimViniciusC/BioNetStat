@@ -91,7 +91,7 @@ classesInput <- reactive({
 geneSetsInput <- reactive ({
   inFile <- input$geneSets
   expr <- exprInput()
-  if (is.null(inFile)) geneSets<-list(c("all",colnames(expr)))
+  if (is.null(inFile)) geneSets<-list(c("All",colnames(expr)))
   else geneSets <- readGmtFile(inFile$datapath)
   return(geneSets)
 })
@@ -186,7 +186,7 @@ labels <- reactive({
   # classes <- strsplit(classes, " ")
   # labels <- labelsInput()
   l <- doLabels(fileName = inFile$datapath,factorName = classes,classes = input$factorsinput)
-  return(l)
+  return(l[,1])
 })
 
 # _____Data tab
@@ -215,10 +215,18 @@ output$labels <- renderUI({
     filename <- paste("\"", input$classes, "\"", sep="")
     # factors <- paste("\"", input$factors, "\"", sep="")
     # classes <- classes()
-    msg <- paste("Class",filename, "was choosed.",
+    if (is.null(input$factorsinput)) msg <- paste("Factor",filename, "was choosed.", "Please, choose the classes to be compared")
+      else{ if(length(input$factorsinput)==1) msg <- paste("Factor ",filename, " was choosed. ",
+                                                        "The first class is ", input$factorsinput,
+                                                        ". Please, choose unless one more class to be compared.",sep = "")
+            else{ if(length(input$factorsinput)==2) msg <- paste("Factor",filename, "was choosed.",
                  "The factors are: ", paste(input$factorsinput[-c(length(input$factorsinput))],collapse = ", ")
-                 , "and", input$factorsinput[c(length(input$factorsinput))]
-                 )
+                 , "and", input$factorsinput[c(length(input$factorsinput))])
+              else msg <- paste("Factor ",filename, " was choosed. ",
+                            "The factors are: ", paste(input$factorsinput[-c(length(input$factorsinput))],collapse = ", ")
+                            , ", and ", input$factorsinput[c(length(input$factorsinput))], sep="")
+            }
+      }
     return(msg)
   }
 })
@@ -274,7 +282,7 @@ output$factors <- renderUI({
 output$geneSets <- renderUI({
   geneSets <- geneSetsInput()
   expr <- exprInput()
-  if (is.null(geneSets))
+  if (length(geneSets)==1 & geneSets[[1]][1]=="All")
     return(paste("No variables sets collection file was loaded. \n All", dim(expr)[2], "variables will be compared. \n (Depending on the number of variables, it may take a while) "))
   else {
     filename <- paste("\"", input$geneSets$name, "\"", sep="")

@@ -12,7 +12,7 @@ runBioNetStat <- function(){
 ################################################################################################################
 #' Read variable values matrix
 #' @param fileName the name of the file which the data are to be read from. Each row of the table appears as one line of the file. If it does not contain an absolute path, the file name is relative to the current working directory, getwd().
-#' @param path the path to the directory that contains the file
+#' @param path the path to the directory that contains the file. Used only by Graphical Interface.
 #' @param dec the character used in the file for decimal points.
 #' @param sep the field separator character. Values on each line of the file are separated by this character. If sep = "" the separator is white space, that is one or more spaces, tabs, newlines or carriage returns, if sep=NULL (default), the function uses tabulation for .txt files or ";" for .csv files.
 #' @param check.names a logical value. If TRUE, the names of the data table kept as they are. Otherwise, the blank space, "-","/" and ",", are replaced by dots.
@@ -24,8 +24,9 @@ runBioNetStat <- function(){
 #' 
 #' # Random file
 #' test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
-#' write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
-#' a<-readVarFile(fileName="~/tf.csv")
+#' tf<-tempfile(fileext = ".csv")
+#' write.table(test1, tf,sep=";",row.names=FALSE)
+#' a<-readVarFile(fileName=tf)
 #' @export
 #'
 readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#readSampleTable
@@ -76,14 +77,15 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#r
 #' 
 #' # Random file
 #' test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
-#' write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
-#' labels<-doLabels("~/tf.csv")
+#' tfl<-tempfile(fileext = ".csv")
+#' write.table(test1, tfl,sep=";",row.names=FALSE)
+#' labels<-doLabels(tfl)
 #' @export
 doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
   options(stringsAsFactors = TRUE)
   table <- read.csv(fileName,header=TRUE,dec=dec,sep=sep)
   if(is.null(factorName)) factor <- names(which(!vapply(table,is.numeric,FUN.VALUE = vector(length = 1))))[1]
-  else if(!any(factorName==names(which(!vapply(table,is.numeric,FUN.VALUE = vector(length = 1)))))) stop(paste("The factorName",factorName," doesn't exists in Data frame"))
+  else if(!any(factorName==names(which(!vapply(table,is.numeric,FUN.VALUE = vector(length = 1)))))) stop(paste("The factorName",factorName," doesn't exists in dataframe"))
   else factor <- factorName
   labels<-table[,factor]
   if(is.null(classes)) classes<-levels(labels)
@@ -91,9 +93,10 @@ doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
   if(any(!c(classes %in% levels(labels)))) if(sum(!c(classes %in% levels(labels)))==1) stop(paste("Class",classes[!c(classes %in% levels(labels))],"isn't contained in",factorName))
   else stop(paste("Classes",paste(classes[!c(classes %in% levels(labels))],collapse = ", "),"aren't contained in",factorName))
   l <- array(NA, length(labels))
-  names <- unique(labels)
+  l2 <- array(NA, length(labels))
+  symbols <- unique(labels)
   i<-vector(length=length(classes))
-  for(p in seq_len(length(i))) i[p] <- which(names == classes[p])
+  for(p in seq_len(length(i))) i[p] <- which(symbols == classes[p])
   
   symbols <- unique(labels)
   j<-list()
@@ -101,10 +104,12 @@ doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
   for(p in seq_len(length(i))){
     j[[p]] <- which(labels == symbols[i[p]])
     l[j[[p]]] <- v
+    l2[j[[p]]] <- as.character(symbols[v+1])
     v <- v+1
   }
   l[is.na(l)] <- -1
-  return(l)
+  l2[is.na(l2)] <- "Not selected"
+  return(data.frame(code=l,names=l2))
 }
 
 ################################################################################################################
@@ -137,7 +142,7 @@ readGmtFile <- function(fileName) {
 #' Differential network analysis method
 #'
 #' @param method a function that receives two adjacency matrices and returns a list containing a statistic theta that measures the difference between them, and a p-value for the test H0: theta = 0 against H1: theta > 0.
-#' @param options a list contaning parameters used by 'method'.
+#' @param options a list contaning parameters used by 'method'. Used only in degreeDistributionTest, spectralEntropyTest and spectralDistributionTest functions. It can be set to either \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.
 #' @param varFile a numeric matrix contaning variables values data.
 #' @param labels a vector of -1s, 0s, and 1s associating each sample with a phenotype. The value 0 corresponds to the first phenotype class of interest, 1 to the second phenotype class of interest, and -1 to the other classes, if there are more than two classes in the gene expression data.
 #' @param varSets a list of gene sets. Each element of the list is a character vector v, where v[1] contains the gene set name, v[2] descriptions about the set, v[3..length(v)] the genes that belong to the set.
@@ -148,6 +153,7 @@ readGmtFile <- function(fileName) {
 #' @param seed the seed for the random number generators. If it is not null then the sample permutations are the same for all the gene sets.
 #' @param min.vert lower number of nodes (variables) that has to be to compare the networks.
 #' @param BPPARAM An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions. #MulticoreParam()
+#' @param na.rm remove the NA values by excluding the rows ("row") or the columns ("col") that contaings it. If NULL (default) the NA values are not removed.
 #' @return a data frame containing the name, size, test statistic, nominal p-value and adjusted p-value (q-value) associated with each gene set.
 #' @examples 
 #' # Glioma data
@@ -172,23 +178,37 @@ readGmtFile <- function(fileName) {
 #' @export
 #'
 diffNetAnalysis <- function(method, options=list(bandwidth="Sturges"), varFile, labels, varSets=NULL,
-                            adjacencyMatrix, numPermutations=1000, print=TRUE,
-                            resultsFile=NULL, seed=NULL, min.vert=5,BPPARAM=NULL) {
+                            adjacencyMatrix, numPermutations=1000, print=TRUE, resultsFile=NULL, 
+                            seed=NULL, min.vert=5,BPPARAM=NULL, na.rm=NULL) {
+  if(!is.null(na.rm)){ # Removing NA's
+    if(na.rm=="col") {
+      if(sum(apply(expr,2,function(x)any(is.na(x))))==1) print(paste(sum(apply(expr,2,function(x)any(is.na(x)))),"column was removed"))
+      if(sum(apply(expr,2,function(x)any(is.na(x))))>1) print(paste(sum(apply(expr,2,function(x)any(is.na(x)))),"columns were removed"))
+      varFile<-varFile[,!apply(varFile,2,function(x)any(is.na(x)))]
+      }
+    if(na.rm=="row") {
+      if(sum(apply(expr,1,function(x)any(is.na(x))))==1) print(paste(sum(apply(expr,1,function(x)any(is.na(x)))),"row was removed"))
+      if(sum(apply(expr,1,function(x)any(is.na(x))))>1) print(paste(sum(apply(expr,1,function(x)any(is.na(x)))),"rows were removed"))
+      labels<-labels[!apply(varFile,1,function(x)any(is.na(x))),]
+      varFile<-varFile[!apply(varFile,1,function(x)any(is.na(x))),]
+    }
+  }
   if(is.null(varSets)) varSets <- list(c("all",colnames(varFile)))
+  if(class(varSets)!="list") stop("The varSet object is not a list. Please, insert the sets of variables as a list object")
   # else varSets[[length(varSets)+1]] <- c("all",colnames(varFile))
   varSets<-lapply(varSets, function(x){
     if(sum(x %in% colnames(varFile))>=min.vert) x
     else NA})#
   varSets<-varSets[!is.na(varSets)]
-  results <- data.frame(matrix(NA, nrow=length(varSets), ncol=5+length(unique(labels[labels!=-1]))))
+  results <- data.frame(matrix(NA, nrow=length(varSets), ncol=5+length(unique(labels$code[labels$code!=-1]))))
   output<-list()
   names <- array(NA, length(varSets))
   for (i in seq_len(length(varSets))) {
     names[i] <- varSets[[i]][1]
   }
   rownames(results) <- names
-  if(any(labels=="-1"))colnames(results) <- c("N of Networks","Set size", "Test statistic", "Nominal p-value", "Q-value",paste("Factor",unique(labels[-which(labels=="-1")])))
-  else colnames(results) <- c("N of Networks","Set size", "Test statistic", "Nominal p-value", "Q-value",paste("Factor",unique(labels)))
+  if(any(labels$code=="-1"))colnames(results) <- c("N of Networks","Set size", "Test statistic", "Nominal p-value", "Q-value",paste(unique(labels$names[-which(labels$code=="-1")])))
+  else colnames(results) <- c("N of Networks","Set size", "Test statistic", "Nominal p-value", "Q-value",paste(unique(labels$names)))
   #temp <- tempfile("CoGA_results", fileext=".txt")
   for (i in seq_len(length(varSets))) {
     setName <- varSets[[i]][1]
@@ -198,19 +218,20 @@ diffNetAnalysis <- function(method, options=list(bandwidth="Sturges"), varFile, 
     genes <- varSets[[i]][varSets[[i]] %in% colnames(varFile)]
     if (!is.null(seed))
       set.seed(seed)
-    result <- method(varFile[,genes], labels, adjacencyMatrix=
+    result <- method(varFile[,genes], labels$code, adjacencyMatrix=
                        adjacencyMatrix,  numPermutations=
                        numPermutations, options=options,BPPARAM=BPPARAM)
     if(!is.list(result)){
+      for(c in colnames(result[,-c(1:3)])) colnames(result)[colnames(result)==c]<-labels$names[labels$code==c][1]
       output[[setName]]<-result
       results<-output
     }
     if(is.list(result)){
-      results[setName, "N of Networks"] <- sum(unique(labels)!=-1)
+      results[setName, "N of Networks"] <- sum(unique(labels$code)!=-1)
       results[setName, "Test statistic"] <- result[[1]]
       results[setName, "Nominal p-value"] <- result$p.value
       results[setName, "Set size"] <- length(genes)
-      results[setName, 6:ncol(results)] <- result$Partial*100/sum(result$Partial)
+      results[setName, 6:ncol(results)] <- result$Partial
     }
     # if (!is.null(resultsFile)) save(results, file=resultsFile)
   }

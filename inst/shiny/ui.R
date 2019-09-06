@@ -51,19 +51,31 @@ shinyUI(fluidPage(theme = "bootstrap.css",
       ),
       h4(strong("b. Method for network inference")),
       uiOutput("correlationMeasure"),
-      h4(strong("c. Method for selecting the network links")),
-      selectInput(
+      h4(strong("c. Set the statistic used\n as link formation threshold")),
+      conditionalPanel(
+        "input.networkType=='weighted'",
+        selectInput(
         "thrMeasure",
         h5("Association measure"),
         c("Absolute correlation"="correlation", "1 - p-value"="pvalue",
-          "1 - q-value"="qvalue")
+          "1 - q-value"="qvalue","No threshold"="none")
+        )
+      ),
+      conditionalPanel(
+        "input.networkType=='unweighted'",
+        selectInput(
+          "thrMeasure",
+          h5("Association measure"),
+          c("Absolute correlation"="correlation", "1 - p-value"="pvalue",
+            "1 - q-value"="qvalue")
+        )
       ),
       uiOutput("linkFormation"),
       conditionalPanel(
         "input.networkType=='weighted'",
         radioButtons(
           "edgeWeight",
-          h4(strong("d. Enter a association value to define the network edges weights:")),
+          h4(strong("d. Set the criteron for network edges weights:")),
           c("Absolute correlation"="correlation", "1 - p-value"="pvalue",
             "1 - q-value"="qvalue")
         )

@@ -4,3 +4,4 @@ Name Function Source Type Description
 "Closeness centrality" "closenessCentralityVertexTest" "" "both" ""
 "Eigenvector centrality" "eigenvectorCentralityVertexTest" "" "both" ""
 "Local clustering coefficient" "clusteringCoefficientVertexTest" "" "both" ""
+"Betweenness edges centrality" "edgeBetweennessEdgeTest" "" "both" ""

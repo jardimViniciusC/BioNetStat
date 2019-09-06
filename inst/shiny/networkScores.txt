@@ -6,3 +6,4 @@ Name Function Source Type Options Description
 "Average eigenvector centrality" "averageEigenvectorCentrality" "" "both" "" ""
 "Average clustering coefficient" "averageClusteringCoefficient" "" "both" "" ""
 "Average shortest path length" "averageShortestPath" "" "both" "" ""
+"Average betweenness edges centrality" "averageBetweennessEdgesCentrality" "" "both" "" ""
