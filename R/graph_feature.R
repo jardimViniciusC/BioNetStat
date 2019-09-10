@@ -338,7 +338,7 @@ absDiffSpectralEntropy <- function(A1, A2, bandwidth="Sturges") {
 #' @examples 
 #' set.seed(1)
 #' expr <- as.data.frame(matrix(rnorm(120),40,30))
-#' labels<-rep(0:3,10)
+#' labels<-data.frame(code=rep(0:3,10),names=rep(c("A","B","C","D"),10))
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
 #'  threshold="fdr", thr.value=0.05, weighted=FALSE)
 #' @name nodeScores
@@ -351,9 +351,9 @@ absDiffSpectralEntropy <- function(A1, A2, bandwidth="Sturges") {
 #' @export
 degreeCentrality <- function(expr, labels, adjacencyMatrix) {
   A<-list()
-  v<-vector(length=length(unique(labels)))
-  for (a in seq_len(length(unique(labels)))){
-    A[[a]]<-adjacencyMatrix(expr[labels==unique(labels)[a],])
+  v<-vector(length=length(unique(labels$code)))
+  for (a in seq_len(length(unique(labels$code)))){
+    A[[a]]<-adjacencyMatrix(expr[labels$code==unique(labels$code)[a],])
     v[a]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
   }
   A<-lapply(A,abs)
@@ -361,6 +361,7 @@ degreeCentrality <- function(expr, labels, adjacencyMatrix) {
   if(any(v)) weighted <- TRUE
   G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
   result <- lapply(G, graph.strength)
+  names(result)<-unique(labels$names)
   return(result)
 }
 
@@ -372,9 +373,9 @@ degreeCentrality <- function(expr, labels, adjacencyMatrix) {
 #' @export
 betweennessCentrality <- function(expr, labels, adjacencyMatrix) {
   A<-list()
-  v<-vector(length=length(unique(labels)))
-  for (a in seq_len(length(unique(labels)))){
-    A[[a]]<-adjacencyMatrix(expr[labels==unique(labels)[a],])
+  v<-vector(length=length(unique(labels$code)))
+  for (a in seq_len(length(unique(labels$code)))){
+    A[[a]]<-adjacencyMatrix(expr[labels$code==unique(labels$code)[a],])
     v[a]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
   }
   A<-lapply(A,abs)
@@ -383,6 +384,7 @@ betweennessCentrality <- function(expr, labels, adjacencyMatrix) {
   if (!is.null(weighted)) A<-lapply(A,invWeigthts)
   G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
   result <- lapply(G, betweenness)
+  names(result)<-unique(labels$names)
   return(result)
 }
 
@@ -394,9 +396,9 @@ betweennessCentrality <- function(expr, labels, adjacencyMatrix) {
 #' @export
 betweennessEdgesCentrality <- function(expr, labels, adjacencyMatrix) {
   A<-list()
-  v<-vector(length=length(unique(labels)))
-  for (a in seq_len(length(unique(labels)))){
-    A[[a]]<-adjacencyMatrix(expr[labels==unique(labels)[a],])
+  v<-vector(length=length(unique(labels$code)))
+  for (a in seq_len(length(unique(labels$code)))){
+    A[[a]]<-adjacencyMatrix1(expr[labels$code==unique(labels$code)[a],])
     v[a]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
   }
   A<-lapply(A,abs)
@@ -406,12 +408,14 @@ betweennessEdgesCentrality <- function(expr, labels, adjacencyMatrix) {
   G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
   result<-lapply(G, function(x){
     M<-as.matrix(as_adj(x,edges = T,type = "lower"))
-    M[M!=0]<-fun(x, directed=FALSE)
+    M[M!=0]<-edge_betweenness(x, directed=FALSE)
     return(as.vector(M))
   })# guarda a centralidade
   s<-do.call(rbind,result)
   noEdges<-c(which(apply(s,2,function (x) all(x==0))))
-  return(length(lapply(result, function(x) x[-c(noEdges)])[[1]]))
+  res<-lapply(result, function(x) x[-c(noEdges)])
+  names(res)<-unique(labels$names)
+  return(res)
 }
 
 #' @rdname nodeScores
@@ -422,9 +426,9 @@ betweennessEdgesCentrality <- function(expr, labels, adjacencyMatrix) {
 #' @export
 closenessCentrality <- function(expr, labels, adjacencyMatrix) {
   A<-list()
-  v<-vector(length=length(unique(labels)))
-  for (a in seq_len(length(unique(labels)))){
-    A[[a]]<-adjacencyMatrix(expr[labels==unique(labels)[a],])
+  v<-vector(length=length(unique(labels$code)))
+  for (a in seq_len(length(unique(labels$code)))){
+    A[[a]]<-adjacencyMatrix(expr[labels$code==unique(labels$code)[a],])
     v[a]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
   }
   A<-lapply(A,abs)
@@ -433,6 +437,7 @@ closenessCentrality <- function(expr, labels, adjacencyMatrix) {
   if (!is.null(weighted)) A<-lapply(A,invWeigthts)
   G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
   result <- lapply(G, closeness)
+  names(result)<-unique(labels$names)
   return(result)
 }
 
@@ -444,9 +449,9 @@ closenessCentrality <- function(expr, labels, adjacencyMatrix) {
 #' @export
 eigenvectorCentrality <- function(expr, labels, adjacencyMatrix) {
   A<-list()
-  v<-vector(length=length(unique(labels)))
-  for (a in seq_len(length(unique(labels)))){
-    A[[a]]<-adjacencyMatrix(expr[labels==unique(labels)[a],])
+  v<-vector(length=length(unique(labels$code)))
+  for (a in seq_len(length(unique(labels$code)))){
+    A[[a]]<-adjacencyMatrix(expr[labels$code==unique(labels$code)[a],])
     v[a]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
   }
   A<-lapply(A,abs)
@@ -454,6 +459,7 @@ eigenvectorCentrality <- function(expr, labels, adjacencyMatrix) {
   if(any(v)) weighted <- TRUE
   G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
   result <- lapply(G, function(x) evcent(x)$vector)
+  names(result)<-unique(labels$names)
   return(result)
 }
 
@@ -465,9 +471,9 @@ eigenvectorCentrality <- function(expr, labels, adjacencyMatrix) {
 #' @export
 clusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
   A<-list()
-  v<-vector(length=length(unique(labels)))
-  for (a in seq_len(length(unique(labels)))){
-    A[[a]]<-adjacencyMatrix(expr[labels==unique(labels)[a],])
+  v<-vector(length=length(unique(labels$code)))
+  for (a in seq_len(length(unique(labels$code)))){
+    A[[a]]<-adjacencyMatrix(expr[labels$code==unique(labels$code)[a],])
     v[a]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
   }
   A<-lapply(A,abs)
@@ -478,6 +484,7 @@ clusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
     G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
     result <- lapply(G, transitivity, type="local", isolates="zero")
   }
+  names(result)<-unique(labels$names)
   return(result)
 }
 
@@ -495,7 +502,7 @@ clusteringCoefficient <- function(expr, labels, adjacencyMatrix) {
 #' @return a list of values containing the spectral entropie or average node score of each network.
 #' @examples set.seed(1)
 #' expr <- as.data.frame(matrix(rnorm(120),40,30))
-#' labels<-rep(0:3,10)
+#' labels<-data.frame(code=rep(0:3,10),names=rep(c("A","B","C","D"),10))
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
 #'  threshold="fdr", thr.value=0.05, weighted=FALSE)
 
@@ -574,9 +581,9 @@ averageClusteringCoefficient <- function(expr, labels, adjacencyMatrix, options=
 #' @export
 averageShortestPath <- function(expr, labels, adjacencyMatrix, options=NULL) {
   A<-list()
-  v<-vector(length=length(unique(labels)))
-  for (a in seq_len(length(unique(labels)))){
-    A[[a]]<-adjacencyMatrix(expr[labels==unique(labels)[a],])
+  v<-vector(length=length(unique(labels$code)))
+  for (a in seq_len(length(unique(labels$code)))){
+    A[[a]]<-adjacencyMatrix(expr[labels$code==unique(labels$code)[a],])
     v[a]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
   }
   A<-lapply(A,abs)
@@ -585,6 +592,7 @@ averageShortestPath <- function(expr, labels, adjacencyMatrix, options=NULL) {
   if (!is.null(weighted)) A<-lapply(A,invWeigthts)
   G<-lapply(A,graph.adjacency, mode="undirected", weighted=weighted)
   result <- lapply(G, average.path.length)
+  names(result)<-unique(labels$names)
   return(result)
 }
 
@@ -609,9 +617,9 @@ spectralEntropy <- function(A, bandwidth="Sturges") {
 #' @export
 spectralEntropies <- function(expr, labels, adjacencyMatrix, options=list(bandwidth="Sturges")) {
   A<-list()
-  v<-vector(length=length(unique(labels)))
-  for (a in seq_len(length(unique(labels)))){
-    A[[a]]<-adjacencyMatrix(expr[labels==unique(labels)[a],])
+  v<-vector(length=length(unique(labels$code)))
+  for (a in seq_len(length(unique(labels$code)))){
+    A[[a]]<-adjacencyMatrix(expr[labels$code==unique(labels$code)[a],])
   }
   A<-lapply(A,abs)
   fs<- nSpectralDensities(A,bandwidth=options$bandwidth)
@@ -621,6 +629,7 @@ spectralEntropies <- function(expr, labels, adjacencyMatrix, options=list(bandwi
   for(j in seq_len(length(A))){ # uma entropia para cada grafo
     entropies[[j]]<-entropy(list("x"=fs$x, "y"=fs$densities[,j]))
   }
+  names(entropies)<-unique(labels$names)
   return(entropies)
 }
 
@@ -670,8 +679,9 @@ edgesResInt <- function(A,expr,weighted,fun){
 #' "Partial" - a vector with the weigths of each network in a measure value.
 #' @examples 
 #' set.seed(1)
-#' expr <- as.data.frame(matrix(rnorm(120),40,30))
-#' labels<-rep(0:3,10)
+#' data("varFile")
+#' gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+#' labels<-doLabels(gliomaData)
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
 #'  threshold="fdr", thr.value=0.05, weighted=FALSE)
 #' # The numPermutations number is 1 to do a faster example, but we advise to use unless 1000 permutations in real analysis
@@ -680,7 +690,9 @@ edgesResInt <- function(A,expr,weighted,fun){
 #' @examples 
 #' 
 #' # Degree centrality test
-#' degreeCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 degreeCentralityTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -708,7 +720,9 @@ degreeCentralityTest <- function(expr, labels, adjacencyMatrix, numPermutations=
 #' @examples 
 #' 
 #' # Betweenness centrality test
-#' betweennessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=betweennessCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 betweennessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutations=1000, options=NULL,BPPARAM=NULL) {
   # Betweenness centrality test for many graphs
@@ -741,7 +755,9 @@ betweennessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutati
 #' @examples 
 #' 
 #' # Closeness centrality test
-#' closenessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=closenessCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 closenessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutations=1000, options=NULL, BPPARAM=NULL) {
   # Closeness centrality test for many graphs
@@ -773,7 +789,9 @@ closenessCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutation
 #' @examples 
 #' 
 #' # Eigenvector centrality test
-#' eigenvectorCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=eigenvectorCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 eigenvectorCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutations=1000, options=NULL, BPPARAM=NULL) {
   # Eigenvector centrality test for many graphs
@@ -802,7 +820,9 @@ eigenvectorCentralityTest <- function(expr, labels, adjacencyMatrix,numPermutati
 #' @examples 
 #' 
 #' # Clustering coefficient test
-#' clusteringCoefficientTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=clusteringCoefficientTest, varFile=varFile, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 clusteringCoefficientTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -858,7 +878,9 @@ clusteringCoefficientTest <- function(expr, labels, adjacencyMatrix, numPermutat
 #' @examples 
 #' 
 #' # Edge betweenness centrality test
-#' edgeBetweennessTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=edgeBetweennessTest, varFile=varFile, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 edgeBetweennessTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -918,7 +940,9 @@ edgeBetweennessTest <- function(expr, labels, adjacencyMatrix, numPermutations=1
 #' @examples
 #' 
 #' # Degree distribution test
-#' degreeDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=degreeDistributionTest, varFile=varFile, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, options=list(bandwidth="Sturges"))
 #' @export
 degreeDistributionTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=list(bandwidth="Sturges"), BPPARAM=NULL) {
   
@@ -957,8 +981,9 @@ degreeDistributionTest <- function(expr, labels, adjacencyMatrix, numPermutation
 #' @examples 
 #' 
 #' # Spectral entropy test
-#' spectralEntropyTest(expr, labels, adjacencyMatrix1,numPermutations=1,
-#'  options=list(bandwidth="Sturges"))
+#'  diffNetAnalysis(method=spectralEntropyTest, varFile=varFile, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, options=list(bandwidth="Sturges"))
 #' @export
 spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=list(bandwidth="Sturges"), BPPARAM=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -1006,8 +1031,9 @@ spectralEntropyTest <- function(expr, labels, adjacencyMatrix, numPermutations=1
 #' @examples 
 #' 
 #' # Spectral distribution test
-#' spectralDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=1,
-#'  options=list(bandwidth="Sturges"))
+#'  diffNetAnalysis(method=spectralDistributionTest, varFile=varFile, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, options=list(bandwidth="Sturges"))
 #' @export
 spectralDistributionTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=list(bandwidth="Sturges"), BPPARAM=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -1105,7 +1131,7 @@ retEdgesTable <- function(results,output,expr,numPermutations,lab){
 #' @examples 
 #' set.seed(1)
 #' expr <- as.data.frame(matrix(rnorm(120),40,30))
-#' labels<-rep(0:3,10)
+#' labels<-data.frame(code=rep(0:3,10),names=rep(c("A","B","C","D"),10))
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
 #'  threshold="fdr", thr.value=0.05, weighted=FALSE)
 #' # The numPermutations number is 1 to do a faster example, but we advise to use unless 1000 permutations in real analysis
@@ -1114,7 +1140,9 @@ retEdgesTable <- function(results,output,expr,numPermutations,lab){
 #' @examples 
 #' 
 #' # Degree centrality test
-#' degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=degreeCentralityVertexTest, varFile=expr, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 degreeCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL,BPPARAM=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -1140,7 +1168,9 @@ degreeCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermuta
 #' @examples 
 #' 
 #' # Betweenness centrality test
-#' betweennessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=betweennessCentralityVertexTest, varFile=expr, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 betweennessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=NULL) {
   # Betweenness centrality test for many graphs
@@ -1170,7 +1200,9 @@ betweennessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPe
 #' @examples 
 #' 
 #' # Closeness centrality test
-#' closenessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=closenessCentralityVertexTest, varFile=expr, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 closenessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -1199,7 +1231,9 @@ closenessCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPerm
 #' @examples 
 #' 
 #' # Eigenvector centrality test
-#' eigenvectorCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=eigenvectorCentralityVertexTest, varFile=expr, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 eigenvectorCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -1225,7 +1259,9 @@ eigenvectorCentralityVertexTest <- function(expr, labels, adjacencyMatrix, numPe
 #' @examples 
 #' 
 #' # Clustering coefficient test
-#' clusteringCoefficientVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=clusteringCoefficientVertexTest, varFile=expr, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 clusteringCoefficientVertexTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL, BPPARAM=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -1276,11 +1312,36 @@ clusteringCoefficientVertexTest <- function(expr, labels, adjacencyMatrix, numPe
   return(retTable(results,output,expr,numPermutations,lab))
 }
 
-#' @rdname networkTest
+
+#' Edge score equality test
+#' @name edgeTest
+#' @description Nodes scores equality test between network
+#' @param expr Matrix of variables (columns) vs samples (rows)
+#' @param labels a vector in which a position indicates the phenotype of the corresponding sample or state
+#' @param adjacencyMatrix a function that returns the adjacency matrix for a given variables values matrix
+#' @param numPermutations number of permutations that will be carried out in the permutation test
+#' @param options argument non used in this function
+#' @param BPPARAM An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions. MulticoreParam()
+#' @return A table, containing on the columns, the following informations for each variable (rows):
+#' "Test Statistic" - difference among the degree centrality of a node in two or more networks associated with each phenotype
+#' "Nominal p-value" - the Nominal p-value of the test
+#' "Q-value" - the q-value of the test, correction of p-value by FDR to many tests
+#' "Factor n" - the node degree centrality in each network compared
+#' @examples 
+#' set.seed(1)
+#' expr <- as.data.frame(matrix(rnorm(120),40,30))
+#' labels<-data.frame(code=rep(0:3,10),names=rep(c("A","B","C","D"),10))
+#' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
+#'  threshold="fdr", thr.value=0.05, weighted=FALSE)
+#' # The numPermutations number is 1 to do a faster example, but we advise to use unless 1000 permutations in real analysis
+
+#' @rdname edgeTest
 #' @examples 
 #' 
 #' # Edge betweenness centrality test
-#' edgeBetweennessEdgeTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+#' diffNetAnalysis(method=edgeBetweennessEdgeTest, varFile=expr, labels=labels, varSets=NULL,
+#'  adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+#'   seed=NULL, min.vert=5, option=NULL)
 #' @export
 edgeBetweennessEdgeTest <- function(expr, labels, adjacencyMatrix, numPermutations=1000, options=NULL,BPPARAM=NULL) {
   lab<-levels(as.factor(labels)) # salva os fatores de labels em lab.
@@ -1289,7 +1350,7 @@ edgeBetweennessEdgeTest <- function(expr, labels, adjacencyMatrix, numPermutatio
   weighted <- NULL # Define o weighted como NULL, assim como na função original
   v<-vapply(A,FUN = function(x) sum(x==0) + sum(x==1) == length(x),FUN.VALUE = vector(length = 1))
   if(any(!v)) weighted <- TRUE
-  output<-edgesResEdgesInt(A,expr,weighted,edge_betweenness)
+  output<-edgesResEdgesInt(A,expr,weighted,igraph::edge_betweenness)
   if(is.null(BPPARAM)) results<-lapply(seq_len(numPermutations),function(i){
     l <- sample(labels, replace = FALSE)
     A<-lapply(lab, function(x) adjacencyMatrix(expr[l==x,]))

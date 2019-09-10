@@ -158,7 +158,8 @@ readGmtFile <- function(fileName) {
 #' @examples 
 #' # Glioma data
 #' data("varFile")
-#' data("labels")
+#' gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+#' labels<-doLabels(gliomaData)
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
 #'  thr.value=0.05, weighted=FALSE)
 #' diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
@@ -169,7 +170,7 @@ readGmtFile <- function(fileName) {
 #' # Random data
 #' set.seed(1)
 #' varFile <- as.data.frame(matrix(rnorm(120),40,30))
-#' labels<-rep(0:3,10)
+#' labels<-data.frame(code=rep(0:3,10),names=rep(c("A","B","C","D"),10))
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
 #'  thr.value=0.05, weighted=FALSE)
 #' diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
@@ -180,6 +181,8 @@ readGmtFile <- function(fileName) {
 diffNetAnalysis <- function(method, options=list(bandwidth="Sturges"), varFile, labels, varSets=NULL,
                             adjacencyMatrix, numPermutations=1000, print=TRUE, resultsFile=NULL, 
                             seed=NULL, min.vert=5,BPPARAM=NULL, na.rm=NULL) {
+  if(!is.data.frame(labels)) stop(("The object 'labels' is not a data frame. It has to be a dataframe with two columns (code and names)."))
+  if(ncol(labels)!=2) stop(("Number of columns of 'labels' object is different from two. It has to be a two columns object (code and names)."))
   if(!is.null(na.rm)){ # Removing NA's
     if(na.rm=="col") {
       if(sum(apply(expr,2,function(x)any(is.na(x))))==1) print(paste(sum(apply(expr,2,function(x)any(is.na(x)))),"column was removed"))
@@ -194,7 +197,7 @@ diffNetAnalysis <- function(method, options=list(bandwidth="Sturges"), varFile, 
     }
   }
   if(is.null(varSets)) varSets <- list(c("all",colnames(varFile)))
-  if(class(varSets)!="list") stop("The varSet object is not a list. Please, insert the sets of variables as a list object")
+  if(!is.list(varSets)) stop("The varSet object is not a list. Please, insert the sets of variables as a list object")
   # else varSets[[length(varSets)+1]] <- c("all",colnames(varFile))
   varSets<-lapply(varSets, function(x){
     if(sum(x %in% colnames(varFile))>=min.vert) x
