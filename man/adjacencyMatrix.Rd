@@ -4,9 +4,8 @@
 \alias{adjacencyMatrix}
 \title{Adjacency matrix}
 \usage{
-adjacencyMatrix(method, association = c("corr", "pvalue", "fdr"),
-  threshold = c("fdr", "pvalue", "corr", NULL), thr.value = 0.05,
-  weighted = TRUE, abs.values = TRUE)
+adjacencyMatrix(method, association = "none", threshold = "none",
+  thr.value = 0.05, weighted = TRUE, abs.values = TRUE)
 }
 \arguments{
 \item{method}{a function that measures the association between the variables values.}

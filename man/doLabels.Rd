@@ -31,6 +31,7 @@ labels<-doLabels(gliomaData)
 
 # Random file
 test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
-write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
-labels<-doLabels("~/tf.csv")
+tfl<-tempfile(fileext = ".csv")
+write.table(test1, tfl,sep=";",row.names=FALSE)
+labels<-doLabels(tfl)
 }

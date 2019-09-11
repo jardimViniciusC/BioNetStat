@@ -7,35 +7,41 @@
 \alias{closenessCentralityTest}
 \alias{eigenvectorCentralityTest}
 \alias{clusteringCoefficientTest}
+\alias{edgeBetweennessTest}
 \alias{degreeDistributionTest}
 \alias{spectralEntropyTest}
 \alias{spectralDistributionTest}
 \title{Network equality test}
 \usage{
-degreeCentralityTest(expr, labels, adjacencyMatrix, numPermutations = 1000,
-  options = NULL, BPPARAM = MulticoreParam())
+degreeCentralityTest(expr, labels, adjacencyMatrix,
+  numPermutations = 1000, options = NULL, BPPARAM = NULL)
 
 betweennessCentralityTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = MulticoreParam())
+  numPermutations = 1000, options = NULL, BPPARAM = NULL)
 
-closenessCentralityTest(expr, labels, adjacencyMatrix, numPermutations = 1000,
-  options = NULL, BPPARAM = MulticoreParam())
+closenessCentralityTest(expr, labels, adjacencyMatrix,
+  numPermutations = 1000, options = NULL, BPPARAM = NULL)
 
 eigenvectorCentralityTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = MulticoreParam())
+  numPermutations = 1000, options = NULL, BPPARAM = NULL)
 
 clusteringCoefficientTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = MulticoreParam())
+  numPermutations = 1000, options = NULL, BPPARAM = NULL)
 
-degreeDistributionTest(expr, labels, adjacencyMatrix, numPermutations = 1000,
-  options = list(bandwidth = "Silverman"), BPPARAM = MulticoreParam())
+edgeBetweennessTest(expr, labels, adjacencyMatrix,
+  numPermutations = 1000, options = NULL, BPPARAM = NULL)
 
-spectralEntropyTest(expr, labels, adjacencyMatrix, numPermutations = 1000,
-  options = list(bandwidth = "Sturges"), BPPARAM = MulticoreParam())
+degreeDistributionTest(expr, labels, adjacencyMatrix,
+  numPermutations = 1000, options = list(bandwidth = "Sturges"),
+  BPPARAM = NULL)
+
+spectralEntropyTest(expr, labels, adjacencyMatrix,
+  numPermutations = 1000, options = list(bandwidth = "Sturges"),
+  BPPARAM = NULL)
 
 spectralDistributionTest(expr, labels, adjacencyMatrix,
   numPermutations = 1000, options = list(bandwidth = "Sturges"),
-  BPPARAM = MulticoreParam())
+  BPPARAM = NULL)
 }
 \arguments{
 \item{expr}{Matrix of variables (columns) vs samples (rows)}
@@ -48,7 +54,7 @@ spectralDistributionTest(expr, labels, adjacencyMatrix,
 
 \item{options}{a list containing parameters. Used only in degreeDistributionTest, spectralEntropyTest and spectralDistributionTest functions. It can be set to either \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.}
 
-\item{BPPARAM}{An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions.}
+\item{BPPARAM}{An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions. MulticoreParam()}
 }
 \value{
 A list containing:
@@ -63,35 +69,55 @@ Test of equality between network properties
 }
 \examples{
 set.seed(1)
-expr <- as.data.frame(matrix(rnorm(120),40,30))
-labels<-rep(0:3,10)
+data("varFile")
+gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+labels<-doLabels(gliomaData)
 adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
  threshold="fdr", thr.value=0.05, weighted=FALSE)
 # The numPermutations number is 1 to do a faster example, but we advise to use unless 1000 permutations in real analysis
 
 # Degree centrality test
-degreeCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
 
 # Betweenness centrality test
-betweennessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+diffNetAnalysis(method=betweennessCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
 
 # Closeness centrality test
-closenessCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+diffNetAnalysis(method=closenessCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
 
 # Eigenvector centrality test
-eigenvectorCentralityTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+diffNetAnalysis(method=eigenvectorCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
 
 # Clustering coefficient test
-clusteringCoefficientTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+diffNetAnalysis(method=clusteringCoefficientTest, varFile=varFile, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
+
+# Edge betweenness centrality test
+diffNetAnalysis(method=edgeBetweennessTest, varFile=varFile, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
 
 # Degree distribution test
-degreeDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+diffNetAnalysis(method=degreeDistributionTest, varFile=varFile, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, options=list(bandwidth="Sturges"))
 
 # Spectral entropy test
-spectralEntropyTest(expr, labels, adjacencyMatrix1,numPermutations=1,
- options=list(bandwidth="Sturges"))
+ diffNetAnalysis(method=spectralEntropyTest, varFile=varFile, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, options=list(bandwidth="Sturges"))
 
 # Spectral distribution test
-spectralDistributionTest(expr, labels, adjacencyMatrix1,numPermutations=1,
- options=list(bandwidth="Sturges"))
+ diffNetAnalysis(method=spectralDistributionTest, varFile=varFile, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, options=list(bandwidth="Sturges"))
 }

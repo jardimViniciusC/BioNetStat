@@ -4,6 +4,7 @@
 \alias{nodeScores}
 \alias{degreeCentrality}
 \alias{betweennessCentrality}
+\alias{betweennessEdgesCentrality}
 \alias{closenessCentrality}
 \alias{eigenvectorCentrality}
 \alias{clusteringCoefficient}
@@ -12,6 +13,8 @@
 degreeCentrality(expr, labels, adjacencyMatrix)
 
 betweennessCentrality(expr, labels, adjacencyMatrix)
+
+betweennessEdgesCentrality(expr, labels, adjacencyMatrix)
 
 closenessCentrality(expr, labels, adjacencyMatrix)
 
@@ -35,7 +38,7 @@ Node score (degree, betweenness, closenness, eigenvector centralities or cluster
 \examples{
 set.seed(1)
 expr <- as.data.frame(matrix(rnorm(120),40,30))
-labels<-rep(0:3,10)
+labels<-data.frame(code=rep(0:3,10),names=rep(c("A","B","C","D"),10))
 adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
  threshold="fdr", thr.value=0.05, weighted=FALSE)
 
@@ -44,6 +47,9 @@ degreeCentrality(expr, labels, adjacencyMatrix1)
 
 # Betweenness Centrality
 betweennessCentrality(expr, labels, adjacencyMatrix1)
+
+# Edges Betweenness Centrality
+betweennessEdgesCentrality(expr, labels, adjacencyMatrix1)
 
 # Closenness Caentrality
 closenessCentrality(expr, labels, adjacencyMatrix1)

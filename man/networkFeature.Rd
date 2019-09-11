@@ -4,6 +4,7 @@
 \alias{networkFeature}
 \alias{averageDegreeCentrality}
 \alias{averageBetweennessCentrality}
+\alias{averageBetweennessEdgesCentrality}
 \alias{averageClosenessCentrality}
 \alias{averageEigenvectorCentrality}
 \alias{averageClusteringCoefficient}
@@ -13,18 +14,24 @@
 \usage{
 averageDegreeCentrality(expr, labels, adjacencyMatrix, options = NULL)
 
-averageBetweennessCentrality(expr, labels, adjacencyMatrix, options = NULL)
+averageBetweennessCentrality(expr, labels, adjacencyMatrix,
+  options = NULL)
+
+averageBetweennessEdgesCentrality(expr, labels, adjacencyMatrix,
+  options = NULL)
 
 averageClosenessCentrality(expr, labels, adjacencyMatrix, options = NULL)
 
-averageEigenvectorCentrality(expr, labels, adjacencyMatrix, options = NULL)
+averageEigenvectorCentrality(expr, labels, adjacencyMatrix,
+  options = NULL)
 
-averageClusteringCoefficient(expr, labels, adjacencyMatrix, options = NULL)
+averageClusteringCoefficient(expr, labels, adjacencyMatrix,
+  options = NULL)
 
 averageShortestPath(expr, labels, adjacencyMatrix, options = NULL)
 
-spectralEntropies(expr, labels, adjacencyMatrix, options = list(bandwidth =
-  "Sturges"))
+spectralEntropies(expr, labels, adjacencyMatrix, options = list(bandwidth
+  = "Sturges"))
 }
 \arguments{
 \item{expr}{Matrix of variables (columns) vs samples (rows)}
@@ -46,12 +53,15 @@ Network feature average nodes scores (degree, betweenness, closenness, eigenvect
 \examples{
 set.seed(1)
 expr <- as.data.frame(matrix(rnorm(120),40,30))
-labels<-rep(0:3,10)
+labels<-data.frame(code=rep(0:3,10),names=rep(c("A","B","C","D"),10))
 adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
  threshold="fdr", thr.value=0.05, weighted=FALSE)
 
 # Average degree centrality
 averageDegreeCentrality(expr, labels, adjacencyMatrix1)
+
+# Average betweenness centrality
+averageBetweennessCentrality(expr, labels, adjacencyMatrix1)
 
 # Average betweenness centrality
 averageBetweennessCentrality(expr, labels, adjacencyMatrix1)

@@ -4,15 +4,15 @@
 \alias{diffNetAnalysis}
 \title{Differential network analysis method}
 \usage{
-diffNetAnalysis(method, options, varFile, labels, varSets = NULL,
-  adjacencyMatrix, numPermutations = 1000, print = TRUE,
-  resultsFile = NULL, seed = NULL, min.vert = 5,
-  BPPARAM = MulticoreParam())
+diffNetAnalysis(method, options = list(bandwidth = "Sturges"), varFile,
+  labels, varSets = NULL, adjacencyMatrix, numPermutations = 1000,
+  print = TRUE, resultsFile = NULL, seed = NULL, min.vert = 5,
+  BPPARAM = NULL, na.rm = NULL)
 }
 \arguments{
 \item{method}{a function that receives two adjacency matrices and returns a list containing a statistic theta that measures the difference between them, and a p-value for the test H0: theta = 0 against H1: theta > 0.}
 
-\item{options}{a list contaning paremeters used by 'method'.}
+\item{options}{a list contaning parameters used by 'method'. Used only in degreeDistributionTest, spectralEntropyTest and spectralDistributionTest functions. It can be set to either \code{list(bandwidth="Sturges")} or \code{list(bandwidth="Silverman")}.}
 
 \item{varFile}{a numeric matrix contaning variables values data.}
 
@@ -32,7 +32,9 @@ diffNetAnalysis(method, options, varFile, labels, varSets = NULL,
 
 \item{min.vert}{lower number of nodes (variables) that has to be to compare the networks.}
 
-\item{BPPARAM}{An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions.}
+\item{BPPARAM}{An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions. #MulticoreParam()}
+
+\item{na.rm}{remove the NA values by excluding the rows ("row") or the columns ("col") that contaings it. If NULL (default) the NA values are not removed.}
 }
 \value{
 a data frame containing the name, size, test statistic, nominal p-value and adjusted p-value (q-value) associated with each gene set.
@@ -43,7 +45,8 @@ Differential network analysis method
 \examples{
 # Glioma data
 data("varFile")
-data("labels")
+gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+labels<-doLabels(gliomaData)
 adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
  thr.value=0.05, weighted=FALSE)
 diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, varSets=NULL,
@@ -54,7 +57,7 @@ diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, var
 # Random data
 set.seed(1)
 varFile <- as.data.frame(matrix(rnorm(120),40,30))
-labels<-rep(0:3,10)
+labels<-data.frame(code=rep(0:3,10),names=rep(c("A","B","C","D"),10))
 adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
  thr.value=0.05, weighted=FALSE)
 diffNetAnalysis(method=degreeCentralityTest, varFile=varFile, labels=labels, varSets=NULL,

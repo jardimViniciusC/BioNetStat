@@ -10,7 +10,7 @@ readVarFile(fileName, path = NULL, dec = ".", sep = NULL,
 \arguments{
 \item{fileName}{the name of the file which the data are to be read from. Each row of the table appears as one line of the file. If it does not contain an absolute path, the file name is relative to the current working directory, getwd().}
 
-\item{path}{the path to the directory that contains the file}
+\item{path}{the path to the directory that contains the file. Used only by Graphical Interface.}
 
 \item{dec}{the character used in the file for decimal points.}
 
@@ -31,6 +31,7 @@ varFile<-readVarFile(gliomaData)
 
 # Random file
 test1 <- as.data.frame(cbind(rep(LETTERS[1:4],each=10),matrix(rnorm(120),40,30)))
-write.table(test1, "~/tf.csv",sep=";",row.names=FALSE)
-a<-readVarFile(fileName="~/tf.csv")
+tf<-tempfile(fileext = ".csv")
+write.table(test1, tf,sep=";",row.names=FALSE)
+a<-readVarFile(fileName=tf)
 }

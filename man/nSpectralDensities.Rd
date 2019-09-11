@@ -4,7 +4,8 @@
 \alias{nSpectralDensities}
 \title{Spectral Density functions of n graphs}
 \usage{
-nSpectralDensities(A, from = NULL, to = NULL, bandwidth = "Silverman")
+nSpectralDensities(A, from = NULL, to = NULL,
+  bandwidth = "Silverman")
 }
 \arguments{
 \item{A}{a list of adjacency matrices}

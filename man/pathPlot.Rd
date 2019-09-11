@@ -4,9 +4,10 @@
 \alias{pathPlot}
 \title{Variable values view in metabolic pathways}
 \usage{
-pathPlot(gene.data = NULL, cpd.data = NULL, labels, varr.diff.list = NULL,
-  threshold = NULL, thr.value = 0.05, FUN = median, species, pathway.id,
-  kegg.native = TRUE, file.name = "path")
+pathPlot(gene.data = NULL, cpd.data = NULL, labels,
+  varr.diff.list = NULL, threshold = NULL, thr.value = 0.05,
+  FUN = median, species, pathway.id, kegg.native = TRUE,
+  file.name = "path")
 }
 \arguments{
 \item{gene.data}{either vector (single sample) or a matrix-like data (multiple sample). Vector should be numeric with gene IDs as names or it may also be character of gene IDs. Character vector is treated as discrete or count data. Matrix-like data structure has genes as rows and samples as columns. Row names should be gene IDs. Here, gene ID is a generic concepts, including multiple types of gene, transcript and protein uniquely mappable to KEGG gene IDs. KEGG ortholog IDs are also treated as gene IDs as to handle metagenomic data. Check details for mappable ID types. Default gene.data=NULL.

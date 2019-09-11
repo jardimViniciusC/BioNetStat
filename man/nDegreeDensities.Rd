@@ -4,8 +4,8 @@
 \alias{nDegreeDensities}
 \title{Density functions of the degrees of n graphs}
 \usage{
-nDegreeDensities(Gs, npoints = 1024, bandwidth = "Sturges", from = NULL,
-  to = NULL)
+nDegreeDensities(Gs, npoints = 1024, bandwidth = "Sturges",
+  from = NULL, to = NULL)
 }
 \arguments{
 \item{Gs}{a list of n igraph graphs objects}

@@ -10,19 +10,19 @@
 \title{Node score equality test}
 \usage{
 degreeCentralityVertexTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = MulticoreParam())
+  numPermutations = 1000, options = NULL, BPPARAM = NULL)
 
 betweennessCentralityVertexTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = MulticoreParam())
+  numPermutations = 1000, options = NULL, BPPARAM = NULL)
 
 closenessCentralityVertexTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = MulticoreParam())
+  numPermutations = 1000, options = NULL, BPPARAM = NULL)
 
 eigenvectorCentralityVertexTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = MulticoreParam())
+  numPermutations = 1000, options = NULL, BPPARAM = NULL)
 
 clusteringCoefficientVertexTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = MulticoreParam())
+  numPermutations = 1000, options = NULL, BPPARAM = NULL)
 }
 \arguments{
 \item{expr}{Matrix of variables (columns) vs samples (rows)}
@@ -35,7 +35,7 @@ clusteringCoefficientVertexTest(expr, labels, adjacencyMatrix,
 
 \item{options}{argument non used in this function}
 
-\item{BPPARAM}{An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions.}
+\item{BPPARAM}{An optional BiocParallelParam instance determining the parallel back-end to be used during evaluation, or a list of BiocParallelParam instances, to be applied in sequence for nested calls to BiocParallel functions. MulticoreParam()}
 }
 \value{
 A table, containing on the columns, the following informations for each variable (rows):
@@ -50,23 +50,33 @@ Nodes scores equality test between network
 \examples{
 set.seed(1)
 expr <- as.data.frame(matrix(rnorm(120),40,30))
-labels<-rep(0:3,10)
+labels<-data.frame(code=rep(0:3,10),names=rep(c("A","B","C","D"),10))
 adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue",
  threshold="fdr", thr.value=0.05, weighted=FALSE)
 # The numPermutations number is 1 to do a faster example, but we advise to use unless 1000 permutations in real analysis
 
 # Degree centrality test
-degreeCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+diffNetAnalysis(method=degreeCentralityVertexTest, varFile=expr, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
 
 # Betweenness centrality test
-betweennessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+diffNetAnalysis(method=betweennessCentralityVertexTest, varFile=expr, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
 
 # Closeness centrality test
-closenessCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+diffNetAnalysis(method=closenessCentralityVertexTest, varFile=expr, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
 
 # Eigenvector centrality test
-eigenvectorCentralityVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+diffNetAnalysis(method=eigenvectorCentralityVertexTest, varFile=expr, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
 
 # Clustering coefficient test
-clusteringCoefficientVertexTest(expr, labels, adjacencyMatrix1,numPermutations=1)
+diffNetAnalysis(method=clusteringCoefficientVertexTest, varFile=expr, labels=labels, varSets=NULL,
+ adjacencyMatrix=adjacencyMatrix1, numPermutations=1, print=TRUE, resultsFile=NULL,
+  seed=NULL, min.vert=5, option=NULL)
 }
