@@ -1,0 +1,29 @@
+<p>
+    To run BioNetStat, you must upload on the left sidebar file containing variable values data 
+    with the phenotype labels in any column. If the variables can be grouped, such as a collection of gene sets, it is also possible to upload the variable set database. Detailed information about the data formats are described below.
+</p>
+
+<h5>Variable values data (*.csv)</h5>
+
+<p>
+    The values data are a comma separeted values (*.csv). The .csv file must to contain in each row one unit sample. The columns of csv, as a default, are separeted by ";". Only in the command line usage is possible to define other columns separation. One of the columns must to be a characters column (read by R as a factor) that will be read as class (e.g. phenotype or treatment) of the sample. If there is more than one column of characters you will have the option to choose which one will be used in the analysis. It is only possible to choose only one column. The columns containing numeric values are consired as variable to be compared and appear in the preview table of main panel. An example is presented in the figure below:
+</p>
+
+<img src="images/CSVtabExemp.png" width="241">
+
+<h5>Variables set database (*.txt)</h5>
+
+<p>
+    The gene set database file describes the groups of variables that will be analyzed. The columns are tab delimited. Each row corresponds to a gene set. The first column describes the gene set name, the second one contains a gene set description (optional), and the following columns contain the variables that belong to the set. Usualy the file have the *.txt extension, but other exstension such as .gmt (explained below) is also possible. The .txt format is illustrated by the figure below:
+</p>
+
+<img src="images/TXTtabExemp.png"  width="400">
+
+<p>
+    </br>
+    As an example for variable set in gmt format, gene set collections are freely available at the 
+    Molecular Signature Database (MSigDB) 
+    (<a href="http://www.broadinstitute.org/gsea/msigdb/index.jsp">http://www.broadinstitute.org/gsea/msigdb/index.jsp</a>) (Subramanian <i>et al.</i>, 2005). An example is in the figure below:
+<p>
+  
+<img src="images/GMTtabExemp.png"  width="700">

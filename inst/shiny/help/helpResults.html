@@ -1,0 +1,65 @@
+<p>
+    When the differential network analysis finishes, the "Analysis running..." warning will be replaced by the foolowing figure and the results are shown on  the "Analysis results" tab.
+</p>
+
+<img src="images/bionetstat_results1_image.png"  width="600">
+
+<h5>Results table</h5>
+<p>The results table has the following format:</p>
+
+</br>
+<img src="images/bionetstat_results2_image.png"  width="600">
+
+<!--
+<ul>
+    <li>
+        Genes set name
+    </li>
+    <li>
+        Set size
+    </li>
+    <li>
+        Test statistic
+    </li>
+    <li>
+        Nominal p-value 
+    </li>
+    <li>
+        Q-value Adjusted (p-value for multiple comparisons (Benjamin and Hochberg FDR method)
+    </li>
+-->
+</br>
+<p>
+    You can save the results as a CSV or R data file:
+    <ul>
+        <li>CSV: a comma-separated text file, containing the execution parameters
+            and the results table. It can be opened with a spreadsheet software</li>
+        <li>R data: a file that contains two R variables: a data frame called
+            "results" (the differential network analysis results), and a table 
+            called "parameters" (the parameters used in the analysis). It 
+            can be loaded using the "load" command in the R console.</li>
+    </ul>
+</p>
+
+<h5>Missing p-values</h5>
+
+<p>The differential network analyses may fail when empty graphs are inferred from 
+the expression data. Missing p-values are likely to happen for unweighted small
+graphs. </p>
+
+<p>If you are using the "Spectral entropy test", the "Spectral density test",
+or the "Degree distribution test", setting the bandwidth to Silverman's criteria
+will avoid the missing p-values. </p>
+
+<p>If you are using the "Shortest path test", the analysis will always fail
+when the graph is empty. To avoid it, try filtering larger gene sets.</p>
+
+<!--
+<ul>
+    <li>
+        CSV file: 
+    </li>
+    <li>
+        R Data:
+    </li>
+</u> -->

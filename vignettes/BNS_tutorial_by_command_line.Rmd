@@ -23,7 +23,7 @@ library(BioNetStat)
 Um guia de como usar a interface gráfica está nas aba 'Help' da própria interface ou em [Tutorial BioNetStat para a interface](tutorial_BNS_interface.md )
 
 ## Dados de teste
-Para realizar esse tutorial faça o download da tabela de [valores das variáveis](data/bnsDataTest.csv) e dos [grupos de variáveis](data/c2.cp.v5.2.symbols.gmt).
+Para realizar esse tutorial faça o download da tabela de [valores das variáveis](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/extdata/bnsData.csv) e dos [grupos de variáveis](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/extdata/c2.cp.v5.2.symbols.gmt).
 
 ## Lendo a tabela de valores das variáveis
 A função 'readVarFile', lê apenas os valores numéricos da tabela que serão usados para a construção do grafo. Neste exemplo a tabela 'cancer_data.csv' é formada por valores de expressão de 134 genes.
@@ -39,9 +39,9 @@ labmat<-doLabels(fileName = "~/path_to_file/bnsDataTest.csv")
 labmat2<-doLabels(fileName = "~/path_to_file/bnsDataTest.csv",factorName = "histologic_diagnosis",classes = c("Oligodendroglioma","Astrocytoma"))
 ```
 ## Lendo o arquivo que indica os grupos de variáveis
-A função readGmtFile lê uma tabela que indica os na primeira coluna os nomes dos grupos e nas colunas seguintes as variáveis que pertencem a cada grupo. Neste arquivo, as colunas devem ser delimitadas por tabulação.
+A função readSetFile lê uma tabela que indica os na primeira coluna os nomes dos grupos e nas colunas seguintes as variáveis que pertencem a cada grupo. Neste arquivo, as colunas devem ser delimitadas por tabulação.
 ```Rscript
-varSets<-readGmtFile(fileName = "~/path_to_file/c2.cp.v5.2.symbols.gmt")
+varSets<-readSetFile(fileName = "~/path_to_file/c2.cp.v5.2.symbols.gmt")
 ```
 ## Escolhendo os parâmetros para construção da matriz de adjacência
 
@@ -59,7 +59,7 @@ metodos<-list(spectralDistributionTest, spectralEntropyTest, degreeDistributionT
            betweennessCentralityTest, closenessCentralityTest, eigenvectorCentralityTest,
            clusteringCoefficientTest)
            
-res<-diffNetAnalysis(method = metodos[1],varFile = matriz, labels = labmat, varSets = NULL,adjacencyMatrix = funAdjMat,
+res<-diffNetAnalysis(method = metodos[[1]],varFile = matriz, labels = labmat, varSets = NULL,adjacencyMatrix = funAdjMat,
                 numPermutations = 1000, min.vert = 10,options = list("bandwidth"="Silverman"))
 res
 ```
@@ -70,7 +70,7 @@ A função 'diffNetAnalysis' também realiza o teste de comparação de vertices
 metodos<-list(degreeCentralityVertexTest,betweennessCentralityVertexTest, closenessCentralityVertexTest, eigenvectorCentralityVertexTest,
               clusteringCoefficientVertexTest)
 
-  res<-diffNetAnalysis(method = metodos[1],options = list("bandwidth"="Silverman"),varFile = matriz,
+  res<-diffNetAnalysis(method = metodos[[1]],options = list("bandwidth"="Silverman"),varFile = matriz,
                        labels = labmat, varSets = NULL,adjacencyMatrix = funAdjMat, numPermutations = 1000, print = T,
                        seed = F,min.vert = 10, resultsFile ="resultados.RData" )
   res$all

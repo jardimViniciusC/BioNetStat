@@ -301,7 +301,7 @@ output$downloadDiffExprTests <- downloadHandler(
     }
 )
 
-output$diffExprTests <- renderDataTable({
+output$diffExprTests <- DT::renderDataTable({
    table <- diffExprTests()
 if (!is.null(table))
 # colnames(table)[1] <- "Gene symbol <img src=\"images/info.png\" title=\"teste\" />"

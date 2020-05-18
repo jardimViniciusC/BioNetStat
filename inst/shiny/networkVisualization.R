@@ -654,7 +654,7 @@ output$downloadAbsDiff <- downloadHandler(
 
 # Render table containing the average absolute difference of the gene
 #correlations
-output$corAbsDiff <- renderDataTable({
+output$corAbsDiff <- DT::renderDataTable({
    corAbsDiff()
 })
 
@@ -712,7 +712,7 @@ output$downloadsitTable <- downloadHandler(
   }
 )
 
-output$sitTable <- renderDataTable({
+output$sitTable <- DT::renderDataTable({
   sitTable()
 })
 

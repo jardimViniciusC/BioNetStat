@@ -11,7 +11,7 @@
 #' @params lib name of js library used
 #' @params package name where js library resides
 #' @export
-chartOutput <- showOutput <- function(outputId, lib = NULL, package = '~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/shiny_BioNetStat/', 
+chartOutput <- showOutput <- function(outputId, lib = NULL, package = '~/Dropbox/mestrado/bionetstat/codigo_bns/creating_BioNetStat_com_git/BioNetStat/', 
     add_lib = TRUE){
   if (!is.null(lib)){
     LIB <- get_lib(lib, package = package)

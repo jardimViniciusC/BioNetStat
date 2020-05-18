@@ -28,7 +28,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
     wellPanel(
       h4(strong("Variable set database")),
       fileInput("geneSets",
-                h5(paste("Load the Set of variables file (*.gmt)",
+                h5(paste("Load the Set of variables file (*.txt)",
                       "describing the variables sets"),img(src="images/info.png", title="Choose a file containing the groups of variables. The format of the file that has to be inserted is explained in help section.")),
                 accept=c('.gmt',".txt"),placeholder = "Select a variables groups file")
     ),
@@ -43,14 +43,14 @@ shinyUI(fluidPage(theme = "bootstrap.css",
     ),
     wellPanel(
       h3("Network construction"),
-      h4(strong("a. Network type")),
+      h4(strong("a. Method for network inference")),
+      uiOutput("correlationMeasure"),
+      h4(strong("b. Network type")),
       radioButtons(
         "networkType",
         h5("Select what network type will be compared"),
         c("Weighted"="weighted", "Unweighted"="unweighted")
       ),
-      h4(strong("b. Method for network inference")),
-      uiOutput("correlationMeasure"),
       h4(strong("c. Set the statistic used\n as link formation threshold")),
       conditionalPanel(
         "input.networkType=='weighted'",
@@ -131,7 +131,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
           uiOutput("resultsType"),
           uiOutput("downloadResultsButton")
         ),
-        dataTableOutput("results"),# 'datatables'
+        DT::dataTableOutput("results"),# 'datatables'
         # chartOutput('results', 'datatables'),
         value = "Analysis results"
       ),
@@ -165,7 +165,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
               uiOutput("downloadVertexAnalysisButton")
             ),
             br(),
-            dataTableOutput("vertexAnalysisTable"),
+            DT::dataTableOutput("vertexAnalysisTable"),
             bsCollapsePanel(
               "KEGG pathway visualization",
               h4(strong("KEGG codes")),
@@ -277,7 +277,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
                 uiOutput("downloadAbsDiffButton")
               ),
               br(),
-              dataTableOutput("corAbsDiff")#, "datatables")
+              DT::dataTableOutput("corAbsDiff")#, "datatables")
               # chartOutput("corAbsDiff")#, "datatables")
             )
           ),
@@ -288,7 +288,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
               uiOutput("downloadsitTableButton")
             ),
             br(),
-            dataTableOutput("sitTable")#, "datatables")
+            DT::dataTableOutput("sitTable")#, "datatables")
             # chartOutput("corAbsDiff")#, "datatables")
           )
           ),
@@ -377,7 +377,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
                 uiOutput("downloadDiffExprTestsButton")
               ),
               br(),
-              dataTableOutput("diffExprTests")
+              DT::dataTableOutput("diffExprTests")
               # chartOutput("diffExprTests", "datatables")
             ),
             bsCollapsePanel(
@@ -406,45 +406,47 @@ shinyUI(fluidPage(theme = "bootstrap.css",
         value = "Further analyses"
 
 
-      )#,
+      ),
       # Help tab
-      # tabPanel(
-      #   h5("Help"),
-      #   bsCollapse(
-      #     multiple=TRUE,
-      #     id="help",
-      #     bsCollapsePanel(
-      #       "1. Loading the dataset",
-      #       includeHTML("help/helpData.html"),
-      #       id="helpData"
-      #     ),
-      #     bsCollapsePanel(
-      #       "2. Setting parameters and running the analysis",
-      #       includeHTML("help/helpParameters.html"),
-      #       id="helpParameters"
-      #     ),
-      #     bsCollapsePanel(
-      #       "3. Interpreting the results",
-      #       includeHTML("help/helpResults.html"),
-      #       id="helpResults"
-      #     ),
-      #     bsCollapsePanel(
-      #       "4. Further Analyses",
-      #       includeHTML("help/helpFurtherAnalyses.html"),
-      #       id="helpFurtherAnalyses"
-      #     ),
-      #     bsCollapsePanel(
-      #       "5. Running BNS from the command-line interface",
-      #       includeHTML("help/helpCommandLine.html"),
-      #       id="helpCommandLine"
-      #     ),
-      #     bsCollapsePanel(
-      #       "6. References",
-      #       includeHTML("help/helpReferences.html"),
-      #       id="helpReferences"
-      #     )
-      #   ),
-      #   value = "Help"
-      # )
+      tabPanel(
+        h5("Help"),
+        bsCollapse(
+          multiple=TRUE,
+          id="help",
+          bsCollapsePanel(
+            "1. Loading the dataset",
+            includeHTML("help/helpData.html")#,
+            # id="helpData"
+          ),
+          bsCollapsePanel(
+            "2. Setting parameters and running the analysis",
+            includeHTML("help/helpParameters.html")#,
+            # id="helpParameters"
+          ),
+          bsCollapsePanel(
+            "3. Interpreting the results",
+            includeHTML("help/helpResults.html")#,
+            # id="helpResults"
+          )#,
+          # bsCollapsePanel(
+          #   "4. Further Analyses",
+          #   includeHTML("help/helpFurtherAnalyses.html"),
+          #   id="helpFurtherAnalyses"
+          # ),
+          # bsCollapsePanel(
+          #   "5. Running BNS from the command-line interface",
+          #   includeHTML("help/helpCommandLine.html"),
+          #   id="helpCommandLine"
+          # ),
+          # bsCollapsePanel(
+          #   "6. References",
+          #   includeHTML("help/helpReferences.html"),
+          #   id="helpReferences"
+          # )
+        ),
+        value = "Help"
+      ),
+      # About tab
+      tabPanel(h5("About"), includeHTML("about.html"), value="About")
       ))
 ))
