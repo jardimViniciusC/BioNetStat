@@ -85,14 +85,14 @@ results <- reactive ({
                   results[setName, "Test statistic"] <<- round(result[[1]],4)
                   results[setName, "Nominal p-value"] <<- round(result$p.value,4)
                   results[setName, "Set size"] <<- length(genes)
-                  results[setName, 6:ncol(results)] <<- round(result$Partial,1)
+                  # results[setName, 6:ncol(results)] <<- round(result$Partial,1)
                 }
             }
           if(is.list(result)) results[, "q-value"] <<- round(p.adjust(results[, "Nominal p-value"], method="fdr"),4)#
         })
-        results <- cbind(rownames(results), results)
-        colnames(results)[1] <- "Set name"
-        return(results)
+        # results <- cbind(rownames(results), results)
+        # colnames(results)[1] <- "Set name"
+        return(results[,1:5])
     })
 })
 
@@ -290,8 +290,7 @@ output$appMessages <- renderUI({
 #                                       list(bSearchable = FALSE))))
 
 
-
-output$results <- renderDataTable({
+output$results <- DT::renderDataTable({
       table <- results()
       #
       # colnames(table)[5] <- paste("Q-value <img src=\"images/info.png\" ",
@@ -302,13 +301,14 @@ output$results <- renderDataTable({
       return(table)
 })
 
-# output$results <- renderChart2({
+# output$results <- renderChart({
 #   table <- results()
 #   colnames(table)[5] <- paste("Q-value <img src=\"images/info.png\" ",
 #                               "title=\"Adjusted p-value for ",
 #                               "multiple comparisons (Benjamin and ",
 #                               "Hochberg FDR method)\" />", sep="")
-#   return(dTable(table))
+#   # return(dTable(table))
+#   return(table)
 # })
 
 

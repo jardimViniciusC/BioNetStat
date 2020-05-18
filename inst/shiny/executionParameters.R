@@ -72,7 +72,7 @@ output$predefGeneSets <- renderUI({
 })
 
 output$correlationMeasure <- renderUI({
-    selectInput("correlationMeasure", h5("Select a dependence measure:"),
+    selectInput("correlationMeasure", h5("Select an association measure:"),
                 rownames(correlationMeasures))
 })
 

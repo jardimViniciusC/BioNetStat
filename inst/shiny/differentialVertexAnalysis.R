@@ -164,7 +164,7 @@ output$vertexFunction <- renderUI({
                         names)
 })
 
-output$vertexAnalysisTable  <- renderDataTable({
+output$vertexAnalysisTable  <- DT::renderDataTable({
    return(vertexAnalysisTable())
 })
 

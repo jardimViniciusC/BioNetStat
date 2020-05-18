@@ -31,34 +31,11 @@ runBioNetStat <- function(){
 #'
 readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#readSampleTable
   if(is.null(path)) path<-fileName
-  if(lapply(strsplit(as.character(path), '[.]'),rev)[[1]][1]=="txt"){ # Se o arquivo for TXT
-    if(is.null(sep)) sep="\t"
-    expr <- read.table(fileName, header=TRUE,dec=dec,sep=sep,check.names = check.names)
-    colnames(expr) <- toupper(colnames(expr))
-    cols <- colnames(expr)
-    if (cols[1] != "NAME")
-      stop(paste("Wrong gene expression data format. The fist column",
-                 "of the file should be \"Name\"."))
-    
-    names <- expr[, "NAME"]
-    n <- ncol(expr)
-    
-    if (cols[2] == "DESCRIPTION")
-      expr <- expr[, 3:n]
-    else
-      expr <- expr[, 2:n]
-    
-    expr <- as.matrix(expr)
-    rownames(expr) <- names
-    return(expr) ## Lembrar que a matrix agora está com os genes na primeira coluna
-  }
-  if(lapply(strsplit(as.character(path), '[.]'),rev)[[1]][1]=="csv"){ # Se o arquivo for CSV
-    if(is.null(sep)) sep=";"
+  if(is.null(sep)) sep=";"
     table <- read.table(fileName,header=TRUE,dec=dec,sep=sep,check.names = check.names) # atentar para o decimal como virgula
     expr <- table[,vapply(table,is.numeric,FUN.VALUE = vector(length = 1))]
     n <- nrow(expr)
     return(expr)
-  }
 }
 ################################################################################################################
 
@@ -113,20 +90,20 @@ doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
 }
 
 ################################################################################################################
-#' Read a collection of gene sets (*.gmt)
+#' Read a collection of variables sets (*.txt)
 #'
-#' 'readGmtFile' reads a tab-delimited text file containing a collection of
+#' 'readSetFile' reads a tab-delimited text file containing a collection of
 #' gene sets.
 #' @param fileName a string containing the file name
 #' @return a list of gene sets. Each element of the list is a character vector
 #' v, where v[1] contains the gene set name, v[2] descriptions about the set,
 #' v[3..length(v)] the genes that belong to the set.
 #' @examples
-#' # Read example gmt file
-#' gmt_fname <- system.file("extdata", "c2.cp.v5.2.symbols.gmt", package = "BioNetStat")
-#' deneSets <- readGmtFile(gmt_fname)
+#' # Read example set file
+#' set_fname <- system.file("extdata", "c2.cp.v5.2.symbols.gmt", package = "BioNetStat")
+#' deneSets <- readSetFile(set_fname)
 #' @export
-readGmtFile <- function(fileName) {
+readSetFile <- function(fileName) {
   lines <- readLines(fileName)
   geneSets <- strsplit(lines, "\t")
   n <- length(geneSets)

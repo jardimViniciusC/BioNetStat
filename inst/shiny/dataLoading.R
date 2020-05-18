@@ -92,7 +92,7 @@ geneSetsInput <- reactive ({
   inFile <- input$geneSets
   expr <- exprInput()
   if (is.null(inFile)) geneSets<-list(c("All",colnames(expr)))
-  else geneSets <- readGmtFile(inFile$datapath)
+  else geneSets <- readSetFile(inFile$datapath)
   return(geneSets)
 })
 
@@ -248,7 +248,7 @@ output$classes <- renderUI({
   if (is.null(labelsInput()))
     return(NULL)
   labels <- labelsInput()
-  wellPanel(selectInput("classes", p(h4(strong("Factors\n")),h5("Choose the conditions class you want to test:",img(src="images/info.png", title="Select the column of your data table that you want to use to set the samples (rows) states."))),
+  wellPanel(selectInput("classes", p(h4(strong("Column classes name\n")),h5("Choose the column of classes you want to test:",img(src="images/info.png", title="Select the column of your data table that you want to use to set the samples (rows) states."))),
               choices = c(labels)))
 })
 
@@ -261,7 +261,7 @@ output$factors <- renderUI({
   # for (i in 1:ncol(classes)) {
   #   options[i] <- paste(classes[1, i], classes[2, i])
   # }
-  wellPanel(selectizeInput("factorsinput", p(h4(strong("Classes\n")),h5("Choose the conditions to be compared:",img(src="images/info.png", title="Select which states (samples) you want to bild a network to be compared. "))),
+  wellPanel(selectizeInput("factorsinput", p(h4(strong("Classes\n")),h5("Choose the classes to be compared:",img(src="images/info.png", title="Select which states (samples) you want to bild a network to be compared. "))),
               choices = classes, multiple=T))#c(options)
 })
 
