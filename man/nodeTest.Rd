@@ -9,20 +9,50 @@
 \alias{clusteringCoefficientVertexTest}
 \title{Node score equality test}
 \usage{
-degreeCentralityVertexTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+degreeCentralityVertexTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 
-betweennessCentralityVertexTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+betweennessCentralityVertexTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 
-closenessCentralityVertexTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+closenessCentralityVertexTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 
-eigenvectorCentralityVertexTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+eigenvectorCentralityVertexTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 
-clusteringCoefficientVertexTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+clusteringCoefficientVertexTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 }
 \arguments{
 \item{expr}{Matrix of variables (columns) vs samples (rows)}

@@ -4,10 +4,21 @@
 \alias{diffNetAnalysis}
 \title{Differential network analysis method}
 \usage{
-diffNetAnalysis(method, options = list(bandwidth = "Sturges"), varFile,
-  labels, varSets = NULL, adjacencyMatrix, numPermutations = 1000,
-  print = TRUE, resultsFile = NULL, seed = NULL, min.vert = 5,
-  BPPARAM = NULL, na.rm = NULL)
+diffNetAnalysis(
+  method,
+  options = list(bandwidth = "Sturges"),
+  varFile,
+  labels,
+  varSets = NULL,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  print = TRUE,
+  resultsFile = NULL,
+  seed = NULL,
+  min.vert = 5,
+  BPPARAM = NULL,
+  na.rm = NULL
+)
 }
 \arguments{
 \item{method}{a function that receives two adjacency matrices and returns a list containing a statistic theta that measures the difference between them, and a p-value for the test H0: theta = 0 against H1: theta > 0.}

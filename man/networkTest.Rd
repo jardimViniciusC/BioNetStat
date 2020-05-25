@@ -13,35 +13,86 @@
 \alias{spectralDistributionTest}
 \title{Network equality test}
 \usage{
-degreeCentralityTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+degreeCentralityTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 
-betweennessCentralityTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+betweennessCentralityTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 
-closenessCentralityTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+closenessCentralityTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 
-eigenvectorCentralityTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+eigenvectorCentralityTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 
-clusteringCoefficientTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+clusteringCoefficientTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 
-edgeBetweennessTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+edgeBetweennessTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 
-degreeDistributionTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = list(bandwidth = "Sturges"),
-  BPPARAM = NULL)
+degreeDistributionTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = list(bandwidth = "Sturges"),
+  BPPARAM = NULL
+)
 
-spectralEntropyTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = list(bandwidth = "Sturges"),
-  BPPARAM = NULL)
+spectralEntropyTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = list(bandwidth = "Sturges"),
+  BPPARAM = NULL
+)
 
-spectralDistributionTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = list(bandwidth = "Sturges"),
-  BPPARAM = NULL)
+spectralDistributionTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = list(bandwidth = "Sturges"),
+  BPPARAM = NULL
+)
 }
 \arguments{
 \item{expr}{Matrix of variables (columns) vs samples (rows)}

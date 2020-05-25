@@ -4,12 +4,21 @@
 \alias{centralityPathPlot}
 \title{Structural measures of vertices view in metabolic pathways}
 \usage{
-centralityPathPlot(gene.data = NULL, cpd.data = NULL,
-  threshold = NULL, thr.value = 0.05, species, pathway.id,
-  kegg.native = TRUE, file.name = "path", limit = list(gene = NULL,
-  cdp = NULL), bins = list(gene = 15, cpd = 15), both.dirs = list(gene
-  = FALSE, cpd = FALSE), mid = list(gene = "white", cpd = "white"),
-  high = list(gene = "red", cpd = "red"))
+centralityPathPlot(
+  gene.data = NULL,
+  cpd.data = NULL,
+  threshold = NULL,
+  thr.value = 0.05,
+  species,
+  pathway.id,
+  kegg.native = TRUE,
+  file.name = "path",
+  limit = list(gene = NULL, cdp = NULL),
+  bins = list(gene = 15, cpd = 15),
+  both.dirs = list(gene = FALSE, cpd = FALSE),
+  mid = list(gene = "white", cpd = "white"),
+  high = list(gene = "red", cpd = "red")
+)
 }
 \arguments{
 \item{gene.data}{an output dataframe from diffNetAnalysis function. Data frame structure has genes as rows and statistical test, Nominal p-value, Q-value (p-value FDR adjust for multiple tests)and networks measures, for each network, as columns. Row names should be gene IDs. Here gene ID is a generic concepts, including multiple types of gene, transcript and protein uniquely mappable to KEGG gene IDs. KEGG ortholog IDs are also treated as gene IDs as to handle metagenomic data. Check details for mappable ID types. Default gene.data=NULL.

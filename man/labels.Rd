@@ -4,7 +4,9 @@
 \name{labels}
 \alias{labels}
 \title{Labels of glioma tissues in gene expression}
-\format{Vector which associates each row of data.frame (varFile) with a state (that will be an network).}
+\format{
+Vector which associates each row of data.frame (varFile) with a state (that will be an network).
+}
 \source{
 \href{https://cancergenome.nih.gov/}{TCGA - The Cancer Genome Atlas}
 }
