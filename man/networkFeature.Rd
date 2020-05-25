@@ -14,24 +14,29 @@
 \usage{
 averageDegreeCentrality(expr, labels, adjacencyMatrix, options = NULL)
 
-averageBetweennessCentrality(expr, labels, adjacencyMatrix,
-  options = NULL)
+averageBetweennessCentrality(expr, labels, adjacencyMatrix, options = NULL)
 
-averageBetweennessEdgesCentrality(expr, labels, adjacencyMatrix,
-  options = NULL)
+averageBetweennessEdgesCentrality(
+  expr,
+  labels,
+  adjacencyMatrix,
+  options = NULL
+)
 
 averageClosenessCentrality(expr, labels, adjacencyMatrix, options = NULL)
 
-averageEigenvectorCentrality(expr, labels, adjacencyMatrix,
-  options = NULL)
+averageEigenvectorCentrality(expr, labels, adjacencyMatrix, options = NULL)
 
-averageClusteringCoefficient(expr, labels, adjacencyMatrix,
-  options = NULL)
+averageClusteringCoefficient(expr, labels, adjacencyMatrix, options = NULL)
 
 averageShortestPath(expr, labels, adjacencyMatrix, options = NULL)
 
-spectralEntropies(expr, labels, adjacencyMatrix, options = list(bandwidth
-  = "Sturges"))
+spectralEntropies(
+  expr,
+  labels,
+  adjacencyMatrix,
+  options = list(bandwidth = "Sturges")
+)
 }
 \arguments{
 \item{expr}{Matrix of variables (columns) vs samples (rows)}

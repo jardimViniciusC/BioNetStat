@@ -5,8 +5,14 @@
 \alias{edgeBetweennessEdgeTest}
 \title{Edge score equality test}
 \usage{
-edgeBetweennessEdgeTest(expr, labels, adjacencyMatrix,
-  numPermutations = 1000, options = NULL, BPPARAM = NULL)
+edgeBetweennessEdgeTest(
+  expr,
+  labels,
+  adjacencyMatrix,
+  numPermutations = 1000,
+  options = NULL,
+  BPPARAM = NULL
+)
 }
 \arguments{
 \item{expr}{Matrix of variables (columns) vs samples (rows)}

@@ -4,8 +4,7 @@
 \alias{nSpectralDensities}
 \title{Spectral Density functions of n graphs}
 \usage{
-nSpectralDensities(A, from = NULL, to = NULL,
-  bandwidth = "Silverman")
+nSpectralDensities(A, from = NULL, to = NULL, bandwidth = "Silverman")
 }
 \arguments{
 \item{A}{a list of adjacency matrices}
@@ -33,11 +32,11 @@ A[[2]]<-as.matrix(as_adj(barabasi.game(30,power = 1,directed = FALSE)))
 A[[3]]<-as.matrix(as_adj(watts.strogatz.game(1,30,2,0.3)))
 d<-nSpectralDensities(A, bandwidth="Sturges")
 par(mfrow=c(1,3))
-plot(d$x,d$densities[,1],main="Erdos-Renyi\\n Spectral distribution",
+plot(d$x,d$densities[,1],main="Erdos-Renyi\n Spectral distribution",
 xlab="Eigenvalue",ylab="Frequency")
-plot(d$x,d$densities[,2],main="Barabasi\\n Spectral distribution",
+plot(d$x,d$densities[,2],main="Barabasi\n Spectral distribution",
 xlab="Eigenvalue",ylab="Frequency")
-plot(d$x,d$densities[,3],main="Watts-Strogatz\\n Spectral distribution",
+plot(d$x,d$densities[,3],main="Watts-Strogatz\n Spectral distribution",
 xlab="Eigenvalue",ylab="Frequency")
 }
 \seealso{

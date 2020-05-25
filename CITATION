@@ -1,0 +1,15 @@
+citEntry(entry="article",
+    Title = "BioNetStat: A Tool for Biological Networks Differential Analysis",
+    Author = personList(as.person("Vinícius Carvalho Jardim"),
+        as.person("Suzana de Siqueira Santos"), 
+        as.person("André Fujita"),
+        as.person("Marcos Silveira Buckeridge")),
+    Year = 2019,
+    Journal = "Frontiers in Genetics",
+    Pages = {"594"},
+    Volume = {"10"},
+    doi="10.3389/fgene.2019.00594",
+    url="https://www.frontiersin.org/article/10.3389/fgene.2019.00594",
+    textVersion = "Jardim, V. C., Santos, S. d. S., Fujita, A., e Buckeridge, M. S. (2019). BioNetStat: A Tool for Biological
+Networks Differential Analysis. Frontiers in Genetics, 10(June):594."
+)

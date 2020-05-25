@@ -4,7 +4,9 @@
 \name{varFile}
 \alias{varFile}
 \title{Gene expression in glioma tissues}
-\format{Object of class \code{data.frame} containing 134 variables (colunms) and 658 observations.}
+\format{
+Object of class \code{data.frame} containing 134 variables (colunms) and 658 observations.
+}
 \source{
 \href{https://cancergenome.nih.gov/}{TCGA - The Cancer Genome Atlas}
 }
