@@ -297,8 +297,8 @@ output$networkScoresComparison  <- renderUI({
         M <- adjMatrix(expr)
         return(abs(M))
     }
-
-    r <- match.fun(networkScoresMatrix[networkScore, 2])(data$expr, data$labels,
+    labelsDF<-data.frame(code=data$labels)
+    r <- match.fun(networkScoresMatrix[networkScore, 2])(data$expr, labelsDF,
                                                 adjacencyMatrix, options=options)
     r1 <- round(r[[1]], 5)
     r2 <- round(r[[2]], 5)

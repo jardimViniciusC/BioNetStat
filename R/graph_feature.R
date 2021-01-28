@@ -398,7 +398,7 @@ betweennessEdgesCentrality <- function(expr, labels, adjacencyMatrix) {
   A<-list()
   v<-vector(length=length(unique(labels$code)))
   for (a in seq_len(length(unique(labels$code)))){
-    A[[a]]<-adjacencyMatrix1(expr[labels$code==unique(labels$code)[a],])
+    A[[a]]<-adjacencyMatrix(expr[labels$code==unique(labels$code)[a],])
     v[a]<-(sum(!(A[[1]] %in% c(1,0))) != 0)
   }
   A<-lapply(A,abs)
