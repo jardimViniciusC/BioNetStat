@@ -284,6 +284,8 @@ output$geneSets <- renderUI({
   expr <- exprInput()
   if (length(geneSets)==1 & geneSets[[1]][1]=="All")
     return(paste("No variables sets collection file was loaded. \n All", dim(expr)[2], "variables will be compared. \n (Depending on the number of variables, it may take a while) "))
+  if (minSize()==0 & maxSize()==0)
+    return(paste("Something went wrong. There is no variable name in Variable set database corresponding to collumn name of Variables values file"))
   else {
     filename <- paste("\"", input$geneSets$name, "\"", sep="")
     msg <- paste(filename, "was loaded successfully.",
@@ -297,13 +299,18 @@ output$geneSets <- renderUI({
       msg <- paste(msg, " ", min(geneSetSizes()), " (", minSize(),
                    " in the variables values data) to ", max(geneSetSizes()),
                    " (", maxSize(), " in the variables values data) variables.",
-                   sep="",rownames(expr))
+                   sep="")
     }
     return(msg)
   }
 })
 output$table<-renderDataTable({
-  expr <- exprInput()
+  if (is.null(exprInput())){
+    expr <- exprInput()
+  }
+  else{
+    expr <- round(exprInput(),3) 
+  }
   expr
 })
 # Observing user inputs --------------------------------------------------------
