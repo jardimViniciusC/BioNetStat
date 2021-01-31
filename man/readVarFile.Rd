@@ -25,7 +25,7 @@ Read variable values matrix
 }
 \examples{
 # Glioma file
-gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+gliomaData <- system.file("extdata", "variablesValue_BioNetStat_tutorial_data.csv", package = "BioNetStat")
 varFile<-readVarFile(gliomaData)
 
 # Random file

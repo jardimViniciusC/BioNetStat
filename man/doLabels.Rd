@@ -25,7 +25,7 @@ Class vector of data table
 }
 \examples{
 # Glioma file
-gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+gliomaData <- system.file("extdata", "variablesValue_BioNetStat_tutorial_data.csv", package = "BioNetStat")
 labels<-doLabels(gliomaData)
 
 # Random file
