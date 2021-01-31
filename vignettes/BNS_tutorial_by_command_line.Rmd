@@ -23,7 +23,7 @@ library(BioNetStat)
 Um guia de como usar a interface gráfica está nas aba 'Help' da própria interface ou em [Tutorial BioNetStat para a interface](tutorial_BNS_interface.md )
 
 ## Dados de teste
-Para realizar esse tutorial faça o download da tabela de [valores das variáveis](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/extdata/bnsData.csv) e dos [grupos de variáveis](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/extdata/c2.cp.v5.2.symbols.gmt).
+Para realizar esse tutorial faça o download da tabela de [valores das variáveis](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/extdata/variablesValue_BioNetStat_tutorial_data.csv) e dos [grupos de variáveis](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/extdata/variableSet_BioNetStat_tutorial_data.gmt).
 
 ## Lendo a tabela de valores das variáveis
 A função 'readVarFile', lê apenas os valores numéricos da tabela que serão usados para a construção do grafo. Neste exemplo a tabela 'cancer_data.csv' é formada por valores de expressão de 134 genes.
@@ -32,16 +32,16 @@ A função 'doLabels' lê, na mesma tabela, uma coluna que definirá a qual esta
 
 Os dados usados neste exemplo 
 ```Rscript
-matriz<-readVarFile(fileName = "~/path_to_file/bnsDataTest.csv",sep = ";",dec=".")
+matriz<-readVarFile(fileName = "~/path_to_file/variablesValue_BioNetStat_tutorial_data.csv",sep = ";",dec=".")
 
-labmat<-doLabels(fileName = "~/path_to_file/bnsDataTest.csv")
+labmat<-doLabels(fileName = "~/path_to_file/variablesValue_BioNetStat_tutorial_data.csv")
 
-labmat2<-doLabels(fileName = "~/path_to_file/bnsDataTest.csv",factorName = "histologic_diagnosis",classes = c("Oligodendroglioma","Astrocytoma"))
+labmat2<-doLabels(fileName = "~/path_to_file/variablesValue_BioNetStat_tutorial_data.csv",factorName = "histologic_diagnosis",classes = c("Oligodendroglioma","Astrocytoma"))
 ```
 ## Lendo o arquivo que indica os grupos de variáveis
 A função readSetFile lê uma tabela que indica os na primeira coluna os nomes dos grupos e nas colunas seguintes as variáveis que pertencem a cada grupo. Neste arquivo, as colunas devem ser delimitadas por tabulação.
 ```Rscript
-varSets<-readSetFile(fileName = "~/path_to_file/c2.cp.v5.2.symbols.gmt")
+varSets<-readSetFile(fileName = "~/path_to_file/variableSet_BioNetStat_tutorial_data.gmt")
 ```
 ## Escolhendo os parâmetros para construção da matriz de adjacência
 
