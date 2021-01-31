@@ -56,7 +56,7 @@ Differential network analysis method
 \examples{
 # Glioma data
 data("varFile")
-gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+gliomaData <- system.file("extdata", "variablesValue_BioNetStat_tutorial_data.csv", package = "BioNetStat")
 labels<-doLabels(gliomaData)
 adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
  thr.value=0.05, weighted=FALSE)

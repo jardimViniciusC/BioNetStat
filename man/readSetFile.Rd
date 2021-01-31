@@ -20,6 +20,6 @@ gene sets.
 }
 \examples{
 # Read example set file
-set_fname <- system.file("extdata", "c2.cp.v5.2.symbols.gmt", package = "BioNetStat")
+set_fname <- system.file("extdata", "variableSet_BioNetStat_tutorial_data.gmt", package = "BioNetStat")
 deneSets <- readSetFile(set_fname)
 }
