@@ -19,7 +19,7 @@ runBioNetStat <- function(){
 #' @return a dataframe containing only the numeric columns of selected file. Each column is considered as a variable and each row as a sample.
 #' @examples 
 #' # Glioma file
-#' gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+#' gliomaData <- system.file("extdata", "variablesValue_BioNetStat_tutorial_data.csv", package = "BioNetStat")
 #' varFile<-readVarFile(gliomaData)
 #' 
 #' # Random file
@@ -49,7 +49,7 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#r
 #' @return a vector that identify each row of the readVarFile object as a sample belonging to a state (network). 
 #' @examples 
 #' # Glioma file
-#' gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+#' gliomaData <- system.file("extdata", "variablesValue_BioNetStat_tutorial_data.csv", package = "BioNetStat")
 #' labels<-doLabels(gliomaData)
 #' 
 #' # Random file
@@ -100,7 +100,7 @@ doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
 #' v[3..length(v)] the genes that belong to the set.
 #' @examples
 #' # Read example set file
-#' set_fname <- system.file("extdata", "c2.cp.v5.2.symbols.gmt", package = "BioNetStat")
+#' set_fname <- system.file("extdata", "variableSet_BioNetStat_tutorial_data.gmt", package = "BioNetStat")
 #' deneSets <- readSetFile(set_fname)
 #' @export
 readSetFile <- function(fileName) {
@@ -135,7 +135,7 @@ readSetFile <- function(fileName) {
 #' @examples 
 #' # Glioma data
 #' data("varFile")
-#' gliomaData <- system.file("extdata", "bnsData.csv", package = "BioNetStat")
+#' gliomaData <- system.file("extdata", "variablesValue_BioNetStat_tutorial_data.csv", package = "BioNetStat")
 #' labels<-doLabels(gliomaData)
 #' adjacencyMatrix1 <- adjacencyMatrix(method="spearman", association="pvalue", threshold="fdr",
 #'  thr.value=0.05, weighted=FALSE)
