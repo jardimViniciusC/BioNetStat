@@ -59,8 +59,8 @@ readVarFile <- function(fileName,path=NULL,dec=".",sep=NULL,check.names=TRUE){#r
 #' labels<-doLabels(tfl)
 #' @export
 doLabels <- function(fileName, factorName=NULL, classes=NULL,dec=".",sep=";") {
-  options(stringsAsFactors = TRUE)
-  table <- read.csv(fileName,header=TRUE,dec=dec,sep=sep)
+  # options(stringsAsFactors = TRUE)
+  table <- read.csv(fileName,header=TRUE,dec=dec,sep=sep,stringsAsFactors = T)
   if(is.null(factorName)) factor <- names(which(!vapply(table,is.numeric,FUN.VALUE = vector(length = 1))))[1]
   else if(!any(factorName==names(which(!vapply(table,is.numeric,FUN.VALUE = vector(length = 1)))))) stop(paste("The factorName",factorName," doesn't exists in dataframe"))
   else factor <- factorName
