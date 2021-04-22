@@ -1,16 +1,16 @@
 Package: BioNetStat
 Type: Package
 Title: Biological Network Analysis
-Version: 1.10.2
+Version: 1.10.3
 Author: Vinícius Jardim, Suzana Santos, André Fujita, and Marcos Buckeridge
 Maintainer: Vinicius Jardim <viniciusjc@gmail.com>
 Description: A package to perform differential network analysis, differential node analysis (differential coexpression analysis), network and metabolic pathways view.
 License: GPL (>= 3)
 Depends: R (>= 3.5), shiny, igraph, shinyBS, pathview, DT
-Imports: BiocParallel, RJSONIO, whisker, yaml, pheatmap, ggplot2, plyr, utils, stats, RColorBrewer, Hmisc, psych, knitr
+Imports: BiocParallel, RJSONIO, whisker, yaml, pheatmap, ggplot2, plyr, utils, stats, RColorBrewer, Hmisc, psych, knitr, rmarkdown, markdown
 biocViews: Network, NetworkInference, Pathways, GraphAndNetwork, Sequencing, Microarray, Metabolomics, Proteomics, GeneExpression, RNASeq, SystemsBiology, DifferentialExpression, GeneSetEnrichment, ImmunoOncology
 RoxygenNote: 6.1.1
 URL: http://github.com/jardimViniciusC/BioNetStat
 BugReports: http://github.com/jardimViniciusC/BioNetStat/issues
 Encoding: UTF-8
-VignetteBuilder: knitr
+VignetteBuilder: knitr, rmarkdown

@@ -165,7 +165,7 @@ output$selectGeneSet <- renderUI({
             i <- which(results[, "q-value"] <= input$geneSetThreshold)
         n <- length(i)
         if (n != 0)
-            geneSets <- results[i, "Set name"]
+            geneSets <- rownames(results[i,])
     }
 
     else if (input$filterGeneSets == "tested") {
