@@ -68,18 +68,18 @@ diffExprTests <- reactive({
           expr2 <- expr[labels==cla[cla[,1]==c2,2], i]
           t <-  t.test(expr1, expr2)
           result[i,"Difference between means"] <- round(t$estimate[1] -
-                                                        t$estimate[2], 4)
-          result[i,"Difference between means test p-value"] <- t$p.value
+                                                        t$estimate[2], 2)
+          result[i,"Difference between means test p-value"] <- round(t$p.value, 4)
           w <- wilcox.test(expr1, expr2, conf.int=T)
-          result[i,"Difference in location"] <- round(w$estimate, 4)
-          result[i, "Wilcoxon-Mann-Whitney test p-value"] <- w$p.value
+          result[i,"Difference in location"] <- round(w$estimate, 2)
+          result[i, "Wilcoxon-Mann-Whitney test p-value"] <- round(w$p.value, 4)
       }
     }
     else{
       colnames(result) <- c("Variable symbol", "F-value",
-                            "Analisys of veriance test p-value",
-                            "F-value",
-                            "Kruskal-Wallis test p-value")
+                            "ANOVA test p-value",
+                            "Kruskal-Wallis statistic",
+                            "KW test p-value")
       if (is.null(data))
         return(result)
       expr <- data$expr
@@ -89,9 +89,9 @@ diffExprTests <- reactive({
       genes <- names(expr)
       result <- data.frame(matrix(NA, nrow=length(genes), ncol=5))
       colnames(result) <- c("Variable symbol", "F-value",
-                            "Analisys of veriance test p-value",
-                            "F-value KS",
-                            "Kruskal-Wallis test p-value")
+                            "ANOVA test p-value",
+                            "Kruskal-Wallis statistic",
+                            "KW test p-value")
       for (i in 1:length(genes)) {
         result[i,"Variable symbol"] <- genes[i]
         expr<-list()
@@ -105,11 +105,11 @@ diffExprTests <- reactive({
         }
         l<-do.call(c,l)
         t <-anova(lm(expr[,i]~as.factor(l)))
-        result[i,"F-value"] <- round(t$`F value`[1], 4)
-        result[i,"Analisys of veriance test p-value"] <- t$`Pr(>F)`[1]
+        result[i,"F-value"] <- round(t$`F value`[1], 2)
+        result[i,"ANOVA test p-value"] <- round(t$`Pr(>F)`[1], 4)
         k<-kruskal.test(expr[,i],as.factor(l))
-        result[i,"F-value KS"] <- round(k$statistic, 4)
-        result[i, "Kruskal-Wallis test p-value"] <- k$p.value
+        result[i,"Kruskal-Wallis statistic"] <- round(k$statistic, 2)
+        result[i, "KW test p-value"] <- round(k$p.value, 4)
       }
     }
     return(result)
@@ -297,7 +297,7 @@ output$downloadDiffExprTests <- downloadHandler(
         if (input$diffExprTestsType == "R data")
             save(diffExpressionAnalysis, file=filename)
         else
-            write.csv(diffExpressionAnalysis, filename, row.names=F)
+            write.table(diffExpressionAnalysis, filename, append=T, row.names=F, col.names=T,sep=";", dec=".",quote = F)
     }
 )
 

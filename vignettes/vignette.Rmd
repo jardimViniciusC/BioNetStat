@@ -7,7 +7,7 @@ output:
   pdf_document: default
   word_document: default
 ---
-%\VignetteIndexEntry{2. Interface tutorial}
+%\VignetteIndexEntry{1. Interface tutorial}
 %\VignetteKeywords{user interface}
 %\VignettePackage{BioNetStat}
 %\VignetteEngine{knitr::knitr}

@@ -51,8 +51,7 @@ graphs. </p>
 or the "Degree distribution test", setting the bandwidth to Silverman's criteria
 will avoid the missing p-values. </p>
 
-<p>If you are using the "Shortest path test", the analysis will always fail
-when the graph is empty. To avoid it, try filtering larger gene sets.</p>
+<p>The missing values also can appear because the parameters used are too restrictive. The "1-q-value" as association measure and 0.95 as threshold value are parameters used to datasets with many biological samples. Suppose you are using these parameters to a dataset with few biological samples (less than 30). In that case, you will get great chances to produce empty networks and consequently missing p-values on results. It results in missing p-values manly in "Spectral Distribution test", "Spectral entropy test", and "Degree distribution analysis".</p>
 
 <!--
 <ul>
