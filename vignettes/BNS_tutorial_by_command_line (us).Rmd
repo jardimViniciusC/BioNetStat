@@ -1,0 +1,77 @@
+---
+output:
+  word_document: default
+  pdf_document: default
+  html_document:
+    toc: true
+    toc_depth: 3
+    number_sections: true
+---
+%\VignetteIndexEntry{2. R console tutorial}
+%\VignetteKeywords{Line command}
+%\VignettePackage{BioNetStat}
+%\VignetteEngine{knitr::knitr}
+
+# Tutorial for using BioNetStat in command lines
+
+After installing BioNetStat explained in [README](/README.md), you just need to open R and run the following commands.
+```Rscript
+library(devtools)
+library(shiny)
+library(BioNetStat)
+```
+A guide to using the graphical interface is in the ``Help'' tab of the interface itself or [BioNetStat Tutorial for the interface](tutorial_BNS_interface.md )
+
+## Test Data
+To perform this tutorial download the table of [variable values](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/extdata/variablesValue_BioNetStat_tutorial_data.csv) and the [variable groups](https://github.com/jardimViniciusC/BioNetStat/blob/master/inst/extdata/variableSet_BioNetStat_tutorial_data.gmt).
+
+## Reading the table of variable values
+The function 'readVarFile' reads only the numeric values from the table used to construct the graph. In this example, the table 'cancer_data.csv' is made up of the expression values of 134 genes.
+
+The function 'doLabels' reads, from the same table, a column that will define which state each sample belongs, and which networks will be compared. In this example, the samples 'cancer_data.csv' is divided into four cancer tissue. When you do not specify which column will define the label of the samples, the function will use the first column of the 'factor' class (as shown in the 'labmat' object). When you want to specify which column should be used and which states (treatments) will be compared you must use the arguments 'factorName' and 'classes,' respectively (as in the labmat2 object).
+
+The data used in this example 
+```Rscript
+matrix<-readVarFile(fileName = "~/path_to_file/variablesValue_BioNetStat_tutorial_data.csv",sep = ";",dec=".")
+
+labmat<-doLabels(fileName = "~/path_to_file/variablesValue_BioNetStat_tutorial_data.csv")
+
+labmat2<-doLabels(fileName = "~/path_to_file/variablesValue_BioNetStat_tutorial_data.csv",factorName = "histologic_diagnosis",classes = c("Oligodendroglioma", "Astrocytoma"))
+```
+## Reading the file that indicates the variable groups
+The readSetFile function reads a table that indicates in the first column the names of the groups and in the following columns the variables that belong to each group. In this file, the columns must be tab-delimited.
+```Rscript
+varSets<-readSetFile(fileName = "~/path_to_file/variableSet_BioNetStat_tutorial_data.gmt")
+```
+## Choosing the parameters for building the adjacency matrix
+
+In this function, the user chooses the parameters to build the networks, such as the statistical method (method). It is possible to select between Pearson, Spearman, or Kendall correlation or insert a function that returns an adjacency matrix. After you choose one of the three correlations, you must select which value will be used as association strength ("corr", "pvalue", "fdr") in 'association'. The strength will be used as a threshold in the construction of the networks ("corr", "pvalue", "fdr") and the numeric value (between 0 and 1) used as a threshold, in 'thr.value'. In addition, it is possible to choose whether the network will have weighted or unweighted edges in 'weighted'.
+```Rscript
+funAdjMat<-adjacencyMatrix(method = "pearson",association = "corr",threshold = "corr",thr.value = 0.5,weighted = T)
+```
+
+## Comparing Networks
+
+The function 'diffNetAnalysis' performs the test of comparing multiple networks. To differentiate the networks, you need to choose one of the comparison methods in 'method'. In the arguments 'varFile', 'labels' and 'varSets', you enter the objects of the value matrix, the sample classification, and the variable groups, respectively. The function that constructs the correlation matrix is entered in 'adjacencyMatrix'. The user must define the number of permutations for the p-value calculation ('numPermutations'), the minimum number of vertices used to build the networks ('min.vert'). If you choose to compare the networks by spectrum or degree distributions, you must select which bandwidth measure will be used in the ``options'', which can be ``bandwidth'='Silverman'' or ``bandwidth'='Sturges''.
+```Rscript
+# Choose one structural property
+methods<-list(spectralDistributionTest, spectralEntropyTest, degreeDistributionTest,degreeCentralityTest,
+           betweennessCentralityTest, closenessCentralityTest, eigenvectorCentralityTest,
+           clusteringCoefficientTest)
+           
+res<-diffNetAnalysis(method = methods[[1]],varFile = matrix, labels = labmat, varSets = NULL,adjacencyMatrix = funAdjMat,
+                numPermutations = 1000, min.vert = 10,options = list("bandwidth"="Silverman"))
+res
+```
+## Comparing the importance of vertices
+
+The function 'diffNetAnalysis' also performs the vertex comparison test on multiple networks. Similarly, you need to choose one of the comparison methods (methods) in 'method'. In the arguments 'varFile', 'labels' and 'varSets', you enter the objects of the value matrix, the sample classification, and the variable groups, respectively. The function that constructs the correlation matrix is entered in 'adjacencyMatrix'. The user must define the number of permutations for the p-value calculation ('numPermutations'), the minimum number of vertices used to build the nets ('min.vert').
+```Rscript
+methods<-list(degreeCentralityVertexTest,betweennessCentralityVertexTest, closenessCentralityVertexTest, eigenvectorCentralityVertexTest,
+              clusteringCoefficientVertexTest)
+
+  res<-diffNetAnalysis(method = methods[[1]],options = list("bandwidth"="Silverman"),varFile = array,
+                       labels = labmat, varSets = NULL,adjacencyMatrix = funAdjMat, numPermutations = 1000, print = T,
+                       seed = F,min.vert = 10, resultsFile ="results.RData" )
+  res$all
+```

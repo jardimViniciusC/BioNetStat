@@ -425,9 +425,9 @@ output$downloadResults <- downloadHandler(
           parameters <- rbind(parameters, rep(NA, ncol(results)))
           parameters <- rbind(parameters, colnames(results))
           write.table(parameters, filename, na="", col.names=F, row.names=F,
-                      sep=",",quote = F)
+                      sep=";",quote = F)
           write.table(results, filename, append=T, row.names=F, col.names=F,
-                      sep=",", dec=".",quote = F)
+                      sep=";", dec=".",quote = F)
         }
     }
 )

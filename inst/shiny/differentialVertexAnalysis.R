@@ -146,7 +146,7 @@ output$downloadVertexAnalysisTable <- downloadHandler(
         }
         else {
           write.table(results, filename, append=T, row.names=F, col.names=T,
-                      sep=",", dec=".",quote = F)
+                      sep=";", dec=".",quote = F)
         }
     }
 )

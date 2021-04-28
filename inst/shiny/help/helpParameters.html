@@ -1,58 +1,51 @@
 <p>
-    Before running BioNetStat, you must set the execution parameters available on
-    the left sidebar. Below, we detail each differential 
-    network analysis parameter.
+    Before running BioNetStat, you must set the execution parameters available on the left sidebar. Below, we detail each differential network analysis parameter.
 </p>
 
 <h5>Column classes name</h5>
 
 <p>
-  After input the data variables values data BioNetStat will choose the first character (factor) column to classify the samples. If your dataset has more than one sample class column it is possible to choose the column of classes which you want to compare.
+  After input, the data variables values data BioNetStat will choose the first character (factor) column to classify the samples. Suppose your dataset has more than one column which labels the sample classes. In that case, it is possible to select which column of classes you want to use.
 </p>
 
 <h5>Classes (conditions) being compared</h5>
 
 <p>
-    Select the classes you want to analise with BioNetStat.
+    Select the classes you want to analyze with BioNetStat.
 </p>
 
 <h5>Gene sets size range</h5>
 
 <p>
-    BioNetStat performs tests for each variable set of a collection of sets defined in Variable set database. If none file were inputed only one group with all variables will be analyzed. To test only a subcollection of sets, you can filter the groups according to their sizes by setting the "Minimum gene set size" and "Maximum gene set size" parameters. 
+    BioNetStat performs tests for each variable set of a collection of sets defined in the <i>Variable set database</i>. If the user inputted no file, the program would analyze only one group with all variables. To test only a subcollection of sets, you can filter the groups according to their sizes (number of variables). It is possible to set the "Minimum gene set size" and "Maximum gene set size" parameters. 
 </p>
 
 <p>
-    The minimum gene set size allowed is 5. However, we recommend
-    to test groups with at least 15 variables.
+    The minimum gene set size allowed is 5. However, we recommend testing groups with at least 15 variables.
 </p>
 
 <p>
-    Testing large gene sets can spend much time. In general, 
-    it is feasible to set 1000 or some hundreds of variables as the maximum size. However this number may vary according to the user's machine specification.
+    Testing large gene sets can take much time. In general, 
+    it is feasible to set 1000 or some hundreds of variables as the maximum size. However, this number may vary according to the user's machine specification.
 </p>
 
 <h5>Method for network construction</h5>
 
 <p>
-The network links are inferred according to a measure of association between the variables values. BioNetStat provides three classical association measures:
+The network links are inferred according to a measure of association between the values of the variables. BioNetStat provides three classical association measures:
 </p>
 
 <ul>
     <li>
-        Pearson: Pearson's correlation coefficient. It measures the linear 
-        dependence between two variables. For the statistical test, we use the
+        Pearson: Pearson's correlation coefficient that measures the linear dependence between two variables. For the statistical test, we use the
         Hmisc package.
     </li>
     <li>
-        Spearman: Spearman's correlation coefficient. It measures the monotonic 
-        dependence between two variables. For the statistical test, we use the
+        Spearman: Spearman's correlation coefficient that measures the monotonic dependence between two variables. For the statistical test, we use the
         Hmisc package.
     </li>
     <li>
-        Kendall: Kendall's Tau coefficient. It measures the monotonic 
-        dependence between two variables. For the statistical test, we use the
-        psych package.
+        Kendall: Kendall's Tau coefficient. It measures the monotonic dependence between two variables. For the statistical test, we use the psych package.
     </li>
 </ul>
 
@@ -63,14 +56,10 @@ The network links are inferred according to a measure of association between the
 <ul>
     <li>
         Unweighted: Graphs where all the edges are weighted by one.
-        You must choose a threshold for the edges selection. Only
-        the edges that connect genes with an association degree greater than
-        the threshold will remain in the graph.
+        You must choose a threshold for edge creation. Only edges that connect genes with a higher degree of association than the threshold will be created in the graph.
     </li>
     <li>
-        Weighted: Weighted networks are full graphs where each edge has
-        a weight. The weight of an edge is defined as the association degree 
-        between the two gene products that are connected by it.
+        Weighted: Weighted networks are graphs where each edge has a weight defined in section 2d: <i>Set the criterion for network edges weights</i>. The weight of an edge is defined as the association degree between the two gene products connected by it.
     </li>
 </ul>
 
@@ -95,12 +84,13 @@ The following options are available to measure the association degrees:
 </ul>
 
 <p>
-  After choosing the association measure, the user has to choose the threshold value to links formation.
+  After choosing the association measure, the user has to select the threshold value to links formation.
 </p>
 
 <h5>Links weights</h5>
 <p>
-  If weighted option was selected, the user has also to choose which measure will be used as weight of the links.
+  If the user selected the weighted option, he also has to choose which measure will be used as the weight of the links (Section 2d: <i>Set the criterion for network edges weights</i>)
+).
 </p>
 
 <h5>Method for gene networks comparison</h5>
@@ -113,22 +103,14 @@ The following options are available to measure the association degrees:
 
 <ul>
     <li>
-        Spectral distribution test: The spectrum of an undirected
-        graph is the set of eigenvalues of its adjacency matrix. The spectrum distribution describes many topological properties of a graph, such as 
-        the number of walks, diameter, and cliques. The spectral distribution 
-        test is based on the Kullback-Leiber (KL) divergence between spectral 
-        distributions (Takahashi <i>et al.</i>, 2012). It can be used to test if 
-        two graphs were generated by the same model.
+        Spectral distribution test: The spectrum of an undirected graph is the set of eigenvalues of its adjacency matrix. The spectrum distribution describes many topological properties of a graph, such as the number of walks, diameter, and cliques. The spectral distribution test is based on the Kullback-Leiber (KL) divergence between spectral distributions (Takahashi <i>et al.</i>, 2012). This test can use it to verify if the same model generated two graphs.
     </li>
     <li>
         Spectral entropy test: It uses the absolute difference between spectral entropies (Takahashi <i>et al.</i>, 2012) to measure the difference in 
         the graph topological organization complexity.
     </li>
     <li>
-        Degree distribution test: The degree of a node is the number of edges 
-        that connect to it. The degree distribution test is based on the 
-        Kullback-Leiber (KL) divergence between the degree distributions. BioNetStat uses the
-        igraph package implementation of the node degree.
+        Degree distribution test: The degree of a node is the number of edges that connect to it. The degree distribution test is based on the Kullback-Leiber (KL) divergence between the degree distributions. BioNetStat uses the igraph package implementation of the node degree.
     </li>
     <li>
         Degree centrality test: The degree centrality test
@@ -137,19 +119,11 @@ The following options are available to measure the association degrees:
     </li>
     <li>
         Betweenness centrality test: The betweenness centrality of a node is the number of shortest paths going through it (Freeman, 1979). 
-        The betweenness centrality test is based on the Euclidian distance between the
-        betweenness centralities of
-        the two networks adjusted by the number of vertices. BioNetStat uses the igraph package 
+        The betweenness centrality test is based on the Euclidian distance between the betweenness centralities of the two networks adjusted by the number of vertices. BioNetStat uses the igraph package 
         implementation.
     </li>
     <li>
-        Closeness centrality test: The closeness centrality of a node is the 
-        inverse of the average length of the shortest paths between it and all 
-        the other vertices in the graph (Freeman, 1979). The closeness 
-        centrality test is based on the Euclidian distance between the  
-        closeness centralities of the two networks adjusted by the number of 
-        vertices. BioNetStat uses the igraph package 
-        implementation.
+        Closeness centrality test: The closeness centrality of a node is the inverse of the average length of the shortest paths between it and all the other vertices in the graph (Freeman, 1979). The closeness centrality test is based on the Euclidian distance between the closeness centralities of the two networks adjusted by the number of vertices. BioNetStat uses the igraph package implementation.
     </li>
     <li>
         Eigenvector centrality test: The eigenvector centrality of a node 
@@ -162,13 +136,7 @@ The following options are available to measure the association degrees:
     </li>
     <li>
         Clustering coefficient test: 
-        The local clustering coefficient of a node is the number of edges between the 
-        vertices within its neighborhood divided by the number of edges that could 
-        exist among them (Watts and Strogatz, 1998). The clustering coefficient test
-        is based on the Euclidian distance between the 
-        local clustering coefficients of the two networks adjusted by the number 
-        of vertices. BioNetStat uses the igraph package 
-        implementation. 
+        The local clustering coefficient of a node is the number of edges between the vertices within its neighborhood divided by the number of edges that could exist among them (Watts and Strogatz, 1998). The clustering coefficient test is based on the Euclidian distance between the local clustering coefficients of the two networks adjusted by the number of vertices. BioNetStat uses the igraph package implementation. 
     </li>
 </ul>
 
@@ -196,10 +164,9 @@ The following options are available to measure the association degrees:
         test for unweighted networks. 
     </li>
     <li>
-        Degree distribution test: BioNetStat generalizes the degree of a node 
-        to the sum of the weights of the edges that connect to it (Barrat, 2004). 
+        Degree distribution test: BioNetStat generalizes the degree of a node to the sum of the weights of the edges that connect to it (Barrat, 2004). 
         The software uses the igraph implementation of the node strength. 
-        It replaces the usual node degree by the weighted degree, and
+        It replaces the usual node degree with the weighted degree and
         then computes the degree distribution test for unweighted networks.
     </li>
     <li>
@@ -209,9 +176,7 @@ The following options are available to measure the association degrees:
     </li>
     <li>
         Betweenness centrality test: The betweenness centrality of a node is the number of shortest paths going through it (Freeman, 1979). 
-        The betweenness centrality test is based on the Euclidian distance between the
-        betweenness centralities of
-        the two networks adjusted by the number of vertices. BioNetStat uses the igraph package 
+        The betweenness centrality test is based on the Euclidian distance between the betweenness centralities of the two networks adjusted by the number of vertices. BioNetStat uses the igraph package 
         implementation.
     </li>
     <li>
@@ -220,14 +185,11 @@ The following options are available to measure the association degrees:
         test for unweighted networks (Newton, 2004).
     </li>
     <li>
-        Clustering coefficient test: replaces the local clustering coefficient 
-        of a node by the sum of the weights of the edges between the vertices within its neighborhood divided by the number of edges that could exist among 
-        them (Lopez-Fernandez <i>et al</i>, 2004). Then it performs the
-        clustering coefficient test for unweighted networks.
+        Clustering coefficient test: replaces the local clustering coefficient of a node by the sum of the weights of the edges between the vertices within its neighborhood divided by the number of edges that could exist among them (Lopez-Fernandez <i> et al. </i>, 2004). Then it performs the clustering coefficient test for unweighted networks.
     </li>
 </ul>
 
-<p>For the "Spectral distribution test", the "Spectral entropy test", and
+<p>For the "Spectral distribution test," the "Spectral entropy test," and
 the "Degree distribution test" methods, you must select a criterion to
 define the bandwidth for the probability density function estimation. The
 available methods for computing the bandwidth are:</p>
@@ -272,16 +234,14 @@ probability density function.</p>
 </p>
 
 <p>
-    To perform the same label permutations for all variable sets, you can set a seed
-    to generate the random permutations on the "Enter a seed to generate random
-    permutations" option.
+    To perform the same label permutations for all variable sets, you can set a seed to generate the random permutations on the "Enter a seed to generate random permutations" option.
 </p>
 
 <h5>Running the analysis</h5>
 
 <p>
     After loading the dataset and the execution parameters, click on the "Start 
-    analysis" button. The warning "The analysis is runing..." will be shown on the "Analysis results" section:
+    analysis" button. The warning "The analysis is running..." will be shown on the "Analysis Results" section:
 </p>
 
 <img src="images/anaRun.png"  width="700">
@@ -290,3 +250,9 @@ probability density function.</p>
     The results and other execution messages are shown on the 
     "Analysis results" section.
 </p>
+
+<p>
+    Note: If an error occurs during the analysis, the page gets grey, as in the example below. In this case, restart the analysis, reloading the application.
+</p>
+
+<img src="images/errorRunAnalysis.PNG"  width="700">

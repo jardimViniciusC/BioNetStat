@@ -75,7 +75,7 @@ shinyUI(fluidPage(theme = "bootstrap.css",
         "input.networkType=='weighted'",
         radioButtons(
           "edgeWeight",
-          h4(strong("d. Set the criteron for network edges weights:")),
+          h4(strong("d. Set the criterion for network edges weights:")),
           c("Absolute correlation"="correlation", "1 - p-value"="pvalue",
             "1 - q-value"="qvalue")
         )
