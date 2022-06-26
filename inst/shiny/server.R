@@ -1,4 +1,5 @@
 library(shiny);library(shinyBS);library(BioNetStat)
+options(shiny.maxRequestSize=30*1024^2)
 # source("~/Dropbox/mestrado/pacote_r/codigo_coga_vinicius/codigo_para_implmentar_anova/creating_BioNetStat_com_git/shiny_BioNetStat/shiny/global.R")
 # ------------------------------------------------------------------------------
 # Global variables
